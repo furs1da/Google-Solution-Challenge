@@ -166,7 +166,7 @@ class Attendance extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Записати відвідування</h1>
+                        <h1>Submit attendance</h1>
                         <hr />
                         <div className="form-group col">
                             <label htmlFor="zeroSelect">Select subject</label>
