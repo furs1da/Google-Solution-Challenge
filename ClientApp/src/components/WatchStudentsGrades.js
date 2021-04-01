@@ -1,14 +1,8 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
-import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
 import { Button, Table } from 'react-bootstrap';
 
 
@@ -48,12 +42,12 @@ class WatchStudentGrades extends React.Component {
             >
                 {({ errors, message, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Успішність</h1>
+                        <h1>Progress</h1>
                         <hr />
                         <div className="form-group col">
-                            <label htmlFor="zeroSelect">Виберіть предмет</label>
+                            <label htmlFor="zeroSelect">Select subject</label>
                             <Select
-                                placeholder="Оберіть предмет..."
+                                placeholder="Select subject..."
                                 name="zeroSelect"
                                 options={this.state.zeroSelectGroup}
                                 className={'basic-multi-select' + (errors.zeroSelect && touched.zeroSelect ? ' is-invalid' : '')}
@@ -66,11 +60,11 @@ class WatchStudentGrades extends React.Component {
                             {this.state.grades &&
                                 <Table responsive bordered hover>
                                     <thead class="thead-dark">
-                                        <th>ПІБ Вчителя</th>
-                                        <th>Оцінка</th>
-                                        <th>Тип оцінки</th>
-                                        <th>Дата оцінки</th>
-                                        <th>Фідбек</th>                                      
+                                        <th>Teacher</th>
+                                        <th>Mark</th>
+                                        <th>Type of mark</th>
+                                        <th>Date of mark</th>
+                                        <th>Feedback</th>                                      
                                     </thead>
                                     <tbody>
                                     {this.state.grades.map(gradeEntity =>
@@ -88,13 +82,13 @@ class WatchStudentGrades extends React.Component {
                             }
                         </div>
 
-                        <h3>Тематичні оцінки</h3>
+                        <h3>Thematic evaluations</h3>
                         <div>
                             {this.state.themGrades &&
                                 <Table responsive bordered hover>
                                     <thead class="thead-dark">                                    
-                                        <th>Оцінка</th>                                 
-                                        <th>Період теми</th>
+                                        <th>Mark</th>                                 
+                                        <th>Period of theme</th>
                                     </thead>
                                     <tbody>
                                     {this.state.themGrades.map(gradeEntity =>
@@ -109,7 +103,7 @@ class WatchStudentGrades extends React.Component {
                             }
                         </div>
 
-                        <h3>Семестрова оцінка</h3>
+                        <h3>Semester grade</h3>
                         <div class="row">
                             <h3 style={{ marginBottom: 1 + "em", marginLeft: 1 + "em" }}>{this.state.finalGrade}</h3>
                         </div>

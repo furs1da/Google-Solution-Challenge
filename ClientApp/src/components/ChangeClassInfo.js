@@ -1,13 +1,9 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
 
 class ChangeClass extends React.Component {
 
@@ -37,11 +33,11 @@ class ChangeClass extends React.Component {
                 enableReinitialize
                 validationSchema={Yup.object().shape({                  
                     idClassroomTeacher: Yup.string()
-                        .required('Оберіть будь ласка класного керівника'),
+                        .required('Please select the classroom teacher'),
                     accessCode: Yup.string()
-                        .required('Введіть будь ласка код доступу'),
+                        .required('Please enter access code'),
                     adminCode: Yup.string()
-                        .required('Введіть будь ласка код адміністратора')
+                        .required('Please enter administrator code')
                 })}
                 onSubmit={({ idClassroomTeacher, accessCode, adminCode }, { setStatus, setSubmitting }) => {
                     setStatus();
@@ -61,12 +57,12 @@ class ChangeClass extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>       
-                        <h1>Змінити дані про клас</h1>
+                        <h1>Changer info about the class</h1>
                         <hr />
                         <div className="form-group col">
-                            <label htmlFor="idClassroomTeacher">Класний керівник</label>
+                            <label htmlFor="idClassroomTeacher">Classroom teacher</label>
                             <Select
-                                placeholder="Оберіть класного керівника..."
+                                placeholder="Select classsroom teacher..."
                                 name="idClassroomTeacher"
                                 options={this.state.availableTeachers}
                                 value={values.idClassroomTeacherLabel}
@@ -77,19 +73,19 @@ class ChangeClass extends React.Component {
                         </div>
 
                             <div className="form-group col">
-                                <label htmlFor="accessCode">Код доступу</label>
+                                <label htmlFor="accessCode">Access code</label>
                                 <Field name="accessCode" type="text" className={'form-control' + (errors.accessCode && touched.accessCode ? ' is-invalid' : '')} />
                                 <ErrorMessage name="accessCode" component="div" className="invalid-feedback" />
                             </div>
 
                         <div className="form-group">
-                            <label htmlFor="adminCode">Код адміністратора</label>
+                            <label htmlFor="adminCode">Administrator code</label>
                             <Field name="adminCode" type="text" className={'form-control' + (errors.adminCode && touched.adminCode ? ' is-invalid' : '')} />
                             <ErrorMessage name="adminCode" component="div" className="invalid-feedback" />
                         </div>
                         <div className="form-group">
-                            <button type="submit" className="btn btn-primary mr-2">Змінити дані класу</button>
-                            <button type="reset" className="btn btn-secondary">Скинути дані</button>
+                            <button type="submit" className="btn btn-primary mr-2">Change the class info</button>
+                            <button type="reset" className="btn btn-secondary">Reset data</button>
                         </div>
                         {status &&
                             <div className={'alert alert-danger'}>{status}</div>

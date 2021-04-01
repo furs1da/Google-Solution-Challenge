@@ -36,23 +36,23 @@ class ChooseRegistration extends React.Component {
     render() {
         return (
             <div>
-                <h2>Будь ласка оберіть у ролі кого ви хочете зареєструватися:</h2>
+                <h2>Please select the role in which do you want to register:</h2>
             <Formik>
                 {({ errors, status, touched, values, setFieldValue }) => (
                         <Form>
                             <div class="ui two column stackable center aligned grid segment">
                                 <div class="column">
                                     <Button animated onClick={selectValue => this.onRedirectToChild()}>
-                                        <Button.Content visible>Зареєструватися як учень</Button.Content>
+                                        <Button.Content visible>Register as a student</Button.Content>
                                         <Button.Content hidden>
                                             <Icon name='graduation cap' />
                                         </Button.Content>
                                     </Button>  
                                 </div>
-                                <div class="ui vertical divider">АБО</div>
+                                <div class="ui vertical divider">OR</div>
                                 <div class="column">
                                     <Button animated onClick={selectValue => this.onRedirectToParent()}>
-                                        <Button.Content visible>Зареєструватися у ролі батьків</Button.Content>
+                                        <Button.Content visible>Register as a Parent</Button.Content>
                                         <Button.Content hidden>
                                             <Icon name='handshake outline' />
                                         </Button.Content>

@@ -1,14 +1,9 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
 import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
 import { Button, Table } from 'react-bootstrap';
 
 const MyTextArea = ({ label, ...props }) => {
@@ -33,8 +28,8 @@ class Attendance extends React.Component {
             secondSelectGroup: [],
             firstSelectGroup: [],
             zeroSelectGroup: [],
-            receiver: 'Оберіть клас',
-            secondSelectText: 'Оберіть клас',
+            receiver: 'Select class',
+            secondSelectText: 'Select class',
             secondSelectVisibility: false,
             firstSelectDisable: true,
             secondSelectDisable: true,
@@ -67,7 +62,7 @@ class Attendance extends React.Component {
         userService.GetFlowClassLettersTeacher(selected.value).then(secondSelectGroup => this.setState({ secondSelectGroup })).catch(error => this.setState({ error }));
         this.setState({
             secondSelectGroup: false,
-            secondSelectText: 'Оберіть клас',
+            secondSelectText: 'Select class',
             secondSelectDisable: false,
             secondSelectVisibility: true,
             pupils: [],
@@ -96,8 +91,8 @@ class Attendance extends React.Component {
         if (selected.target.value === '') {
             newArray[elementsIndex] = { ...newArray[elementsIndex], grade: -1 }
         }
-        else if (selected.target.value > 12)
-            selected.target.value = 12;
+        else if (selected.target.value > 100)
+            selected.target.value = 100;
 
         else if (selected.target.value < 1)
             selected.target.value = 1;
@@ -147,11 +142,11 @@ class Attendance extends React.Component {
                 }}
                 validationSchema={Yup.object().shape({
                     zeroSelect: Yup.string()
-                        .required('Потрібно вибрати один з ваших предметів!'),
+                        .required('You need to choose one of your subjects!'),
                     firstSelect: Yup.string()
-                        .required('Потрібно обрати одну з паралелей!'),
+                        .required('You need to choose one of your grades!'),
                     secondSelect: Yup.string()
-                        .required('Потрібно обрати певний клас!')
+                        .required('You need to choose one of your classes!')
                 })}
                 onSubmit={({ zeroSelect, firstSelect, secondSelect}, { setStatus, setSubmitting }) => {
                     setStatus();
@@ -174,9 +169,9 @@ class Attendance extends React.Component {
                         <h1>Записати відвідування</h1>
                         <hr />
                         <div className="form-group col">
-                            <label htmlFor="zeroSelect">Оберіть предмет</label>
+                            <label htmlFor="zeroSelect">Select subject</label>
                             <Select
-                                placeholder="Оберіть предмет..."
+                                placeholder="Select subject..."
                                 name="zeroSelect"
                                 options={this.state.zeroSelectGroup}
                                 className={'basic-multi-select' + (errors.zeroSelect && touched.zeroSelect ? ' is-invalid' : '')}
@@ -186,9 +181,9 @@ class Attendance extends React.Component {
                         </div>
 
                         <div className="form-group col">
-                            <label htmlFor="firstSelect">Оберіть паралель</label>
+                            <label htmlFor="firstSelect">Select grade</label>
                             <Select
-                                placeholder="Оберіть паралель..."
+                                placeholder="Select grade..."
                                 name="firstSelect"
                                 options={this.state.firstSelectGroup}
                                 className={'basic-multi-select' + (errors.firstSelect && touched.firstSelect ? ' is-invalid' : '')}
@@ -201,7 +196,7 @@ class Attendance extends React.Component {
                         <div className="form-group col">
                             <label htmlFor="secondSelect">{this.state.secondSelectText}</label>
                             <Select
-                                placeholder="Оберіть..."
+                                placeholder="Select..."
                                 name="secondSelect"
                                 options={this.state.secondSelectGroup}
                                 className={'basic-multi-select' + (errors.secondSelect && touched.secondSelect ? ' is-invalid' : '')}
@@ -211,29 +206,29 @@ class Attendance extends React.Component {
                             />
                             <ErrorMessage name="secondSelect" component="div" className="invalid-feedback" />
                         </div>
-                        <h1>{this.state.secondSelectText} клас</h1>
+                        <h1>{this.state.secondSelectText} class</h1>
 
                         <div>
                             {this.state.pupils &&
                                 <Table responsive bordered hover>
                                 <thead class="thead-dark">
-                                        <th>ПІБ</th>
-                                        <th>Оцінка</th>
-                                        <th>Фідбек щодо оцінки</th>
-                                        <th>Відвідуванність</th>
+                                        <th>Full Name</th>
+                                        <th>Mark</th>
+                                        <th>Feedback about mark</th>
+                                        <th>Attendance</th>
                                     </thead>
                                     <tbody>
                                         {this.state.pupils.map(pupil =>
                                             <tr>
                                                 <td key={pupil.idPupil}><p> {pupil.fio}</p> </td>
-                                                <td> <Field name="gradeStudent" type="number" max="12" min="0" onChange={selectValue => this.onChangeGrade(selectValue, setFieldValue, pupil.idStudent)} style={{width: 100 + "%", lineHeight: 2.0 + "em", fontSize: 1.5 +"em"} }/> </td>
+                                                <td> <Field name="gradeStudent" type="number" max="100" min="0" onChange={selectValue => this.onChangeGrade(selectValue, setFieldValue, pupil.idStudent)} style={{width: 100 + "%", lineHeight: 2.0 + "em", fontSize: 1.5 +"em"} }/> </td>
                                                 <td> <MyTextArea
                                                     name="feedbackStudent"
                                                     rows="2"
-                                                    placeholder="Будь ласка напишіть свій фідбек щодо оцінки..."
+                                                    placeholder="Please write your feedback on the mark..."
                                                     onChange={selectValue => this.onChangeFeedback(selectValue, setFieldValue, pupil.idStudent)} /> </td>
-                                                <td><div><label> <input name={'attendance' + pupil.idStudent} type="radio" value='0' onChange={selectValue => this.onChangeAttendance(0, setFieldValue, pupil.idStudent)} /> Був </label>
-                                                    <label style={{marginLeft: 1 + "em"} }> <input name={'attendance' + pupil.idStudent} type="radio" value='1' onChange={selectValue => this.onChangeAttendance(1, setFieldValue, pupil.idStudent)} /> Не був </label></div> </td>
+                                                <td><div><label> <input name={'attendance' + pupil.idStudent} type="radio" value='0' onChange={selectValue => this.onChangeAttendance(0, setFieldValue, pupil.idStudent)} /> Present </label>
+                                                    <label style={{marginLeft: 1 + "em"} }> <input name={'attendance' + pupil.idStudent} type="radio" value='1' onChange={selectValue => this.onChangeAttendance(1, setFieldValue, pupil.idStudent)} /> No </label></div> </td>
                                             </tr>
                                         )}
 
@@ -244,8 +239,8 @@ class Attendance extends React.Component {
 
 
                         <div className="form-group">
-                            <button type="submit" className="btn btn-primary mr-2">Записати відвідування</button>
-                            <button type="reset" className="btn btn-secondary">Скинути дані</button>
+                            <button type="submit" className="btn btn-primary mr-2">Submit attendance</button>
+                            <button type="reset" className="btn btn-secondary">Reset data</button>
                         </div>
                         {status &&
                             <div className={'alert alert-danger'}>{status}</div>

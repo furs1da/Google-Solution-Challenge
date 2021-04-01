@@ -1,5 +1,4 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import DatePicker, { registerLocale } from "react-datepicker";
@@ -7,8 +6,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { userService } from '../services';
 import { Button, Icon, Popup, Input } from "semantic-ui-react";
 import 'semantic-ui-css/semantic.min.css';
-import uk from "date-fns/locale/uk";
-registerLocale("uk", uk);
 class ChangeAdminPersonal extends React.Component {
 
     constructor(props) {
@@ -56,18 +53,18 @@ class ChangeAdminPersonal extends React.Component {
 
                 validationSchema={Yup.object().shape({
                     emailAdmin: Yup.string()
-                        .email('Неправильний формат пошти.')
-                        .required("Пошта обов'язкова."),
+                        .email('Wrong format of Email.')
+                        .required("Email is required."),
                     passwordAdmin: Yup.string()
-                        .min(6, 'Пароль повинен містити хоча б 6 символів!')
-                        .required("Пароль обов'язковий."),
+                        .min(6, 'Password must contain at least 6 characters!')
+                        .required("Password is required."),
                     confirmPasswordAdmin: Yup.string()
-                        .oneOf([Yup.ref('passwordAdmin'), null], 'Паролі не співпадають!')
-                        .required('Треба підтвердити пароль!'),           
+                        .oneOf([Yup.ref('passwordAdmin'), null], 'Passwords do not match!')
+                        .required('You must confirm the password.'),           
                     phoneAdmin: Yup.string()
-                        .required("Номер телефону обов'язковий!"),
+                        .required("Phone number is required."),
                     descriptionAdmin: Yup.string()
-                        .required('Треба написати коротке резюме про адміністратора'),           
+                        .required('You need to write a short description of the administrator.'),           
                 })}
                 enableReinitialize
                 onSubmit={({ emailAdmin, passwordAdmin, phoneAdmin, descriptionAdmin }, { setStatus, setSubmitting }) => {
@@ -89,26 +86,26 @@ class ChangeAdminPersonal extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form> 
-                        <h1>Змінити власні дані</h1>
+                        <h1>Update personal information</h1>
                         <hr />
                         <div className="form-row">                
                             <div className="form-group col-5">
-                                <label htmlFor="nameAdmin">Ім'я</label>
+                                <label htmlFor="nameAdmin">Name</label>
                                 <Field name="nameAdmin" type="text" disabled className={'form-control' + (errors.nameAdmin && touched.nameAdmin ? ' is-invalid' : '')} />
                                 <ErrorMessage name="nameAdmin" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col-5">
-                                <label htmlFor="patronymicAdmin">По батькові</label>
+                                <label htmlFor="patronymicAdmin">Patronymic</label>
                                 <Field name="patronymicAdmin" type="text" disabled className={'form-control' + (errors.patronymicAdmin && touched.patronymicAdmin ? ' is-invalid' : '')} />
                                 <ErrorMessage name="patronymicAdmin" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col-5">
-                                <label htmlFor="surnameAdmin">Прізвище</label>
+                                <label htmlFor="surnameAdmin">Surname</label>
                                 <Field name="surnameAdmin" type="text" disabled className={'form-control' + (errors.surnameAdmin && touched.surnameAdmin ? ' is-invalid' : '')} />
                                 <ErrorMessage name="surnameAdmin" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col">
-                                <label htmlFor="dateOfBirthAdmin">Дата народження</label>
+                                <label htmlFor="dateOfBirthAdmin">Date of Birth</label>
                                 <br />
                                 <DatePicker
                                     selected={values.dateOfBirthAdmin}
@@ -116,13 +113,12 @@ class ChangeAdminPersonal extends React.Component {
                                     className={'form-control' + (errors.dateOfBirthAdmin && touched.dateOfBirthAdmin ? ' is-invalid' : '')}
                                     name="dateOfBirthAdmin"
                                     disabled
-                                    locale="uk"
                                     onChange={date => setFieldValue('dateOfBirthAdmin', date)}
                                 />
                             </div>
                         </div>
                         <div className="form-group col">
-                            <label htmlFor="genderAdmin">Гендер</label>
+                            <label htmlFor="genderAdmin">Gender</label>
                             <Field name="genderAdmin" as="select" disabled className={'form-control' + (errors.genderAdmin && touched.genderAdmin ? ' is-invalid' : '')}>
                                 {this.state.genders.map((gender, i) => (
                                     <option key={gender.idGender} value={gender.idGender}>{gender.genderType}</option>
@@ -131,25 +127,25 @@ class ChangeAdminPersonal extends React.Component {
                             <ErrorMessage name="title" component="div" className="invalid-feedback" />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="emailAdmin">Електронна пошта</label>
+                            <label htmlFor="emailAdmin">Email</label>
                             <Field name="emailAdmin" type="text" className={'form-control' + (errors.emailAdmin && touched.emailAdmin ? ' is-invalid' : '')} />
                             <ErrorMessage name="emailAdmin" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="phoneAdmin">Номер телефону</label>
+                            <label htmlFor="phoneAdmin">Phone number</label>
                             <Field name="phoneAdmin" type="text" className={'form-control' + (errors.phoneAdmin && touched.phoneAdmin ? ' is-invalid' : '')} />
                             <ErrorMessage name="phoneAdmin" component="div" className="invalid-feedback" />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="descriptionAdmin">Коротке резюме</label>
+                            <label htmlFor="descriptionAdmin">Description</label>
                             <Field name="descriptionAdmin" type="text" className={'form-control' + (errors.descriptionAdmin && touched.descriptionAdmin ? ' is-invalid' : '')} />
                             <ErrorMessage name="descriptionAdmin" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-row">
                             <div className="form-group col">
-                                <label htmlFor="passwordAdmin">Пароль</label>
+                                <label htmlFor="passwordAdmin">Password</label>
                                 <Input name="passwordAdmin" type={this.state.showPassword ? 'text' : 'password'} value={values.passwordAdmin} className={'form-control' + (errors.passwordAdmin && touched.passwordAdmin ? ' is-invalid' : '')}
                                     onChange={password => setFieldValue('passwordAdmin', password.target.value) }
                                     icon={
@@ -161,7 +157,7 @@ class ChangeAdminPersonal extends React.Component {
                                 <ErrorMessage name="passwordAdmin" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col">
-                                <label htmlFor="confirmPasswordAdmin">Підтвердити пароль</label>
+                                <label htmlFor="confirmPasswordAdmin">Confirm password</label>
                                 <Input name="confirmPasswordAdmin" type={this.state.showPassword ? 'text' : 'password'} value={values.confirmPasswordAdmin} className={'form-control' + (errors.confirmPasswordAdmin && touched.confirmPasswordAdmin ? ' is-invalid' : '')}
                                     onChange={password => setFieldValue('confirmPasswordAdmin', password.target.value)}
                                     icon={
@@ -174,8 +170,8 @@ class ChangeAdminPersonal extends React.Component {
                             </div>
                         </div>
                         <div className="form-group">
-                            <button type="submit" className="btn btn-primary mr-2">Змінити свої дані</button>
-                            <button type="reset" className="btn btn-secondary">Повернути попередні дані</button>                       
+                            <button type="submit" className="btn btn-primary mr-2">Update personal information</button>
+                            <button type="reset" className="btn btn-secondary">Reset data</button>                       
                         </div>
                         {status &&
                             <div className={'alert alert-danger'}>{status}</div>

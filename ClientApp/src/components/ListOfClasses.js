@@ -1,15 +1,8 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
-import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
-import { saveAs } from 'file-saver';
 import { Button } from 'react-bootstrap';
 
 
@@ -52,12 +45,12 @@ class ListOfClassesAdmin extends React.Component {
                 }}>
                 {({ errors, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Оберіть паралель</h1>
+                        <h1>Select grade</h1>
                         <hr />
                         <div className="form-group col">
-                            <label htmlFor="flowSelect">Оберіть паралель</label>
+                            <label htmlFor="flowSelect">Select grade</label>
                             <Select
-                                placeholder="Оберіть паралель..."
+                                placeholder="Select grade..."
                                 name="flowSelect"
                                 options={this.state.flowsList}
                                 className={'basic-multi-select' + (errors.flowSelect && touched.flowSelect ? ' is-invalid' : '')}
@@ -66,20 +59,20 @@ class ListOfClassesAdmin extends React.Component {
                             />
                             <ErrorMessage name="secondSelect" component="div" className="invalid-feedback" />
                         </div>
-                        <h1>Відповідні класи</h1>
+                        <h1>Classes in selected grade</h1>
                         {this.state.classesList.map(ClassEntity =>
                             <div class="card" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>
                                 <div class="card-header">
-                                    Клас: {ClassEntity.name}
+                                    Class: {ClassEntity.name}
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">Класний керівник: {ClassEntity.classroomTeacher}</h5>
+                                    <h5 class="card-title">Classroom teacher: {ClassEntity.classroomTeacher}</h5>
                                     <br />
-                                    <h5 class="card-title">Кількість учнів: {ClassEntity.amountOfStudents}</h5>
+                                    <h5 class="card-title">Number of students: {ClassEntity.amountOfStudents}</h5>
                                     <br />
-                                    <h5 class="card-title">Код доступу: {ClassEntity.accessCode}</h5>
+                                    <h5 class="card-title">Class code: {ClassEntity.accessCode}</h5>
                                     <br />
-                                    <Button variant="outline-primary" onClick={selectValue => this.onRedirectToChange(ClassEntity.idClass)}> Редагувати дані </Button>
+                                    <Button variant="outline-primary" onClick={selectValue => this.onRedirectToChange(ClassEntity.idClass)}> Edit class' data </Button>
                                 </div>
                             </div>  
                         )}

@@ -1,16 +1,12 @@
 ﻿import React from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import DatePicker, { registerLocale } from "react-datepicker";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { authenticationService } from '../services';
 import { userService } from '../services';
 import { Button, Icon, Popup, Input } from "semantic-ui-react";
 import 'semantic-ui-css/semantic.min.css';
-import uk from "date-fns/locale/uk";
-registerLocale("uk", uk);
+
 
 class EditPersonalDataParent extends React.Component {
 
@@ -57,31 +53,21 @@ class EditPersonalDataParent extends React.Component {
                 }}
                 enableReinitialize
                 validationSchema={Yup.object().shape({
-                    nameParent: Yup.string()
-                        .required("Ім'я  обов'язкове."),
-                    patronymicParent: Yup.string()
-                        .required("По батькові обов'язкове."),
-                    surnameParent: Yup.string()
-                        .required("Прізвище обов'язкове."),
                     emailParent: Yup.string()
-                        .email('Неправильний формат пошти.')
-                        .required("Пошта обов'язкова."),
+                        .email('Wrong format of Email.')
+                        .required("Email is required."),
                     passwordParent: Yup.string()
-                        .min(6, 'Пароль повинен містити хоча б 6 символів!')
-                        .required("Пароль обов'язковий"),
+                        .min(6, 'Password must contain at least 6 characters!')
+                        .required("Password is required."),
                     confirmPasswordParent: Yup.string()
-                        .oneOf([Yup.ref('passwordParent'), null], 'Паролі не співпадають!')
-                        .required('Треба підтвердити пароль!'),
+                        .oneOf([Yup.ref('passwordParent'), null], 'Passwords do no match!')
+                        .required('You must confirm the password!'),
                     phoneParent: Yup.string()
-                        .required("Номер телефону обов'язковий"),
-                    genderParent: Yup.string()
-                        .required("Оберіть гендер"),
+                        .required("Phone number is required."),
                     adressParent: Yup.string()
-                        .required("Адреса обов'язкова"),
-                    dateOfBirthParent: Yup.date()
-                        .required("Дата народження обов'язкова!"),
+                        .required("Adress is required."),
                     workOfPlaceParent: Yup.string()
-                        .required('Введіть будь ласка місце роботи')
+                        .required('Place of work is required.')
 
                 })}
                 onSubmit={({ emailParent, passwordParent, workOfPlaceParent, phoneParent, adressParent }, { setStatus, setSubmitting }) => {
@@ -103,26 +89,26 @@ class EditPersonalDataParent extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue }) => (
                     <Form>
-                        <h1>Змінити власні дані</h1>
+                        <h1>Update personal information</h1>
                         <hr />
                         <div className="form-row">
                             <div className="form-group col-5">
-                                <label htmlFor="nameParent">Ім'я</label>
+                                <label htmlFor="nameParent">Name</label>
                                 <Field name="nameParent" type="text" disabled className={'form-control' + (errors.nameParent && touched.nameParent ? ' is-invalid' : '')} />
                                 <ErrorMessage name="nameParent" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col-5">
-                                <label htmlFor="patronymicParent">По батькові</label>
+                                <label htmlFor="patronymicParent">Patronymic</label>
                                 <Field name="patronymicParent" type="text" disabled className={'form-control' + (errors.patronymicParent && touched.patronymicParent ? ' is-invalid' : '')} />
                                 <ErrorMessage name="patronymicParent" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col-5">
-                                <label htmlFor="surnameParent">Прізвище</label>
+                                <label htmlFor="surnameParent">Surname</label>
                                 <Field name="surnameParent" type="text" disabled className={'form-control' + (errors.surnameParent && touched.surnameParent ? ' is-invalid' : '')} />
                                 <ErrorMessage name="surnameParent" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col">
-                                <label htmlFor="dateOfBirthParent">День народження</label>
+                                <label htmlFor="dateOfBirthParent">Date of birth</label>
                                 <br />
                                 <DatePicker
                                     disabled
@@ -130,13 +116,12 @@ class EditPersonalDataParent extends React.Component {
                                     dateFormat="MMMM d, yyyy"
                                     className={'form-control' + (errors.dateOfBirthParent && touched.dateOfBirthParent ? ' is-invalid' : '')}
                                     name="dateOfBirthParent"
-                                    locale="uk"
                                     onChange={date => setFieldValue('dateOfBirthParent', date)}
                                 />
                             </div>
                         </div>
                         <div className="form-group col">
-                            <label htmlFor="genderParent">Гендер</label>
+                            <label htmlFor="genderParent">Gender</label>
                             <Field name="genderParent" as="select" disabled className={'form-control' + (errors.genderParent && touched.genderParent ? ' is-invalid' : '')}>
                                 {this.state.genders.map((gender, i) => (
                                     <option key={gender.idGender} value={gender.idGender}>{gender.genderType}</option>
@@ -146,32 +131,32 @@ class EditPersonalDataParent extends React.Component {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="emailParent">Електронна пошта</label>
+                            <label htmlFor="emailParent">Email</label>
                             <Field name="emailParent" type="text" className={'form-control' + (errors.emailParent && touched.emailParent ? ' is-invalid' : '')} />
                             <ErrorMessage name="emailParent" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="adressParent">Адреса</label>
+                            <label htmlFor="adressParent">Adress</label>
                             <Field name="adressParent" type="text" className={'form-control' + (errors.adressParent && touched.adressParent ? ' is-invalid' : '')} />
                             <ErrorMessage name="adressParent" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="phoneParent">Номер телефону</label>
+                            <label htmlFor="phoneParent">Phone number</label>
                             <Field name="phoneParent" type="text" className={'form-control' + (errors.phoneParent && touched.phoneParent ? ' is-invalid' : '')} />
                             <ErrorMessage name="phoneParent" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="workOfPlaceParent">Місце роботи</label>
+                            <label htmlFor="workOfPlaceParent">Place of work</label>
                             <Field name="workOfPlaceParent" type="text" className={'form-control' + (errors.workOfPlaceParent && touched.workOfPlaceParent ? ' is-invalid' : '')} />
                             <ErrorMessage name="workOfPlaceParent" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-row">                        
                             <div className="form-group col">
-                                <label htmlFor="passwordParent">Пароль</label>
+                                <label htmlFor="passwordParent">Password</label>
                                 <Input name="passwordParent" type={this.state.showPassword ? 'text' : 'password'} value={values.passwordParent} className={'form-control' + (errors.passwordParent && touched.passwordParent ? ' is-invalid' : '')}
                                     onChange={password => setFieldValue('passwordParent', password.target.value)}
                                     icon={
@@ -183,7 +168,7 @@ class EditPersonalDataParent extends React.Component {
                                 <ErrorMessage name="passwordParent" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col">
-                                <label htmlFor="confirmPasswordParent">Підтвердити пароль</label>
+                                <label htmlFor="confirmPasswordParent">Confirm password</label>
                                 <Input name="confirmPasswordParent" type={this.state.showPassword ? 'text' : 'password'} value={values.confirmPasswordParent} className={'form-control' + (errors.confirmPasswordParent && touched.confirmPasswordParent ? ' is-invalid' : '')}
                                     onChange={password => setFieldValue('confirmPasswordParent', password.target.value)}
                                     icon={
@@ -197,8 +182,8 @@ class EditPersonalDataParent extends React.Component {
                         </div>
 
                         <div className="form-group">
-                            <button type="submit" className="btn btn-primary mr-2">Змінити свої дані</button>
-                            <button type="reset" className="btn btn-secondary">Скинути дані</button>
+                            <button type="submit" className="btn btn-primary mr-2">Update personal information</button>
+                            <button type="reset" className="btn btn-secondary">Reset data</button>
                         </div>
                         {status &&
                             <div className={'alert alert-danger'}>{status}</div>

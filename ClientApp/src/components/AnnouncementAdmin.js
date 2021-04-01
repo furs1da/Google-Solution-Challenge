@@ -1,14 +1,9 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
 import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
 
 const MyTextArea = ({ label, ...props }) => {
     const [field, meta] = useField(props);
@@ -31,8 +26,8 @@ class AnnouncementAdmin extends React.Component {
         this.state = {
             secondSelectGroup: [],
             thirdSelectGroup: [],         
-            secondSelectText: 'Оберіть одного з адміністраторів',
-            thirdSelectText: 'Оберіть клас',
+            secondSelectText: 'Select one of the administrators',
+            thirdSelectText: 'Select grade',
             thirdSelectVisibility: false,
             secondSelectDisable: true,
             thirdSelectDisable: true,
@@ -40,26 +35,22 @@ class AnnouncementAdmin extends React.Component {
             announcements: [
                 {
                     value: "1",
-                    label: "Оголошення для вчителів певного предмету"
+                    label: "Announcement for teachers of a certain subject"
                 },
                 {
                     value: "2",
-                    label: "Оголошення для певної паралелі"
+                    label: "Announcement for a certain grade"
                 },
                 {
                     value: "3",
-                    label: "Оголошення для певного типу людей"
+                    label: "Announcement for a certain type of people"
                 },
                 {
                     value: "4",
-                    label: "Оголошення для певного класу"
+                    label: "Announcement for a certain class "
                 }
             ]
         };
-    }
-
-    componentDidMount() {
-
     }
 
     onChangeType(selected, setFieldValue) {
@@ -77,21 +68,21 @@ class AnnouncementAdmin extends React.Component {
             userService.GetAllSubjects().then(secondSelectGroup => this.setState({ secondSelectGroup })).catch(error => this.setState({ error }));
             this.setState({
                 secondSelectDisable: false,
-                secondSelectText: 'Оберіть предмет',
+                secondSelectText: 'Select subject',
             });
         }
         else if (selected.value === "3") {
             userService.GetAllRoles().then(secondSelectGroup => this.setState({ secondSelectGroup })).catch(error => this.setState({ error }));
             this.setState({
                 secondSelectDisable: false,
-                secondSelectText: 'Оберіть тип людей',
+                secondSelectText: 'Select type of people',
             });
         }
         else {
             userService.GetAllFlows().then(secondSelectGroup => this.setState({ secondSelectGroup })).catch(error => this.setState({ error }));
             this.setState({
                 secondSelectDisable: false,
-                secondSelectText: 'Оберіть паралель',
+                secondSelectText: 'Select grade',
             });
         }
     }
@@ -112,7 +103,7 @@ class AnnouncementAdmin extends React.Component {
             userService.GetFlowClassLetters(selected.value).then(thirdSelectGroup => this.setState({ thirdSelectGroup })).catch(error => this.setState({ error }));
             this.setState({
                 thirdSelectDisable: false,
-                thirdSelectText: 'Оберіть клас',
+                thirdSelectText: 'Select grade',
                 thirdSelectVisibility: true,
             });   
         }
@@ -133,9 +124,9 @@ class AnnouncementAdmin extends React.Component {
 
                 validationSchema={Yup.object().shape({
                     title: Yup.string()
-                        .required('Необхідно написати тему оголошення!'),
+                        .required('Write the subject of the announcement!'),
                     content: Yup.string()
-                        .required('Необхідно написати зміст оголошення!')
+                        .required('Write the content oh the announcement!')
                 })}
                 onSubmit={({ firstSelect, secondSelect, thirdSelect, title, content, attachement }, { setStatus, setSubmitting }) => {
                     setStatus();
@@ -155,12 +146,12 @@ class AnnouncementAdmin extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Зробити оголошення</h1>
+                        <h1>Make an announcement</h1>
                         <hr />
                         <div className="form-group col">
-                            <label htmlFor="firstSelect">Оберіть тип людини</label>
+                            <label htmlFor="firstSelect">Select type of the person</label>
                             <Select
-                                placeholder="Оберіть тип людини..."
+                                placeholder="Select type of the person..."
                                 name="firstSelect"
                                 options={this.state.announcements}
                                 className={'basic-multi-select' + (errors.firstSelect && touched.firstSelect ? ' is-invalid' : '')}
@@ -172,7 +163,7 @@ class AnnouncementAdmin extends React.Component {
                         <div className="form-group col">
                             <label htmlFor="secondSelect">{this.state.secondSelectText}</label>
                             <Select
-                                placeholder="Оберіть..."
+                                placeholder="Select..."
                                 name="secondSelect"
                                 options={this.state.secondSelectGroup}
                                 className={'basic-multi-select' + (errors.secondSelect && touched.secondSelect ? ' is-invalid' : '')}
@@ -187,7 +178,7 @@ class AnnouncementAdmin extends React.Component {
                             <div className="form-group col">
                                 <label htmlFor="thirdSelect">{this.state.thirdSelectText}</label>
                             <Select
-                                    placeholder="Оберіть..."
+                                    placeholder="Select..."
                                     name="thirdSelect"
                                     options={this.state.thirdSelectGroup}
                                     className={'basic-multi-select' + (errors.thirdSelect && touched.thirdSelect ? ' is-invalid' : '')}
@@ -211,12 +202,12 @@ class AnnouncementAdmin extends React.Component {
                                 label="Content"
                                 name="content"
                                 rows="10"
-                                placeholder="Напишіть зміст оголошення..."
+                                placeholder="Write the content of the announcement..."
                             />
                         </div>
 
                         <div className="form-group col">
-                            <label for="attachement">Додати файл</label>
+                            <label for="attachement">Add a file</label>
                             <br/>
                             <input
                                 id="attachement"
@@ -230,8 +221,8 @@ class AnnouncementAdmin extends React.Component {
 
 
                         <div className="form-group col">
-                            <button type="submit" className="btn btn-primary mr-2">Зробити оголошення</button>
-                            <button type="reset" className="btn btn-secondary">Скинути дані</button>
+                            <button type="submit" className="btn btn-primary mr-2">Make announcement</button>
+                            <button type="reset" className="btn btn-secondary">Reset</button>
                         </div>
                         {status &&
                             <div className={'alert alert-danger'}>{status}</div>

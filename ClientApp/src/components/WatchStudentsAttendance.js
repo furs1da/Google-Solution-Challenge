@@ -1,14 +1,8 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
-import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
 import { Button, Table } from 'react-bootstrap';
 
 
@@ -37,13 +31,13 @@ class WatchStudentAttendance extends React.Component {
             <Formik>
                 {({ errors, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Відвідуванність</h1>
+                        <h1>Attendance</h1>
                         <hr />
-                        <h3>Оберіть предмет</h3>
+                        <h3>Select subject</h3>
                         <div className="form-group col">
-                            <label htmlFor="zeroSelect">Виберіть предмет</label>
+                            <label htmlFor="zeroSelect">Select subject</label>
                             <Select
-                                placeholder="Оберіть предмет..."
+                                placeholder="Select subject..."
                                 name="zeroSelect"
                                 options={this.state.zeroSelectGroup}
                                 className={'basic-multi-select' + (errors.zeroSelect && touched.zeroSelect ? ' is-invalid' : '')}
@@ -51,13 +45,13 @@ class WatchStudentAttendance extends React.Component {
                                 onChange={selectSubject => this.onChangeSubject(selectSubject, setFieldValue)} />
                             <ErrorMessage name="zeroSelect" component="div" className="invalid-feedback" />
                         </div>
-                        <h3 style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em" }}>Відвідуванність</h3>
+                        <h3 style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em" }}>Attendance</h3>
                         <div>
                             {this.state.atttendances &&
                                 <Table responsive bordered hover>
                                     <thead class="thead-dark">                                   
-                                        <th>Дата уроку</th>
-                                        <th>Присутній(-ня)</th>
+                                        <th>Date of the lesson</th>
+                                        <th>Present</th>
                                     </thead>
                                     <tbody>
                                     {this.state.atttendances.map(attendanceEntity =>

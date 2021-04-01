@@ -1,17 +1,9 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
-import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
 import { saveAs } from 'file-saver';
 import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 
 
 class ListOfAnnouncementsAdmin extends React.Component {
@@ -52,26 +44,26 @@ class ListOfAnnouncementsAdmin extends React.Component {
                     <Form className="justify-content-md-center" class="container-fluid">
                         <div class="container-fluid">
                             <div class="row">
-                                <h1 style={{ marginLeft: -0.5 + "em" }}>Усі оголошення зроблені вами</h1></div>
+                                <h1 style={{ marginLeft: -0.5 + "em" }}>All your announcements</h1></div>
                             <hr />   
                                 {this.state.announcementsList.map(ancmnt =>
                                     <div class="card" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>
                                         <div class="card-header">
-                                            Аудиторія: {ancmnt.audience}
+                                            Audience: {ancmnt.audience}
                                         </div>
                                         <div class="card-body">
-                                            <h5 class="card-title">Тема: {ancmnt.title}</h5>
-                                            <h5 class="card-title">Актуальність: {ancmnt.actual}</h5>
+                                            <h5 class="card-title">Topic: {ancmnt.title}</h5>
+                                            <h5 class="card-title">Is Actual: {ancmnt.actual}</h5>
                                             <br />
-                                            <h6 class="card-subtitle mb-2 text-muted">Дата оголошення: {new Date(ancmnt.dateOfAnnouncement).toLocaleDateString()}</h6>
+                                            <h6 class="card-subtitle mb-2 text-muted">Date of announcement: {new Date(ancmnt.dateOfAnnouncement).toLocaleDateString()}</h6>
                                             <br />
-                                            <h6 class="card-subtitle mb-2 text-muted">Наповнення:</h6>
+                                            <h6 class="card-subtitle mb-2 text-muted">Content:</h6>
                                             <p class="card-text">{ancmnt.content}</p>
                                             {ancmnt.filename !== 'nodata' &&
-                                                <Button variant="outline-primary"   onClick={selectValue => this.onDownload(ancmnt.idAnnouncement, ancmnt.filename)}> {ancmnt.filename} </Button>
+                                                <Button variant="outline-primary" onClick={selectValue => this.onDownload(ancmnt.idAnnouncement, ancmnt.filename)}> {ancmnt.filename} </Button>
                                             }
                                             <br/>
-                                            <Button variant="outline-secondary" block onClick={selectValue => this.onRedirectToChange(ancmnt.idAnnouncement)} style={{ marginTop: 0.5 + "em" }}> Редагувати оголошення </Button>
+                                            <Button variant="outline-secondary" block onClick={selectValue => this.onRedirectToChange(ancmnt.idAnnouncement)} style={{ marginTop: 0.5 + "em" }}> Edit announcement's data </Button>
                                         </div>
                                     </div>  
                                 )} 

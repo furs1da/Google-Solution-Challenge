@@ -1,14 +1,10 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
 import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
+
 
 const MyTextArea = ({ label, ...props }) => {
     // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
@@ -33,7 +29,7 @@ class PostTeacher extends React.Component {
         this.state = {
             firstSelectGroup: [],
             secondSelectGroup: [],         
-            secondSelectText: 'Оберіть паралель',
+            secondSelectText: 'Select grade',
             secondSelectDisable: true,
             error: '',
         };
@@ -77,9 +73,9 @@ class PostTeacher extends React.Component {
 
                     validationSchema={Yup.object().shape({
                         title: Yup.string()
-                            .required('Заповніть будь ласка тему!'),
+                            .required('Add topic!'),
                         content: Yup.string()
-                            .required('Заповніть будь ласка зміст!')
+                            .required('Add content!')
                     })}
                     onSubmit={({ firstSelect, secondSelect, title, content, attachement }, { setStatus, setSubmitting }) => {
                         setStatus();
@@ -99,12 +95,12 @@ class PostTeacher extends React.Component {
                 >
                     {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                         <Form>
-                            <h1>Опублікувати пост</h1>
+                            <h1>Publish post</h1>
                             <hr />
                             <div className="form-group col">
-                                <label htmlFor="firstSelect">Оберіть предмет</label>
+                                <label htmlFor="firstSelect">Select subject</label>
                                 <Select
-                                    placeholder="Оберіть предмет..."
+                                    placeholder="Select subject..."
                                     name="firstSelect"
                                     options={this.state.firstSelectGroup}
                                     className={'basic-multi-select' + (errors.firstSelect && touched.firstSelect ? ' is-invalid' : '')}
@@ -116,7 +112,7 @@ class PostTeacher extends React.Component {
                             <div className="form-group col">
                                 <label htmlFor="secondSelect">{this.state.secondSelectText}</label>
                                 <Select
-                                    placeholder="Оберіть..."
+                                    placeholder="Select..."
                                     name="secondSelect"
                                     options={this.state.secondSelectGroup}
                                     className={'basic-multi-select' + (errors.secondSelect && touched.secondSelect ? ' is-invalid' : '')}
@@ -129,13 +125,13 @@ class PostTeacher extends React.Component {
 
 
                             <div className="form-group col">
-                                <label htmlFor="title">Тема</label>
+                                <label htmlFor="title">Topic</label>
                                 <Field name="title" type="text" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
                                 <ErrorMessage name="title" component="div" className="invalid-feedback" />
                             </div>
 
                             <div className="form-group col">
-                                <label>Зміст уроку</label>
+                                <label>Content</label>
                                 <MyTextArea
                                     label=""
                                     name="content"
@@ -144,7 +140,7 @@ class PostTeacher extends React.Component {
                             </div>
 
                             <div className="form-group col">
-                                <label for="attachement">Прикріпити файл</label>
+                                <label for="attachement">Attach a file</label>
                                 <br />
                                 <input
                                     id="attachement"
@@ -158,8 +154,8 @@ class PostTeacher extends React.Component {
 
 
                             <div className="form-group col">
-                                <button type="submit" className="btn btn-primary mr-2">Опублікувати урок</button>
-                                <button type="reset" className="btn btn-secondary">Скинути дані</button>
+                                <button type="submit" className="btn btn-primary mr-2">Publish post</button>
+                                <button type="reset" className="btn btn-secondary">Reset data</button>
                             </div>
                             {status &&
                                 <div className={'alert alert-danger'}>{status}</div>

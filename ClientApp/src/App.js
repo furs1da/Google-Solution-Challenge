@@ -2,9 +2,6 @@
 import { NavLink, Router, Route, Link } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
-import { AdminPage } from './components/AdminPage';
 import { LoginPage } from './components/LoginPage';
 import { history, Role } from './helpers';
 import { authenticationService } from './services';
@@ -45,9 +42,7 @@ import { FinalGrades } from './components/FinalMarksTeacher';
 import { WatchStudentGrades } from './components/WatchStudentsGrades';
 import { WatchParentGrades } from './components/ParentGrades';
 import { WatchClassroomTeacherGrades } from './components/ClassroomTeacherGrades';
-
 import { WatchStudentAttendance } from './components/WatchStudentsAttendance';
-
 import { WatchParentAttendance } from './components/ParentAttendance';
 import { WatchClassroomTeacherAttendance } from './components/ClassroomTeacherAttendance';
 import { WatchAdminAttendance } from './components/AdminWatchAttendance';
@@ -118,21 +113,21 @@ export default class App extends Component {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="mr-auto">                       
-                                <Nav.Link as={Link} to="/Homeworks">Домашні завдання</Nav.Link>
-                                <Nav.Link as={Link} to="/grades">Оцінки</Nav.Link>
-                                <Nav.Link as={Link} to="/watchAnnouncementsPupil">Оголошення для вас</Nav.Link>
-                                <NavDropdown title="Зв'язок" as={Link} to="/" id="collasible-nav-dropdown">
-                                <NavDropdown.Item as={Link} to="/watchFeedbackPupil">Вхідні</NavDropdown.Item>
+                                <Nav.Link as={Link} to="/Homeworks">Homework assignments</Nav.Link>
+                                <Nav.Link as={Link} to="/grades">Marks</Nav.Link>
+                                <Nav.Link as={Link} to="/watchAnnouncementsPupil">Announcements</Nav.Link>
+                                <NavDropdown title="Communication" as={Link} to="/" id="collasible-nav-dropdown">
+                                <NavDropdown.Item as={Link} to="/watchFeedbackPupil">Mails</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item as={Link} to="/feedbackPupil">Написати повідомлення</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="/feedbackPupil">Send mail</NavDropdown.Item>
                                 </NavDropdown> 
-                                <Nav.Link as={Link} to="/attendanceStudent">Відвідування</Nav.Link>
-                                <Nav.Link as={Link} to="/watchPosts">Пости вчителів</Nav.Link>
+                                <Nav.Link as={Link} to="/attendanceStudent">Attendance</Nav.Link>
+                                <Nav.Link as={Link} to="/watchPosts">Posts</Nav.Link>
                     </Nav>
                     <Nav>
-                        <Nav.Link as={Link} to="/myInfoPupil"><i class="user outline icon"></i>Змінити дані</Nav.Link>
-                        <Nav.Link as={Link} to="/watchFeedbackPupil"><i class="envelope outline icon"></i>Вхідні</Nav.Link>
-                        <Nav.Link onClick={this.logout}><i class="sign out alternate icon"></i>Вийти</Nav.Link>
+                        <Nav.Link as={Link} to="/myInfoPupil"><i class="user outline icon"></i>Edit personal data</Nav.Link>
+                        <Nav.Link as={Link} to="/watchFeedbackPupil"><i class="envelope outline icon"></i>Mails</Nav.Link>
+                        <Nav.Link onClick={this.logout}><i class="sign out alternate icon"></i>Exit</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
                     </Navbar>   
@@ -143,27 +138,27 @@ export default class App extends Component {
                             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                             <Navbar.Collapse id="responsive-navbar-nav">
                             <Nav className="mr-auto">
-                                <Nav.Link as={Link} to="/watchAnnouncementsParent">Оголошення для вас</Nav.Link>
-                                <Nav.Link as={Link} to="/attendanceParent">Відвідування</Nav.Link>
-                                <Nav.Link as={Link} to="/gradesParent">Оцінки</Nav.Link>
+                                <Nav.Link as={Link} to="/watchAnnouncementsParent">Announcements</Nav.Link>
+                                <Nav.Link as={Link} to="/attendanceParent">Attendance</Nav.Link>
+                                <Nav.Link as={Link} to="/gradesParent">Marks</Nav.Link>
                            
                                     <NavDropdown title="Ваші діти" as={Link} to="/" id="collasible-nav-dropdown">
-                                    <NavDropdown.Item as={Link} to="/listOfChilds">Список дітей</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/listOfChilds">List of children</NavDropdown.Item>
                                         <NavDropdown.Divider />
-                                    <NavDropdown.Item as={Link} to="/addChild">Додати дитину</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/addChild">Add a child</NavDropdown.Item>
                                 </NavDropdown>
 
-                                <NavDropdown title="Зв'язок" as={Link} to="/" id="collasible-nav-dropdown">
-                                    <NavDropdown.Item as={Link} to="/watchFeedbackParent">Вхідні</NavDropdown.Item>
+                                <NavDropdown title="Communication" as={Link} to="/" id="collasible-nav-dropdown">
+                                    <NavDropdown.Item as={Link} to="/watchFeedbackParent">Mails</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item as={Link} to="/feedbackParent">Написати повідомлення</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/feedbackParent">Send mail</NavDropdown.Item>
                                 </NavDropdown>
 
                                 </Nav>
                                 <Nav>
-                                <Nav.Link as={Link} to="/myInfoParent"><i class="user outline icon"></i>Змінити дані</Nav.Link>
-                                <Nav.Link as={Link} to="/watchFeedbackParent"><i class="envelope outline icon"></i>Вхідні</Nav.Link>
-                                    <Nav.Link onClick={this.logout}><i class="sign out alternate icon"></i>Вийти</Nav.Link>
+                                <Nav.Link as={Link} to="/myInfoParent"><i class="user outline icon"></i>Edit personal data</Nav.Link>
+                                <Nav.Link as={Link} to="/watchFeedbackParent"><i class="envelope outline icon"></i>Mails</Nav.Link>
+                                    <Nav.Link onClick={this.logout}><i class="sign out alternate icon"></i>Exit</Nav.Link>
                                 </Nav>
                             </Navbar.Collapse>
                         </Navbar>
@@ -174,44 +169,44 @@ export default class App extends Component {
                             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                             <Navbar.Collapse id="responsive-navbar-nav">
                                 <Nav className="mr-auto">
-                                    <Nav.Link as={Link} to="/watchAnnouncementsTeacher">Оголошення для вас</Nav.Link>
-                                    <Nav.Link as={Link} to="/attendanceTeacher">Відвідування</Nav.Link>
+                                    <Nav.Link as={Link} to="/watchAnnouncementsTeacher">Announcements</Nav.Link>
+                                    <Nav.Link as={Link} to="/attendanceTeacher">Attendance</Nav.Link>
 
-                                <NavDropdown title="Зв'язок" as={Link} to="/" id="collasible-nav-dropdown">
-                                    <NavDropdown.Item as={Link} to="/watchFeedbackTeacher">Вхідні</NavDropdown.Item>
+                                <NavDropdown title="Communication" as={Link} to="/" id="collasible-nav-dropdown">
+                                    <NavDropdown.Item as={Link} to="/watchFeedbackTeacher">Mails</NavDropdown.Item>
                                         <NavDropdown.Divider />
-                                    <NavDropdown.Item as={Link} to="/feedbackTeacher">Написати повідомлення</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/feedbackTeacher">Send mail</NavDropdown.Item>
                                 </NavDropdown>
 
-                                <NavDropdown title="Домішні завдання" as={Link} to="/" id="collasible-nav-dropdown">
-                                    <NavDropdown.Item as={Link} to="/allHWSubmissions">Усі завантаження з домашніх завдань</NavDropdown.Item>
+                                <NavDropdown title="Homework assignments" as={Link} to="/" id="collasible-nav-dropdown">
+                                    <NavDropdown.Item as={Link} to="/allHWSubmissions">All homework submissions</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item as={Link} to="/listOfHomeworkInfos">Ваші домашні завдання</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/listOfHomeworkInfos">Your homework assignments</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item as={Link} to="/createHomework">Опублікувати домашнє завдання</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/createHomework">Post homework assignments</NavDropdown.Item>
                                 </NavDropdown>
-                                <NavDropdown title="Пости" as={Link} to="/" id="collasible-nav-dropdown">
-                                    <NavDropdown.Item as={Link} to="/listOfTeachersPosts">Всі пости</NavDropdown.Item>
+                                <NavDropdown title="Posts" as={Link} to="/" id="collasible-nav-dropdown">
+                                    <NavDropdown.Item as={Link} to="/listOfTeachersPosts">Posts</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item as={Link} to="/postSubject">Опублікувати пост</NavDropdown.Item>                                   
+                                    <NavDropdown.Item as={Link} to="/postSubject">Publish your post</NavDropdown.Item>                                   
                                 </NavDropdown>
-                                <NavDropdown title="Оцінки" as={Link} to="/" id="collasible-nav-dropdown">
-                                    <NavDropdown.Item as={Link} to="/thematicalGrades">Тематичні</NavDropdown.Item>
+                                <NavDropdown title="Marks" as={Link} to="/" id="collasible-nav-dropdown">
+                                    <NavDropdown.Item as={Link} to="/thematicalGrades">Thematic marks</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item as={Link} to="/finalGrades">Семестрові</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/finalGrades">Semester marks</NavDropdown.Item>
                                 </NavDropdown>
-                                <NavDropdown title="Для класних керівників" as={Link} to="/" id="collasible-nav-dropdown">
-                                    <NavDropdown.Item as={Link} to="/feedbackClassroomTeacher">Написати повідомлення класу</NavDropdown.Item>
+                                <NavDropdown title="For classroom teachers" as={Link} to="/" id="collasible-nav-dropdown">
+                                    <NavDropdown.Item as={Link} to="/feedbackClassroomTeacher">Send a mail to your class</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item as={Link} to="/attendanceClassroomTeacher">Відвідування в класі</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/attendanceClassroomTeacher">Attendance in your class</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item as={Link} to="/gradesClassroomTeacher">Оцінки в класі</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/gradesClassroomTeacher">Marks in your class</NavDropdown.Item>
                                 </NavDropdown>
                                 </Nav>
                                 <Nav>
-                                <Nav.Link as={Link} to="/myInfoTeacher"><i class="user outline icon"></i>Змінити дані</Nav.Link>
-                                <Nav.Link as={Link} to="/watchFeedbackTeacher"><i class="envelope outline icon"></i>Вхідні</Nav.Link>
-                                    <Nav.Link onClick={this.logout}><i class="sign out alternate icon"></i>Вийти</Nav.Link>
+                                <Nav.Link as={Link} to="/myInfoTeacher"><i class="user outline icon"></i>Edit personal data</Nav.Link>
+                                <Nav.Link as={Link} to="/watchFeedbackTeacher"><i class="envelope outline icon"></i>Mails</Nav.Link>
+                                    <Nav.Link onClick={this.logout}><i class="sign out alternate icon"></i>Exit</Nav.Link>
                                 </Nav>
                             </Navbar.Collapse>
                         </Navbar>
@@ -222,50 +217,51 @@ export default class App extends Component {
                             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                             <Navbar.Collapse id="responsive-navbar-nav">
                                 <Nav className="mr-auto">
-                                    <NavDropdownMenu title="Адміністрування" id="collasible-nav-dropdown">
-                                        <DropdownSubmenu title="Створення">
-                                            <NavDropdown.Item as={Link} to="/createAdmin">Створити адміністратора</NavDropdown.Item>
+                                    <NavDropdownMenu title="Administration" id="collasible-nav-dropdown">
+                                        <DropdownSubmenu title="Administration">
+                                            <NavDropdown.Item as={Link} to="/createAdmin">Create an administrator</NavDropdown.Item>
                                             <NavDropdown.Divider />
-                                        <NavDropdown.Item as={Link} to="/createTeacher">Створити вчителя</NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/createTeacher">Create a teacher</NavDropdown.Item>
                                             <NavDropdown.Divider />
-                                        <NavDropdown.Item as={Link} to="/createPupil">Створити учня</NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/createPupil">Create a student</NavDropdown.Item>
                                             <NavDropdown.Divider />
-                                        <NavDropdown.Item as={Link} to="/createClass">Створити клас</NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/createClass">Create a class</NavDropdown.Item>
                                         </DropdownSubmenu>
                                         <NavDropdown.Divider />
-                                        <DropdownSubmenu title="Списки">
-                                            <NavDropdown.Item as={Link} to="/listOfAdmins">Список адміністраторів</NavDropdown.Item>
+                                        <DropdownSubmenu title="Lists">
+                                            <NavDropdown.Item as={Link} to="/listOfAdmins">List of administrators</NavDropdown.Item>
                                             <NavDropdown.Divider />
-                                        <NavDropdown.Item as={Link} to="/listOfTeachers">Список вчителів</NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/listOfTeachers">List of teachers</NavDropdown.Item>
                                             <NavDropdown.Divider />
-                                        <NavDropdown.Item as={Link} to="/listOfStudents">Список учнів</NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/listOfStudents">List of students</NavDropdown.Item>
                                             <NavDropdown.Divider />
-                                        <NavDropdown.Item as={Link} to="/listOfParents">Список батьків</NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/listOfParents">List of parents</NavDropdown.Item>
                                             <NavDropdown.Divider />
-                                        <NavDropdown.Item as={Link} to="/listOfClasses">Список класів</NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/listOfClasses">List of classes</NavDropdown.Item>
                                             <NavDropdown.Divider />
-                                        <NavDropdown.Item as={Link} to="/listOfAnnouncements">Список оголошень</NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/listOfAnnouncements">List of announcements</NavDropdown.Item>
                                         </DropdownSubmenu>
                                         <NavDropdown.Divider />
-                                        <NavDropdown.Item as={Link} to="/createCurricular">Створити розклад</NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/createCurricular">Create a timetable</NavDropdown.Item>
                                     </NavDropdownMenu>
-                                    <NavDropdown title="Оголошення" as={Link} to="/" id="collasible-nav-dropdown">
-                                        <NavDropdown.Item as={Link} to="/watchAnnouncementsAdmin">Оголошення для вас</NavDropdown.Item>
+                                    <NavDropdown title="Announcements" as={Link} to="/" id="collasible-nav-dropdown">
+                                        <NavDropdown.Item as={Link} to="/watchAnnouncementsAdmin">Announcements</NavDropdown.Item>
                                         <NavDropdown.Divider />
-                                        <NavDropdown.Item as={Link} to="/listOfAnnouncements">Створені вами оголошення</NavDropdown.Item>
-                                    <NavDropdown.Item as={Link} to="/announcementAdmin">Створити оголошення</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/listOfAnnouncements">Your announcements</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item as={Link} to="/announcementAdmin">Create an announcement</NavDropdown.Item>
                                     </NavDropdown>
-                                <NavDropdown title="Зв'язок" as={Link} to="/" id="collasible-nav-dropdown">
-                                        <NavDropdown.Item as={Link} to="/watchFeedbackAdmin">Вхідні</NavDropdown.Item>
+                                <NavDropdown title="Communication" as={Link} to="/" id="collasible-nav-dropdown">
+                                        <NavDropdown.Item as={Link} to="/watchFeedbackAdmin">Mails</NavDropdown.Item>
                                         <NavDropdown.Divider />
-                                        <NavDropdown.Item as={Link} to="/feedbackAdmin">Написати повідомлення</NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/feedbackAdmin">Send mail</NavDropdown.Item>
                                     </NavDropdown>
-                                    <Nav.Link as={Link} to="/attendanceAdmin">Відвідування</Nav.Link>
+                                    <Nav.Link as={Link} to="/attendanceAdmin">Attendance</Nav.Link>
                                 </Nav>
                                 <Nav>
-                                    <Nav.Link as={Link} to="/myInfoAdmin"><i class="user outline icon"></i>Змінити дані</Nav.Link>
-                                    <Nav.Link as={Link} to="/watchFeedbackAdmin"><i class="envelope outline icon"></i>Вхідні</Nav.Link>
-                                    <Nav.Link onClick={this.logout}><i class="sign out alternate icon"></i>Вийти</Nav.Link>
+                                    <Nav.Link as={Link} to="/myInfoAdmin"><i class="user outline icon"></i>Change personal data</Nav.Link>
+                                    <Nav.Link as={Link} to="/watchFeedbackAdmin"><i class="envelope outline icon"></i>Mails</Nav.Link>
+                                    <Nav.Link onClick={this.logout}><i class="sign out alternate icon"></i>Exit</Nav.Link>
                                 </Nav>
                             </Navbar.Collapse>
                         </Navbar>
@@ -275,7 +271,6 @@ export default class App extends Component {
                         <div className="container" class="d-flex justify-content-center" >
                             <div class="container-fluid">
                             <PrivateRoute exact path="/" component={Home} />
-                            <PrivateRoute path="/admin" roles={[Role.Admin]} component={AdminPage} />
                             <PrivateRoute path="/createAdmin" roles={[Role.Admin]} component={CreateAdmin} />
                             <PrivateRoute path="/createTeacher" roles={[Role.Admin]} component={CreateTeacher} />
                             <PrivateRoute path="/createPupil" roles={[Role.Admin]} component={CreatePupil} />

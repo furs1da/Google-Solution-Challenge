@@ -1,14 +1,9 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
 import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
 import { Button, Table } from 'react-bootstrap';
 
 const MyTextArea = ({ label, ...props }) => {
@@ -32,9 +27,9 @@ class FeedBackClassRoomTeacher extends React.Component {
             error: '',
             secondSelectGroup: [],
             thirdSelectGroup: [],
-            receiver: 'Оберіть отримувача',
-            secondSelectText: 'Оберіть учня',
-            thirdSelectText: 'Оберіть одного з батьків',
+            receiver: 'Select receiver',
+            secondSelectText: 'Select student',
+            thirdSelectText: 'Select parent',
             secondSelectVisibility: false,
             thirdSelectVisibility: false,
             secondSelectDisable: true,
@@ -43,11 +38,11 @@ class FeedBackClassRoomTeacher extends React.Component {
             roles: [
                 {
                     value: "1",
-                    label: "Учень"
+                    label: "Student"
                 },
                 {
                     value: "2",
-                    label: "Батьки"
+                    label: "Parent"
                 }
             ]
         };
@@ -64,7 +59,7 @@ class FeedBackClassRoomTeacher extends React.Component {
             secondSelectVisibility: true,
             secondSelectDisable: false,
             thirdSelectVisibility: false,
-            receiver: 'Оберіть отримувача',
+            receiver: 'Select receiver',
         });
 
         setFieldValue('secondSelect', '')
@@ -78,7 +73,7 @@ class FeedBackClassRoomTeacher extends React.Component {
         this.setState({
             thirdSelectVisibility: false,
 
-            receiver: 'Оберіть отримувача',
+            receiver: 'Select receiver',
         });
 
         setFieldValue('thirdSelect', '')
@@ -93,7 +88,7 @@ class FeedBackClassRoomTeacher extends React.Component {
             userService.GetAllParentsForPupil(selected.value).then(thirdSelectGroup => this.setState({ thirdSelectGroup })).catch(error => this.setState({ error }));
             this.setState({
                 thirdSelectDisable: false,
-                thirdSelectText: 'Оберіть одного з батьків',
+                thirdSelectText: 'Select parent',
                 thirdSelectVisibility: true,
             });
         }
@@ -127,9 +122,9 @@ class FeedBackClassRoomTeacher extends React.Component {
 
                 validationSchema={Yup.object().shape({
                     title: Yup.string()
-                        .required('Вкажіть тему!'),
+                        .required('Add topic!'),
                     content: Yup.string()
-                        .required('Додайте зміст!')
+                        .required('Add content!')
                 })}
                 onSubmit={({ firstSelect, secondSelect, thirdSelect, title, content, attachement }, { setStatus, setSubmitting }) => {
                     setStatus();
@@ -154,13 +149,13 @@ class FeedBackClassRoomTeacher extends React.Component {
                         }
                         {this.state.pageAccess === true &&
                             <div>
-                            <h1>Написати повідомлення</h1>
+                            <h1>Send message</h1>
                             <hr />
                             <h3>{this.state.receiver}</h3>
                                 <div className="form-group col">
-                                    <label htmlFor="firstSelect">Оберіть тип людини</label>
+                                    <label htmlFor="firstSelect">Select type of person</label>
                                     <Select
-                                        placeholder="Оберіть тип людини..."
+                                        placeholder="Select type of person..."
                                         name="firstSelect"
                                         options={this.state.roles}
                                         className={'basic-multi-select' + (errors.firstSelect && touched.firstSelect ? ' is-invalid' : '')}
@@ -172,7 +167,7 @@ class FeedBackClassRoomTeacher extends React.Component {
                                     <div className="form-group col">
                                         <label htmlFor="secondSelect">{this.state.secondSelectText}</label>
                                         <Select
-                                            placeholder="Оберіть..."
+                                            placeholder="Select..."
                                             name="secondSelect"
                                             options={this.state.secondSelectGroup}
                                             className={'basic-multi-select' + (errors.secondSelect && touched.secondSelect ? ' is-invalid' : '')}
@@ -187,7 +182,7 @@ class FeedBackClassRoomTeacher extends React.Component {
                                     <div className="form-group col">
                                         <label htmlFor="thirdSelect">{this.state.thirdSelectText}</label>
                                         <Select
-                                            placeholder="Оберіть..."
+                                            placeholder="Select..."
                                             name="thirdSelect"
                                             options={this.state.thirdSelectGroup}
                                             className={'basic-multi-select' + (errors.thirdSelect && touched.thirdSelect ? ' is-invalid' : '')}
@@ -200,7 +195,7 @@ class FeedBackClassRoomTeacher extends React.Component {
                                 }
 
                                 <div className="form-group col">
-                                    <label htmlFor="title">Тема</label>
+                                    <label htmlFor="title">Topic</label>
                                     <Field name="title" type="text" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
                                     <ErrorMessage name="title" component="div" className="invalid-feedback" />
                                 </div>
@@ -211,13 +206,13 @@ class FeedBackClassRoomTeacher extends React.Component {
                                         label="Content"
                                         name="content"
                                         rows="10"
-                                        placeholder="Напишіть зміст звернення..."
+                                        placeholder="Add content..."
                                     />
                                 </div>
 
 
                             <div className="form-group col">
-                                <label for="attachement">Прикріпити файл</label>
+                                <label for="attachement">Attach file</label>
                                 <br />
                                     <input
                                         id="attachement"
@@ -231,8 +226,8 @@ class FeedBackClassRoomTeacher extends React.Component {
 
                         
                             <div class="col" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>
-                                <Button type="submit" block variant="primary">Надіслати</Button>
-                                <Button type="reset" block variant="secondary">Скинути дані</Button>
+                                <Button type="submit" block variant="primary">Send</Button>
+                                <Button type="reset" block variant="secondary">Reset data</Button>
                             </div>
                             </div>}
                         

@@ -1,17 +1,11 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
-import * as Yup from 'yup';
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
 import { Button, Table } from 'react-bootstrap';
-import uk from "date-fns/locale/uk";
-registerLocale("uk", uk);
+
 
 
 
@@ -34,11 +28,11 @@ class WatchAdminAttendance extends React.Component {
             fifthSelectGroup: [
                 {
                     value: "1",
-                    label: "Порахувати пропуски по обраному предмету"
+                    label: "Calculate attendance on selected lesson"
                 },
                 {
                     value: "2",
-                    label: "Порахувати пропуски по всім предметам"
+                    label: "Calculate attendance "
                 }],
         };
     }
@@ -105,7 +99,7 @@ class WatchAdminAttendance extends React.Component {
         }
         else if (values.thirdSelect === "" || values.fourthSelect === "") {
             this.setState({
-                error: "Будь ласка введіть дані",
+                error: "Please, enter data.",
             });
         }
     }
@@ -129,14 +123,14 @@ class WatchAdminAttendance extends React.Component {
                     <Form className="justify-content-md-center">
                     
                         <div class="container">
-                            <h1>Відвідуванність</h1>
+                            <h1>Attendance</h1>
                             <hr />
-                            <h3>Оберіть учня та предмет</h3>
+                            <h3>Please, select a student and a subject</h3>
                             <div class="row">
                                 <div class="col">
-                            <label htmlFor="firstSelect">Виберіть паралель</label>
+                            <label htmlFor="firstSelect">Select grade</label>
                             <Select
-                                placeholder="Оберіть паралель..."
+                                placeholder="Select grade..."
                                 name="firstSelect"
                                 options={this.state.firstSelectGroup}
                                 className={'basic-multi-select' + (errors.firstSelect && touched.firstSelect ? ' is-invalid' : '')}
@@ -146,9 +140,9 @@ class WatchAdminAttendance extends React.Component {
                                     </div>
                         {this.state.secondSelectVisibility === true &&
                                         <div class="col">
-                            <label htmlFor="secondSelect">Виберіть клас</label>
+                            <label htmlFor="secondSelect">Select class</label>
                             <Select
-                                placeholder="Оберіть клас..."
+                                    placeholder="Select class..."
                                     name="secondSelect"
                                     options={this.state.secondSelectGroup}
                                     className={'basic-multi-select' + (errors.secondSelect && touched.secondSelect ? ' is-invalid' : '')}
@@ -160,9 +154,9 @@ class WatchAdminAttendance extends React.Component {
                                 </div>      <div class="row">
                         {this.state.thirdSelectVisibility === true &&
                                         <div class="col">
-                            <label htmlFor="thirdSelect">Виберіть учня</label>
+                            <label htmlFor="thirdSelect">Select student</label>
                             <Select
-                                placeholder="Оберіть учня..."
+                                placeholder="Select student..."
                                 name="thirdSelect"
                                 options={this.state.thirdSelectGroup}
                                 className={'basic-multi-select' + (errors.thirdSelect && touched.thirdSelect ? ' is-invalid' : '')}
@@ -174,9 +168,9 @@ class WatchAdminAttendance extends React.Component {
                             </div>              <div class="row">
                         {this.state.fourthSelectVisibility === true &&
                                         <div class="col">
-                            <label htmlFor="fourthSelect">Виберіть предмет</label>
+                            <label htmlFor="fourthSelect">Select subject</label>
                             <Select
-                                placeholder="Оберіть предмет..."
+                                placeholder="Select subject..."
                                 name="fourthSelect"
                                 options={this.state.fourthSelectGroup}
                                 className={'basic-multi-select' + (errors.fourthSelect && touched.fourthSelect ? ' is-invalid' : '')}
@@ -188,13 +182,13 @@ class WatchAdminAttendance extends React.Component {
                                 </div>
 
 
-                                <h3 style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em" }}>Відвідуванність</h3>
+                                <h3 style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em" }}>Attendance</h3>
                             <div> 
                             {this.state.atttendances &&
                                     <Table responsive bordered hover>
                                     <thead class="thead-dark">
-                                        <th>Дата уроку</th>
-                                        <th>Присутній(-ня)</th>
+                                        <th>Date of the lesson</th>
+                                        <th>Present</th>
                                     </thead>
                                     <tbody>
                                         {this.state.atttendances.map(attendanceEntity =>
@@ -210,10 +204,10 @@ class WatchAdminAttendance extends React.Component {
                             }
                                 </div> 
 
-                            <h3>Розрахунок пропусків</h3>
+                            <h3>Calculate absences</h3>
                             <div class="row">
                                 <div class="col-4">
-                                <label htmlFor="dateOfStart">Дата початку</label>
+                                <label htmlFor="dateOfStart">Start Date</label>
                                 <br />
                                 <DatePicker
                                     selected={values.dateOfStart}
@@ -221,29 +215,27 @@ class WatchAdminAttendance extends React.Component {
                                     className={'form-control' + (errors.dateOfStart && touched.dateOfStart ? ' is-invalid' : '')}
                                     name="dateOfStart"
                                     onChange={date => this.onChangeStartDate(date, setFieldValue, values)}
-                                    locale="uk"
                                 />
                             </div>
 
                                 <div class="col-4 ml-auto">
-                                    <label htmlFor="dateOfEnd">Кінцева дата</label>  
+                                    <label htmlFor="dateOfEnd">End Date</label>  
                                     <br/>
                                 <DatePicker
                                     selected={values.dateOfEnd}
                                     dateFormat="MMMM d, yyyy"
                                     className={'form-control' + (errors.dateOfEnd && touched.dateOfEnd ? ' is-invalid' : '')}
                                     name="dateOfEnd"
-                                    onChange={date => this.onChangeEndDate(date, setFieldValue, values)}
-                                    locale="uk"
+                                    onChange={date => this.onChangeEndDate(date, setFieldValue, values)}                              
                                 />
                                 </div>                                 
                             </div>
                           
                             <div class="row">
                                 <div class="col">
-                                <label htmlFor="fifthSelect">Виберіть опцію</label>
+                                <label htmlFor="fifthSelect">Select option</label>
                                 <Select
-                                    placeholder="Оберіть опцію..."
+                                    placeholder="Select option..."
                                     name="fifthSelect"
                                     options={this.state.fifthSelectGroup}
                                     className={'basic-multi-select' + (errors.fifthSelect && touched.fifthSelect ? ' is-invalid' : '')}
@@ -253,7 +245,7 @@ class WatchAdminAttendance extends React.Component {
                                 </div> </div>
                             <div class="row" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em" }} className="justify-content-md-center">
                                 <div class="col">
-                                    <Button variant="secondary" block onClick={selectValue => this.onSubmitAbsence(values)}> Розрахунок пропусків </Button>
+                                    <Button variant="secondary" block onClick={selectValue => this.onSubmitAbsence(values)}> Calculate absences </Button>
                                     <div class="row"> <h3 style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>{this.state.result}</h3></div>      </div>
                                 </div>
                           

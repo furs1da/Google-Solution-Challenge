@@ -1,15 +1,8 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
-import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
-import { Button } from 'react-bootstrap';
 
 
 class WatchStudentAttendance extends React.Component {
@@ -49,9 +42,9 @@ class WatchStudentAttendance extends React.Component {
                 {({ errors, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
                         <div className="form-group col">
-                            <label htmlFor="zeroSelect">Виберіть предмет</label>
+                            <label htmlFor="zeroSelect">Select subject</label>
                             <Select
-                                placeholder="Оберіть предмет..."
+                                placeholder="Select subject..."
                                 name="zeroSelect"
                                 options={this.state.zeroSelectGroup}
                                 className={'basic-multi-select' + (errors.zeroSelect && touched.zeroSelect ? ' is-invalid' : '')}
@@ -59,13 +52,13 @@ class WatchStudentAttendance extends React.Component {
                                 onChange={selectSubject => this.onChangeSubject(selectSubject, setFieldValue)} />
                             <ErrorMessage name="zeroSelect" component="div" className="invalid-feedback" />
                         </div>
-                        <h3>Відвідуваність</h3>
+                        <h3>Attendance</h3>
                         <div>
                             {this.state.atttendances &&
                                 <table id='gradesTable'>
                                     <thead>
-                                        <th>Дата уроку</th>
-                                        <th>Був чи ні</th>
+                                        <th>Date of the lesson</th>
+                                        <th>Present</th>
                                     </thead>
                                     <tbody>
                                     {this.state.atttendances.map(attendanceEntity =>

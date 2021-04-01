@@ -1,14 +1,8 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
-import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
 import { saveAs } from 'file-saver';
 import { Button } from 'react-bootstrap';
 
@@ -58,12 +52,12 @@ class ListOfHomeworksInfoAdmin extends React.Component {
                     <Form className="justify-content-md-center" class="container-fluid">
                         <div class="container-fluid">
                             <div class="row">
-                                <h1 style={{ marginLeft: -0.5 + "em" }}>Усі домашні завдання, які ви задали</h1></div>
+                                <h1 style={{ marginLeft: -0.5 + "em" }}>All homeworks assignments from you</h1></div>
                             <hr /> 
                         <div className="form-group col">
-                            <label htmlFor="subjectSelect">Оберіть предмет</label>
+                            <label htmlFor="subjectSelect">Select subject</label>
                             <Select
-                                placeholder="Оберіть предмет..."
+                                placeholder="Select subject..."
                                 name="subjectSelect"
                                 options={this.state.subjectsList}
                                 className={'basic-multi-select' + (errors.subjectSelect && touched.subjectSelect ? ' is-invalid' : '')}
@@ -73,23 +67,23 @@ class ListOfHomeworksInfoAdmin extends React.Component {
                             />
                             <ErrorMessage name="subjectSelect" component="div" className="invalid-feedback" />
                         </div>
-                        <h1>Усі домашні завдання</h1>
+                        <h1>All homeworks</h1>
                             {this.state.homeworkInfoList.map(hwInfoEntity =>
                                 <div class="card" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>
                                     <div class="card-header">
-                                        Тема: {hwInfoEntity.title}
+                                        Topic: {hwInfoEntity.title}
                                     </div>
                                     <div class="card-body">
-                                        <h5 class="card-title">Для паралелі: {hwInfoEntity.flowNumber}</h5>
-                                        <h5 class="card-title">Дедлайн: {new Date(hwInfoEntity.dueDate).toLocaleDateString()}</h5>
+                                        <h5 class="card-title">For grade: {hwInfoEntity.flowNumber}</h5>
+                                        <h5 class="card-title">Deadline: {new Date(hwInfoEntity.dueDate).toLocaleDateString()}</h5>
                                         <br />                                       
-                                        <h6 class="card-subtitle mb-2 text-muted">Зміст доманього завдання:</h6>
+                                        <h6 class="card-subtitle mb-2 text-muted">Content:</h6>
                                         <p class="card-text"> {hwInfoEntity.description}</p>
                                         {hwInfoEntity.attechement !== 'nodata' &&
                                             <Button variant="outline-primary" onClick={selectValue => this.onDownload(hwInfoEntity.idHomeworkInfo, hwInfoEntity.attechement)}> {hwInfoEntity.attechement} </Button>
                                         }
                                         <br />
-                                        <Button variant="outline-primary" block onClick={selectValue => this.onRedirectToChange(hwInfoEntity.idHomeworkInfo)} style={{ marginTop: 0.5 + "em" }}> Редагувати дані </Button>                                    
+                                        <Button variant="outline-primary" block onClick={selectValue => this.onRedirectToChange(hwInfoEntity.idHomeworkInfo)} style={{ marginTop: 0.5 + "em" }}> Edit homework's data </Button>                                    
                             </div>
                                         </div>  
                         )}

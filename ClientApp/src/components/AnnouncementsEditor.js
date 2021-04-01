@@ -1,11 +1,7 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
 import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -54,15 +50,15 @@ class ChangeAnnouncementInfo extends React.Component {
     }
     DeleteRecord() {
         confirmAlert({
-            title: "Підтвердіть дію",
-            message: "Ви впевнені, що хочете видалити цей обліковий запис?",
+            title: "Confirm the action",
+            message: "Are you sure you want to delete this announcement?",
             buttons: [
                 {
-                    label: "Так",
+                    label: "Yes",
                     onClick: () => { this.DeleteRecordConfirmed() }
                 },
                 {
-                    label: "Ні"
+                    label: "No"
                 }
             ]
         });
@@ -80,9 +76,9 @@ class ChangeAnnouncementInfo extends React.Component {
                 }}
                 validationSchema={Yup.object().shape({
                     title: Yup.string()
-                        .required('Додайте тему оголошення'),
+                        .required('Add the topic of the announcement'),
                     content: Yup.string()
-                        .required('Додайте зміст оголошення'),
+                        .required('Add the content of the announcement'),
                 })}
                 enableReinitialize
                 onSubmit={({ title, content, attachement, actual }, { setStatus, setSubmitting }) => {
@@ -104,35 +100,35 @@ class ChangeAnnouncementInfo extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Змінити оголошення</h1>
+                        <h1>Change Announcement's data</h1>
                         <hr />
                         <div className="form-group">
-                            <label htmlFor="title">Змінити тему оголошення</label>
+                            <label htmlFor="title">Change the topic of the announcement</label>
                             <Field name="title" type="text" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
                             <ErrorMessage name="title" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label>Опис оголошення</label>
+                            <label>Content</label>
                             <MyTextArea
                                 label=""
                                 name="content"
                                 rows="15"
                             />
                         </div>
-                        <label htmlFor="actual">Чи є оголошення актуальним?</label>
+                        <label htmlFor="actual">Is the announcement relevant now?</label>
                         <Field type="checkbox" name="actual" style={{ marginLeft: 1 + "em" }} id="actual" className={'form-check-input ' +
                             (errors.actual && touched.actual ? ' is-invalid' : '')} /><br />
 
                         <div className="form-group">
-                            <label>Прикріплений файл</label>
+                            <label>Atteched file</label>
                             <br/>
                             {this.state.announcementEntity.filename !== 'no data' &&
                                 <Button type="button" variant="outline-primary" onClick={selectValue => this.onDownload(this.state.announcementEntity.idAnnouncement, this.state.announcementEntity.filename)}> {this.state.announcementEntity.filename} </Button>
                             }
                             <br />
                             <br />
-                            <label for="attachement"><b>Якщо хочете змінити прикріплений файл, оберіть інший файл</b></label>
+                            <label for="attachement"><b>If you want to change the attached file, select another file</b></label>
                           
                             <br />
                             <input
@@ -148,12 +144,12 @@ class ChangeAnnouncementInfo extends React.Component {
 
 
                         <div class="row" >
-                            <div class="col" class="pull-left">  <button type="submit" className="btn btn-primary mr-2" style={{ marginTop: 0.5 + "em" }}>Змінити оголошення</button> </div>
+                            <div class="col" class="pull-left">  <button type="submit" className="btn btn-primary mr-2" style={{ marginTop: 0.5 + "em" }}>Change announcement</button> </div>
                          
-                            <div class="col" class="pull-left">  <button type="reset" className="btn btn-secondary" style={{ marginTop: 0.5 + "em" }}>Повернути попередні дані</button> </div>
+                            <div class="col" class="pull-left">  <button type="reset" className="btn btn-secondary" style={{ marginTop: 0.5 + "em" }}>Reset data</button> </div>
                          
                             <div class="col" class="pull-left">    <Button type="button" animated basic color='red' style={{ marginTop: 0.5 + "em",marginLeft: 0.5 + "em", marginBottom: 1 + "em" }} onClick={selectValue => this.DeleteRecord()}>
-                                <Button.Content visible>Видалити оголошення</Button.Content>
+                                <Button.Content visible>Delete announcement</Button.Content>
                                 <Button.Content hidden>
                                     <Icon name='trash' />
                                 </Button.Content>

@@ -1,13 +1,9 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useFormikContext } from 'formik';
 import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
 import DataTable from "react-data-table-component";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -30,71 +26,71 @@ class CreateCurricular extends React.Component {
             classLetters: [],
             mondayTable: [{
                 id: 1,
-                lessonOrder: "Немає інформації",
-                subject: "Немає інформації",
-                teacher: "Немає інформації",
+                lessonOrder: "No data",
+                subject: "No data",
+                teacher: "No data",
                 day: 1,
             }],
             tuesdayTable: [{
                 id: 1,
-                lessonOrder: "Немає інформації",
-                subject: "Немає інформації",
-                teacher: "Немає інформації",
+                lessonOrder: "No data",
+                subject: "No data",
+                teacher: "No data",
                 day: 2,
             }],
             wednesdayTable: [{
                 id: 1,
-                lessonOrder: "Немає інформації",
-                subject: "Немає інформації",
-                teacher: "Немає інформації",
+                lessonOrder: "No data",
+                subject: "No data",
+                teacher: "No data",
                 day: 3,
             }],
             thursdayTable: [{
                 id: 1,
-                lessonOrder: "Немає інформації",
-                subject: "Немає інформації",
-                teacher: "Немає інформації",
+                lessonOrder: "No data",
+                subject: "No data",
+                teacher: "No data",
                 day: 4,
             }],
             fridayTable: [{
                 id: 1,
-                lessonOrder: "Немає інформації",
-                subject: "Немає інформації",
-                teacher: "Немає інформації",
+                lessonOrder: "No data",
+                subject: "No data",
+                teacher: "No data",
                 day: 5,
             }],
             saturdayTable: [{
                 id: 1,
-                lessonOrder: "Немає інформації",
-                subject: "Немає інформації",
-                teacher: "Немає інформації",
+                lessonOrder: "No data",
+                subject: "No data",
+                teacher: "No data",
                 day: 6,
             }]
         };
     }
     columns = [
         {
-            name: "Номер уроку",
+            name: "Lesson Sequencing",
             selector: "lessonOrder",
             sortable: true
         },
         {
-            name: "Предмет",
+            name: "Subject",
             selector: "subject",
             sortable: false
         },
         {
-            name: "Вчитель",
+            name: "Teacher",
             selector: "teacher",
             sortable: false
         },
         {
-            name: "День тижня",
+            name: "Day of the week",
             selector: "day",
             omit: true
         },
         {
-            name: "Видалити урок",
+            name: "Delete the lesson",
             cell: row => <Button type="button" basic color='red' onClick={selectValue => this.DeleteRecord(row.day, row.lessonOrder)}>
                 <Button.Content visible> <Icon name='trash' /></Button.Content>
             </Button>,
@@ -113,15 +109,15 @@ class CreateCurricular extends React.Component {
 
     DeleteRecord(idDay, order) {
         confirmAlert({
-            title: "Підтвердіть дію",
-            message: "Ви впевнені, що хочете видалити цей урок?",
+            title: "Confirm the action",
+            message: "Are you sure you want to delete this lesson?",
             buttons: [
                 {
-                    label: "Так",
+                    label: "Yes",
                     onClick: () => { this.DeleteRecordConfirmed(idDay, order) }
                 },
                 {
-                    label: "Ні"
+                    label: "No"
                 }
             ]
         });
@@ -195,28 +191,28 @@ class CreateCurricular extends React.Component {
                 enableReinitialize
                 validationSchema={Yup.object().shape({
                     flow: Yup.string()
-                        .required('Оберіть будь ласка паралель'),
+                        .required('Please select the grade.'),
                     letter: Yup.string()
-                        .required('Оберіть будь ласка букву класу'),
+                        .required('Please select the letter of the class.'),
                     dayId: Yup.string()
-                        .required('Оберіть будь ласка день тижня'),
+                        .required('Please select the day of the week.'),
                     subjectId: Yup.string()
-                        .required('Оберіть будь ласка предмет'),
+                        .required('Please select the subject.'),
                     teacherId: Yup.string()
-                        .required('Оберіть будь ласка вчителя'),
+                        .required('Please select the teacher.'),
                     lessonOrder: Yup.string()
-                        .required('Оберіть будь ласка номер уроку')
+                        .required('Please select order of the lesson.')
 
                 })}
             >
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Змінити розклад</h1>
+                        <h1>Change timetable</h1>
                         <hr />
                         <div className="form-group col">
-                            <label htmlFor="flow">Оберіть паралель</label>
+                            <label htmlFor="flow">Select the grade</label>
                             <Select
-                                placeholder="Оберіть паралель"
+                                placeholder="Select the grade"
                                 name="flow"
                                 options={this.state.flows}
                                 className={'basic-multi-select' + (errors.flow && touched.flow ? ' is-invalid' : '')}
@@ -226,9 +222,9 @@ class CreateCurricular extends React.Component {
                         </div>
 
                         <div className="form-group col">
-                            <label htmlFor="letter">Оберіть букву класу</label>
+                            <label htmlFor="letter">Select the letter of class</label>
                             <Select
-                                placeholder="Оберіть букву класу"
+                                placeholder="Select the letter of class"
                                 name="letter"
                                 options={this.state.classLetters}
                                 className={'basic-multi-select' + (errors.letter && touched.letter ? ' is-invalid' : '')}
@@ -239,7 +235,7 @@ class CreateCurricular extends React.Component {
                         <div className="form-group row">
                         <div className="form-group col">
                             <DataTable
-                                title="Понеділок"
+                                title="Monday"
                                 columns={this.columns}
                                 data={this.state.mondayTable}
                                 defaultSortField="lessonOrder"
@@ -248,7 +244,7 @@ class CreateCurricular extends React.Component {
 
                         <div className="form-group col">
                             <DataTable
-                                title="Вівторок"
+                                title="Tuesday"
                                 columns={this.columns}
                                 data={this.state.tuesdayTable}
                                 defaultSortField="lessonOrder"
@@ -257,7 +253,7 @@ class CreateCurricular extends React.Component {
                             </div><div className="form-group row">
                         <div className="form-group col">
                             <DataTable
-                                title="Середа"
+                                title="Wednesday"
                                 columns={this.columns}
                                 data={this.state.wednesdayTable}
                                 defaultSortField="lessonOrder"
@@ -266,18 +262,17 @@ class CreateCurricular extends React.Component {
                       
                         <div className="form-group col">
                             <DataTable
-                                title="Четверг"
+                                title="Thursday"
                                 columns={this.columns}
                                 data={this.state.thursdayTable}
                                 defaultSortField="lessonOrder"
-                  
                             />
                             </div>
                         </div>
                         <div className="form-group row">
                         <div className="form-group col">
                             <DataTable
-                                title="П'ятница"
+                                title="Friday"
                                 columns={this.columns}
                                 data={this.state.fridayTable}
                                 defaultSortField="lessonOrder"
@@ -286,7 +281,7 @@ class CreateCurricular extends React.Component {
 
                         <div className="form-group col">
                             <DataTable
-                                title="Субота"
+                                title="Saturday"
                                 columns={this.columns}
                                 data={this.state.saturdayTable}
                                 defaultSortField="lessonOrder"
@@ -297,22 +292,22 @@ class CreateCurricular extends React.Component {
 
 
                         <div className="form-group row">
-                            <label htmlFor="dayId">День тижня</label>
+                            <label htmlFor="dayId">Day of the Week</label>
                             <Field name="dayId" as="select" className={'form-control' + (errors.dayId && touched.dayId ? ' is-invalid' : '')}>
-                                <option value={1}>Понеділок</option>
-                                <option value={2}>Вівторок</option>
-                                <option value={3}>Середа</option>
-                                <option value={4}>Четверг</option>
-                                <option value={5}>П'ятница</option>
-                                <option value={6}>Субота</option>
+                                <option value={1}>Monday</option>
+                                <option value={2}>Tuesday</option>
+                                <option value={3}>Wednesday</option>
+                                <option value={4}>Thursday</option>
+                                <option value={5}>Friday</option>
+                                <option value={6}>Saturday</option>
                             </Field>
                             <ErrorMessage name="title" component="div" className="invalid-feedback" />
 
 
                             <div className="form-group col-lg-3 col-sm-3 col-md-3">
-                                <label htmlFor="subjectId">Оберіть предмет</label>
+                                <label htmlFor="subjectId">Select the subject</label>
                                 <Select
-                                    placeholder="Оберіть предмет"
+                                    placeholder="Select the subject"
                                     menuPlacement="top"
                                     name="subjectId"
                                     options={this.state.subjects}
@@ -322,9 +317,9 @@ class CreateCurricular extends React.Component {
                                 <ErrorMessage name="subjectId" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col-lg-5 col-sm-3 col-md-3">
-                                <label htmlFor="teacherId">Оберіть вчителя</label>
+                                <label htmlFor="teacherId">Select the teacher</label>
                                 <Select
-                                    placeholder="Оберіть вчителя"
+                                    placeholder="Select the teacher"
                                     menuPlacement="top"
                                     name="teacherId"
                                     options={this.state.teachers}
@@ -334,7 +329,7 @@ class CreateCurricular extends React.Component {
                                 <ErrorMessage name="teacherId" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col-lg-3 col-sm-3 col-md-3">
-                                <label htmlFor="lessonOrder">Вкажіть номер уроку</label>
+                                <label htmlFor="lessonOrder">Enter the lesson's order</label>
                                 <Field name="lessonOrder" as="select" className={'form-control' + (errors.lessonOrder && touched.lessonOrder ? ' is-invalid' : '')}>
                                     <option value={1}>1</option>
                                     <option value={2}>2</option>
@@ -350,8 +345,8 @@ class CreateCurricular extends React.Component {
                         </div>
 
                         <div className="form-group col">
-                            <button type="button" className="btn btn-primary mr-2" onClick={selectValue => this.SubmitLesson(values)}>Додати урок до розкладу</button>
-                            <button type="reset" className="btn btn-secondary">Скинути дані</button>
+                            <button type="button" className="btn btn-primary mr-2" onClick={selectValue => this.SubmitLesson(values)}>Add the lesson to your timetable</button>
+                            <button type="reset" className="btn btn-secondary">Reset data</button>
                         </div>
                         {this.state.error &&
                             <div className={'alert alert-danger'}>{this.state.error}</div>

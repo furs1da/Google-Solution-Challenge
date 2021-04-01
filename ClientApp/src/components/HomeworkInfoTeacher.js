@@ -1,16 +1,11 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
 import * as Yup from 'yup';
-import DatePicker, { registerLocale } from "react-datepicker";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
-import uk from "date-fns/locale/uk";
-registerLocale("uk", uk);
+
 
 const MyTextArea = ({ label, ...props }) => {
     const [field, meta] = useField(props);
@@ -78,15 +73,15 @@ class HomeworkInfo extends React.Component {
                 }}
                 validationSchema={Yup.object().shape({
                     zeroSelect: Yup.string()
-                        .required('Оберіть предмет'),
+                        .required('Select subject'),
                     firstSelect: Yup.string()
-                        .required('Оберіть паралель'),
+                        .required('Select grade'),
                     title: Yup.string()
-                        .required('Додайте тему домашнього завдання'),
+                        .required('Add topic'),
                     content: Yup.string()
-                        .required('Додайте зміст домашнього завдання'),
+                        .required('Add content'),
                     dueDate: Yup.date()
-                        .required('Вкажіть дедлайн домашнього завдання')
+                        .required('Add deadline')
                   
                 })}
                 onSubmit={({ zeroSelect, firstSelect, title, content, attachement, dueDate }, { setStatus, setSubmitting }) => {
@@ -108,12 +103,12 @@ class HomeworkInfo extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Задати домашне завдання</h1>
+                        <h1>Post homework assignment</h1>
                         <hr />
                         <div className="form-group col">
-                            <label htmlFor="zeroSelect">Оберіть предмет</label>
+                            <label htmlFor="zeroSelect">Select subject</label>
                             <Select
-                                placeholder="Оберіть предмет..."
+                                placeholder="Select subject..."
                                 name="zeroSelect"
                                 options={this.state.zeroSelectGroup}
                                 className={'basic-multi-select' + (errors.zeroSelect && touched.zeroSelect ? ' is-invalid' : '')}
@@ -123,9 +118,9 @@ class HomeworkInfo extends React.Component {
                         </div>
 
                         <div className="form-group col">
-                            <label htmlFor="firstSelect">Оберіть паралель</label>
+                            <label htmlFor="firstSelect">Select grade</label>
                             <Select
-                                placeholder="Оберіть паралель..."
+                                placeholder="Select grade..."
                                 name="firstSelect"
                                 options={this.state.firstSelectGroup}
                                 className={'basic-multi-select' + (errors.firstSelect && touched.firstSelect ? ' is-invalid' : '')}
@@ -135,7 +130,7 @@ class HomeworkInfo extends React.Component {
                             <ErrorMessage name="firstSelect" component="div" className="invalid-feedback" />
                         </div> 
                         <div className="form-group col">
-                            <label htmlFor="dueDate">Оберіть дедлайн</label>
+                            <label htmlFor="dueDate">Add deadline</label>
                             <br />
                             <DatePicker
                                 selected={values.dueDate}
@@ -143,28 +138,27 @@ class HomeworkInfo extends React.Component {
                                 className={'form-control' + (errors.dueDate && touched.dueDate ? ' is-invalid' : '')}
                                 name="dueDate"
                                 onChange={date => setFieldValue('dueDate', date)}
-                                locale="uk"
                             />
                         </div>  
 
                         <div className="form-group col">
-                            <label htmlFor="title">Тема домашьного завдання</label>
+                            <label htmlFor="title">Topic</label>
                             <Field name="title" type="text" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
                             <ErrorMessage name="title" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group col">
-                            <label>Опис домашнього задання</label>
+                            <label>Content</label>
                             <MyTextArea
                                 label=""
                                 name="content"
                                 rows="15"
-                                placeholder="Напишіть зміст домашньго завдання..."
+                                placeholder="Add content..."
                             />
                         </div>
 
                         <div className="form-group col">
-                            <label for="attachement">Прикріпити файл</label>
+                            <label for="attachement">Attach file</label>
                             <br />
                             <input
                                 id="attachement"
@@ -179,8 +173,8 @@ class HomeworkInfo extends React.Component {
 
 
                         <div className="form-group col">
-                            <button type="submit" className="btn btn-primary mr-2">Опублікувати домашнє завдання</button>
-                            <button type="reset" className="btn btn-secondary">Скинути дані</button>
+                            <button type="submit" className="btn btn-primary mr-2">Post homework assignment</button>
+                            <button type="reset" className="btn btn-secondary">Reset data</button>
                         </div>
                         {status &&
                             <div className={'alert alert-danger'}>{status}</div>

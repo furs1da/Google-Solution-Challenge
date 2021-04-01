@@ -7,8 +7,6 @@ import { authenticationService } from '../services';
 import { userService } from '../services';
 import { Button, Icon, Popup, Input } from "semantic-ui-react";
 import 'semantic-ui-css/semantic.min.css';
-import uk from "date-fns/locale/uk";
-registerLocale("uk", uk);
 
 
 
@@ -61,30 +59,30 @@ class RegisterPage extends React.Component {
                 validationSchema={Yup.object().shape({
                     imageOfPupil: Yup.mixed().required(),
                     namePupil: Yup.string()
-                        .required("Ім'я  обов'язкове."),
+                        .required("Name is required."),
                     patronymicPupil: Yup.string()
-                        .required("По батькові обов'язкове."),
+                        .required("Patronymic is required."),
                     surnamePupil: Yup.string()
-                        .required("Прізвище обов'язкове."),
+                        .required("Surname is required."),
                     emailPupil: Yup.string()
-                        .email('Неправильний формат пошти.')
-                        .required("Пошта обов'язкова."),
+                        .email('Wrong format of email.')
+                        .required("Email is required."),
                     passwordPupil: Yup.string()
-                        .min(6, 'Пароль повинен містити хоча б 6 символів!')
-                        .required("Пароль обов'язковий"),
+                        .min(6, 'Password must contain at least 6 symbols!')
+                        .required("Password is required."),
                     confirmPasswordPupil: Yup.string()
-                        .oneOf([Yup.ref('passwordPupil'), null], 'Паролі не співпадають!')
-                        .required('Треба підтвердити пароль!'),
+                        .oneOf([Yup.ref('passwordPupil'), null], 'Passwords do not match!')
+                        .required('You must confirm the password!'),
                     phonePupil: Yup.string()
-                        .required("Номер телефону обов'язковий"),
+                        .required("Phone number is required."),
                     genderPupil: Yup.string()
-                        .required("Оберіть гендер"),
+                        .required("Gender is required."),
                     adressPupil: Yup.string()
-                        .required("Адреса обов'язкова"),
+                        .required("Address is required."),
                     classCode: Yup.string()
-                        .required("Введіть код класу!"),
+                        .required("Enter class code."),
                     dateOfBirthPupil: Yup.date()
-                        .required("Дата народження обов'язкова!")
+                        .required("Date of birth is required.")
 
                 })}
                 onSubmit={({ namePupil, patronymicPupil, surnamePupil, emailPupil, passwordPupil, dateOfBirthPupil, genderPupil, motoPupil, phonePupil, adressPupil, imageOfPupil, classCode}, { setStatus, setSubmitting }) => {
@@ -105,26 +103,26 @@ class RegisterPage extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue }) => (
                     <Form>
-                        <h1>Реєстрація у ролі учня</h1>
+                        <h1>Register as a student</h1>
                         <hr />
                         <div className="form-row">                       
                             <div className="form-group col-5">
-                                <label htmlFor="namePupil">Ім'я</label>
+                                <label htmlFor="namePupil">Name</label>
                                 <Field name="namePupil" type="text" className={'form-control' + (errors.namePupil && touched.namePupil ? ' is-invalid' : '')} />
                                 <ErrorMessage name="namePupil" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col-5">
-                                <label htmlFor="patronymicPupil">По батькові</label>
+                                <label htmlFor="patronymicPupil">Patronymic</label>
                                 <Field name="patronymicPupil" type="text" className={'form-control' + (errors.patronymicPupil && touched.patronymicPupil ? ' is-invalid' : '')} />
                                 <ErrorMessage name="patronymicPupil" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col-5">
-                                <label htmlFor="surnamePupil">Прізвище</label>
+                                <label htmlFor="surnamePupil">Surname</label>
                                 <Field name="surnamePupil" type="text" className={'form-control' + (errors.surnamePupil && touched.surnamePupil ? ' is-invalid' : '')} />
                                 <ErrorMessage name="surnamePupil" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col">
-                                <label htmlFor="dateOfBirthPupil">День народження</label>
+                                <label htmlFor="dateOfBirthPupil">Date of birth</label>
                                 <br/>
                                 <DatePicker
                                     selected={values.dateOfBirthPupil}
@@ -136,13 +134,12 @@ class RegisterPage extends React.Component {
                                     showYearDropdown
                                     adjustDateOnChange
                                     dropdownMode="select"
-                                    locale="uk"
                                 />
                             </div>                          
                         </div>
                         <div className="form-group col">
-                            <label htmlFor="genderPupil">Гендер</label>
-                            <Field name="genderPupil" as="select" placeholder="Оберіть гендер..." className={'form-control' + (errors.genderPupil && touched.genderPupil ? ' is-invalid' : '')}>
+                            <label htmlFor="genderPupil">Gender</label>
+                            <Field name="genderPupil" as="select" placeholder="Select gender..." className={'form-control' + (errors.genderPupil && touched.genderPupil ? ' is-invalid' : '')}>
                                 {this.state.genders.map((gender, i) => (
                                     <option key={gender.idGender} value={gender.idGender}>{gender.genderType}</option>
                                 ))}
@@ -150,37 +147,37 @@ class RegisterPage extends React.Component {
                             <ErrorMessage name="title" component="div" className="invalid-feedback" />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="emailPupil">Електронна пошта</label>
+                            <label htmlFor="emailPupil">Email</label>
                             <Field name="emailPupil" type="text" className={'form-control' + (errors.emailPupil && touched.emailPupil ? ' is-invalid' : '')} />
                             <ErrorMessage name="emailPupil" component="div" className="invalid-feedback" />
                         </div>
                         
                         <div className="form-group">
-                            <label htmlFor="adressPupil">Адреса</label>
+                            <label htmlFor="adressPupil">Address</label>
                             <Field name="adressPupil" type="text" className={'form-control' + (errors.adressPupil && touched.adressPupil ? ' is-invalid' : '')} />
                             <ErrorMessage name="adressPupil" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="classCode">Код класу</label>
+                            <label htmlFor="classCode">Class code</label>
                             <Field name="classCode" type="text" className={'form-control' + (errors.classCode && touched.classCode ? ' is-invalid' : '')} />
                             <ErrorMessage name="classCode" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="phonePupil">Номер телефону</label>
+                            <label htmlFor="phonePupil">Phone number</label>
                             <Field name="phonePupil" type="text" className={'form-control' + (errors.phonePupil && touched.phonePupil ? ' is-invalid' : '')} />
                             <ErrorMessage name="phonePupil" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="motoPupil">Девіз</label>
+                            <label htmlFor="motoPupil">Moto</label>
                             <Field name="motoPupil" type="text" className={'form-control' + (errors.motoPupil && touched.motoPupil ? ' is-invalid' : '')} />
                             <ErrorMessage name="motoPupil" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label for="imageOfPupil">Загрузити фото</label>
+                            <label for="imageOfPupil">Upload photo</label>
                             <br/>
                             <input
                                 id="imageOfPupil"
@@ -194,7 +191,7 @@ class RegisterPage extends React.Component {
 
                         <div className="form-row">
                             <div className="form-group col">
-                                <label htmlFor="passwordPupil">Пароль</label>
+                                <label htmlFor="passwordPupil">Password</label>
                                 <Input name="passwordPupil" type={this.state.showPassword ? 'text' : 'password'} className={'form-control' + (errors.passwordPupil && touched.passwordPupil ? ' is-invalid' : '')}
                                     onChange={password => setFieldValue('passwordPupil', password.target.value)}
                                     icon={
@@ -206,7 +203,7 @@ class RegisterPage extends React.Component {
                                 <ErrorMessage name="passwordPupil" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col">
-                                <label htmlFor="confirmPasswordPupil">Підтвердити пароль</label>
+                                <label htmlFor="confirmPasswordPupil">Confirm password</label>
                                 <Input name="confirmPasswordPupil" type={this.state.showPassword ? 'text' : 'password'} className={'form-control' + (errors.confirmPasswordPupil && touched.confirmPasswordPupil ? ' is-invalid' : '')}
                                     onChange={password => setFieldValue('confirmPasswordPupil', password.target.value)}
                                     icon={
@@ -220,8 +217,8 @@ class RegisterPage extends React.Component {
                         </div>   
                         
                         <div className="form-group">
-                            <button type="submit" className="btn btn-primary mr-2">Зареєструватися</button>
-                            <button type="reset" className="btn btn-secondary">Скинути дані</button>
+                            <button type="submit" className="btn btn-primary mr-2">Register</button>
+                            <button type="reset" className="btn btn-secondary">Reset Data</button>
                         </div>
                         {status &&
                             <div className={'alert alert-danger'}>{status}</div>

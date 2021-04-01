@@ -6,20 +6,21 @@ export class Home extends Component {
   render () {
       return (
       <div>
-        <h1>Доборого вам дня!</h1>
-        <p>Ви зайшли на шкільну платформу Step-by-step:</p>
+        <h1>Hello!</h1>
+        <h2>You are on an educational platform Step-by-step</h2>
+        <h3>Some editional resources to improve your coding skills:</h3>
         <ul>
-          <li><a href='http://osvita.ch.ua/'>Управління освіти Чернігівської міської ради</a></li>
-          <li><a href='http://uon.cg.gov.ua/'>Управління освіти і науки Чернігівської державної адміністрації</a></li>
-          <li><a href='https://mon.gov.ua/ua'>Міністерство освіти України</a></li>
+          <li><a href='https://developers.google.com/learn/pathways?hl=en'>Google Developers</a></li>
+          <li><a href='https://www.geeksforgeeks.org/'>Geeks For Geeks</a></li>
+          <li><a href='https://www.khanacademy.org/computing/computer-programming'>Khan Academy</a></li>
         </ul>
-        <p>Наш веб-сайт надає можливість школам зручно проводити процес навчання в мережі Інтернет:</p>
+        <p>Our website allows schools to conveniently conduct the learning process on the Internet:</p>
         <ul>
-          <li><strong>Повне адміністрування:</strong>як тільки ви отримали доступ до облікового запису адміністратора, ви можете перенести свою школу сюди.</li>
-          <li><strong>Завершений цикл навчального процесу:</strong> опублікування матеріалів уроків, домашнього завдання, завантаження домашнього завдання зі сторони учнів та його оцінювання</li>
-          <li><strong>Широка мережа спілкування:</strong>ви завжди можете написати повідомлення тій людині, яка вам потрібна.</li>
+          <li><strong>Full administration: </strong> Once you have access to the administrator account, you can move your school here.</li>
+          <li><strong>Completed cycle of the educational process: </strong> publishing lesson materials, homework, downloading homework by students and its assessment.</li>
+          <li><strong>Wide communication network: </strong> You can always write a message to the person you need.</li>
         </ul>
-        <p>Для подальшої співпраці напишіть на мою пошту - <a href="mailto:furs.dmitry@gmail.com">furs.dmitry@gmail.com</a> </p>
+        <p>For further cooperation, write to my e-mail - <a href="mailto:furs.dmitry@gmail.com">furs.dmitry@gmail.com</a> </p>
       </div>
     );
   }

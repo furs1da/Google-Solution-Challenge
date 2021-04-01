@@ -1,14 +1,8 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
 import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
 
 const MyTextArea = ({ label, ...props }) => {
     const [field, meta] = useField(props);
@@ -50,7 +44,7 @@ class submitHomework extends React.Component {
                     attachement: '',
                 }}
                 validationSchema={Yup.object().shape({
-                    attachement: Yup.mixed().required('Треба прикріпити файл!')
+                    attachement: Yup.mixed().required('Attach the file!')
                 })}
                 onSubmit={({ comment, attachement }, { setStatus, setSubmitting }) => {
                     setStatus();                
@@ -70,17 +64,17 @@ class submitHomework extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>  
-                        <h1>Завантажити домашнє завдання</h1>
+                        <h1>Upload homework</h1>
                         <hr />
                         <div class="card" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>
                             <div class="card-header">
                                 Тема: {this.state.hwObject.title}
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">Вчитель: {this.state.hwObject.teacherName}</h5>
-                                <h5 class="card-title">Дедлайн: {new Date(this.state.hwObject.dueDate).toLocaleDateString()}</h5>
-                                <h5 class="card-title">Статус завантаження: {this.state.hwObject.doneFlag}</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Зміст:</h6>
+                                <h5 class="card-title">Teacher: {this.state.hwObject.teacherName}</h5>
+                                <h5 class="card-title">Deadline: {new Date(this.state.hwObject.dueDate).toLocaleDateString()}</h5>
+                                <h5 class="card-title">Submission status: {this.state.hwObject.doneFlag}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Content:</h6>
                                 <p class="card-text">  {this.state.hwObject.description}</p>                   
                             </div>
                         </div>  
@@ -89,14 +83,14 @@ class submitHomework extends React.Component {
 
                         <div className="form-group col">
                             <MyTextArea
-                                label="Коментарі"
+                                label="Comments:"
                                 name="comment"
                                 rows="10"
-                                placeholder="Напишіть коментарі щодо вашого домашнього завдання, які хочете повідомити своєму вчителю..."
+                                placeholder="Write comments about your homework that you want to tell your teacher..."
                             />
                         </div>
                         <div className="form-group col">
-                            <label for="attachement">Завантажити файл з домашнім завданням</label>
+                            <label for="attachement">Upload homework file</label>
                             <br/>
                             <input
                                 id="attachement"
@@ -111,8 +105,8 @@ class submitHomework extends React.Component {
                         <ErrorMessage name="attachement" component="div" className="invalid-feedback" />
 
                         <div className="form-group col">
-                            <button type="submit" className="btn btn-primary mr-2">Завантажити домашнє завдання</button>
-                            <button type="reset" className="btn btn-secondary">Очистити поля</button>
+                            <button type="submit" className="btn btn-primary mr-2">Upload homework</button>
+                            <button type="reset" className="btn btn-secondary">Reset</button>
                         </div>
                         {status &&
                             <div className={'alert alert-danger'}>{status}</div>

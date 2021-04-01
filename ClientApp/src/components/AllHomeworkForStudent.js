@@ -1,14 +1,9 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
 import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
 import { saveAs  } from 'file-saver';
 import { Button } from 'react-bootstrap';
 
@@ -61,7 +56,7 @@ class HomeworkStudent extends React.Component {
                 }}
                 validationSchema={Yup.object().shape({
                     zeroSelect: Yup.string()
-                        .required('Будь ласка оберіть предмет'),                   
+                        .required('Please, select the subject.'),                   
 
                 })}
             >
@@ -71,9 +66,9 @@ class HomeworkStudent extends React.Component {
                         <hr />
                         <h3>Оберіть предмет</h3>
                         <div className="form-group col">
-                            <label htmlFor="zeroSelect">Оберіть предмет</label>
+                            <label htmlFor="zeroSelect">Select the subject</label>
                             <Select
-                                placeholder="Оберіть предмет..."
+                                placeholder="Please, select the subject..."
                                 name="zeroSelect"
                                 options={this.state.zeroSelectGroup}
                                 className={'basic-multi-select' + (errors.zeroSelect && touched.zeroSelect ? ' is-invalid' : '')}
@@ -81,23 +76,23 @@ class HomeworkStudent extends React.Component {
                                 onChange={selectAnnouncement => this.onChangeSubject(selectAnnouncement, setFieldValue)} />
                             <ErrorMessage name="zeroSelect" component="div" className="invalid-feedback" />
                         </div>
-                        <h2>Усі домашні завдання по предмету "{this.state.subjectLabel}"</h2>
+                        <h2>All homeworks on selected subject "{this.state.subjectLabel}"</h2>
                         {this.state.homeworks.map(hw =>
                             <div class="card" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>
                                 <div class="card-header">
-                                    Тема: {hw.title}
+                                    Topic: {hw.title}
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">Вчитель: {hw.teacherName}</h5>
-                                    <h5 class="card-title">Дедлайн: {new Date(hw.dueDate).toLocaleDateString()}</h5>
-                                    <h5 class="card-title">Статус завантаження: {hw.doneFlag}</h5>
+                                    <h5 class="card-title">Teacher: {hw.teacherName}</h5>
+                                    <h5 class="card-title">Deadline: {new Date(hw.dueDate).toLocaleDateString()}</h5>
+                                    <h5 class="card-title">Status of submission: {hw.doneFlag}</h5>
                                     <br />
-                                    <h6 class="card-subtitle mb-2 text-muted">Зміст доманього завдання:</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">Description:</h6>
                                     <p class="card-text">{hw.description}</p>
                                     {hw.attechement !== 'nodata' &&
                                         <Button variant="outline-primary" style={{ marginLeft: 1 + "em", marginTop: 1 + "em" }} onClick={selectValue => this.onDownload(hw.idHomework, hw.attechement)}> {hw.attechement} </Button>
                                     }
-                                    <Button variant="outline-success" style={{marginLeft: 1 + "em", marginTop: 1 + "em"}} onClick={selectValue => this.onSubmitHomework(hw)}> Завантажити домашнє завдання </Button>
+                                    <Button variant="outline-success" style={{marginLeft: 1 + "em", marginTop: 1 + "em"}} onClick={selectValue => this.onSubmitHomework(hw)}> Submit homework </Button>
                                 </div>
                             </div>       
                         )}

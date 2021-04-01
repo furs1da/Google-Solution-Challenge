@@ -1,13 +1,10 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
+
 
 class CreateClass extends React.Component {
 
@@ -39,13 +36,13 @@ class CreateClass extends React.Component {
 
                 validationSchema={Yup.object().shape({
                     flow: Yup.string()
-                        .required('Оберіть будь ласка паралель'),
+                        .required('Please select the grade.'),
                     letter: Yup.string()
-                        .required('Оберіть будь ласка букву класу'),
+                        .required('Please select letter of the class.'),
                     idClassroomTeacher: Yup.string()
-                        .required('Оберіть будь ласка класного керівника'),
+                        .required('Please select a classroom teacher.'),
                     accessCode: Yup.string()
-                        .required('Введіть будь ласка код доступу')
+                        .required("Please enter admin's code.")
                    
                 })}
                 onSubmit={({ flow, letter, idClassroomTeacher, accessCode}, { setStatus, setSubmitting }) => {
@@ -70,9 +67,9 @@ class CreateClass extends React.Component {
                         <h1>Створити клас</h1>
                         <hr />
                         <div className="form-group col">
-                            <label htmlFor="flow">Паралель</label>
+                            <label htmlFor="flow">Grade</label>
                             <Select
-                                placeholder="Оберіть паралель..."
+                                placeholder="Select grade..."
                                 name="flow"
                                 options={this.state.flows}
                                 className={'basic-select' + (errors.flow && touched.flow ? ' is-invalid' : '')}
@@ -81,7 +78,7 @@ class CreateClass extends React.Component {
                             <ErrorMessage name="flow" component="div" className="invalid-feedback" />
                         </div>
                         <div className="form-group col">
-                            <label htmlFor="letter">Буква класу</label>
+                            <label htmlFor="letter">Letter of the grade</label>
                             <Field name="letter" as="select" className={'form-control' + (errors.letter && touched.letter ? ' is-invalid' : '')}>
                                 {this.state.classLetters.map((letterSelected, i) => (
                                     <option key={letterSelected.idLetter} value={letterSelected.idLetter}>{letterSelected.classLetter}</option>
@@ -90,7 +87,7 @@ class CreateClass extends React.Component {
                             <ErrorMessage name="title" component="div" className="invalid-feedback" />
                         </div>
                         <div className="form-group col">
-                            <label htmlFor="idClassroomTeacher">Класний керівник</label>
+                            <label htmlFor="idClassroomTeacher">Classroom teacher</label>
                             <Field name="idClassroomTeacher" as="select" className={'form-control' + (errors.idClassroomTeacher && touched.idClassroomTeacher ? ' is-invalid' : '')}>
                                 {this.state.availableTeachers.map((teacher, i) => (
                                     <option key={teacher.idTeacher} value={teacher.idTeacher}>{teacher.name + ' ' + teacher.patronymic + ' ' + teacher.surname}</option>
@@ -100,13 +97,13 @@ class CreateClass extends React.Component {
                         </div>                     
                         <div className="form-group col">
   
-                                <label htmlFor="accessCode">Код доступу</label>
+                                <label htmlFor="accessCode">Class code</label>
                                 <Field name="accessCode" type="text" className={'form-control' + (errors.accessCode && touched.accessCode ? ' is-invalid' : '')} />
                                 <ErrorMessage name="accessCode" component="div" className="invalid-feedback" />
                         </div>
                         <div className="form-group col">
-                            <button type="submit" className="btn btn-primary mr-2">Додати клас у систему</button>
-                            <button type="reset" className="btn btn-secondary">Скинути дані</button>
+                            <button type="submit" className="btn btn-primary mr-2">Add the class to the system</button>
+                            <button type="reset" className="btn btn-secondary">Reset data</button>
                         </div>
                         {status &&
                             <div className={'alert alert-danger'}>{status}</div>

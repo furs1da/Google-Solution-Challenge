@@ -1,14 +1,7 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
-import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
 import { saveAs } from 'file-saver';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -47,7 +40,7 @@ class WatchFeedbackResponseParent extends React.Component {
                     <Form className="justify-content-md-center" class="container-fluid">
                         <div class="container-fluid">
                             <div class="row">
-                                <h1 style={{ marginLeft: -0.5 + "em" }}>Усі вхідні</h1> </div>
+                                <h1 style={{ marginLeft: -0.5 + "em" }}>All mails</h1> </div>
                             <hr />
                             {this.state.feedbackList.map(feedbackEntity =>
                                 <div class="card" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>
@@ -57,14 +50,14 @@ class WatchFeedbackResponseParent extends React.Component {
                                     <div class="card-body">
                                         <h5 class="card-title">{feedbackEntity.title}</h5>
                                         <br />
-                                        <h6 class="card-subtitle mb-2 text-muted">Дата звернення: {new Date(feedbackEntity.dateOfFeedback).toLocaleDateString()}</h6>
+                                        <h6 class="card-subtitle mb-2 text-muted">Date of mail: {new Date(feedbackEntity.dateOfFeedback).toLocaleDateString()}</h6>
                                         <br />
-                                        <h6 class="card-subtitle mb-2 text-muted">Наповнення:</h6>
+                                        <h6 class="card-subtitle mb-2 text-muted">Content:</h6>
                                         <p class="card-text">{feedbackEntity.content}</p>
                                         {feedbackEntity.filename !== 'nodata' &&
                                             <Button variant="outline-primary" block onClick={selectValue => this.onDownload(feedbackEntity.idFeedback, feedbackEntity.filename)}> {feedbackEntity.filename} </Button>
                                         }
-                                        <br /> <Link to="/feedbackParent" style={{ fontSize: '.9em', marginLeft: '0.5em' }}>Відкрити вкладку спілкування</Link>
+                                        <br /> <Link to="/feedbackParent" style={{ fontSize: '.9em', marginLeft: '0.5em' }}>Open mailing tab</Link>
                                     </div>
                                 </div>
                             )}

@@ -1,18 +1,14 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
 import * as Yup from 'yup';
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import { saveAs } from 'file-saver';
-import uk from "date-fns/locale/uk";
-registerLocale("uk", uk);
+
 
 const MyTextArea = ({ label, ...props }) => {
     const [field, meta] = useField(props);
@@ -59,15 +55,15 @@ class ChangeHomeworkInfo extends React.Component {
     }
     DeleteRecord() {
         confirmAlert({
-            title: "Підтвердіть дію",
-            message: "Ви впевнені, що хочете видалити цей обліковий запис?",
+            title: "Confirm the action",
+            message: "Are you sure you want to delete this homework?",
             buttons: [
                 {
-                    label: "Так",
+                    label: "Yes",
                     onClick: () => { this.DeleteRecordConfirmed() }
                 },
                 {
-                    label: "Ні"
+                    label: "No"
                 }
             ]
         });
@@ -85,11 +81,11 @@ class ChangeHomeworkInfo extends React.Component {
                 }}
                 validationSchema={Yup.object().shape({   
                     title: Yup.string()
-                        .required('Додайте тему домашнього завдання'),
+                        .required('Add a topic of homework'),
                     content: Yup.string()
-                        .required('Додайте зміст домашнього завдання'),
+                        .required('Add a content of homework'),
                     dueDate: Yup.date()
-                        .required('Вкажіть дедлайн домашнього завдання')
+                        .required('Set the homework deadline')
                 })}
                 enableReinitialize
                 onSubmit={({title, content, attachement, dueDate }, { setStatus, setSubmitting }) => {
@@ -111,29 +107,28 @@ class ChangeHomeworkInfo extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>                     
-                        <h1>Змінити домашне завдання</h1>
+                        <h1>Update homework's information</h1>
                         <hr />
                         <div className="form-group col">
-                            <label htmlFor="dueDate">Змінити дедлайн</label>
+                            <label htmlFor="dueDate">Update deadline</label>
                             <br />
                             <DatePicker
                                 selected={values.dueDate}
                                 dateFormat="MMMM d, yyyy"
                                 className={'form-control' + (errors.dueDate && touched.dueDate ? ' is-invalid' : '')}
                                 name="dueDate"
-                                onChange={date => setFieldValue('dueDate', date)}
-                                locale="uk"
+                                onChange={date => setFieldValue('dueDate', date)}                     
                             />
                         </div>
 
                         <div className="form-group col">
-                            <label htmlFor="title">Змінити тему домашьного завдання</label>
+                            <label htmlFor="title">Update the topic of homework</label>
                             <Field name="title" type="text" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
                             <ErrorMessage name="title" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group col">
-                            <label>Опис домашнього задання</label>
+                            <label>Homework's content</label>
                             <MyTextArea
                                 label=""
                                 name="content"
@@ -141,13 +136,13 @@ class ChangeHomeworkInfo extends React.Component {
                             />
                         </div>
                         <div className="form-group col">
-                            <label>Прикріплений файл</label>
+                            <label>Atteched file</label>
                             {this.state.hwInfoEntity.attechement !== 'nodata' &&
                                 <Button type="button" variant="outline-primary" onClick={selectValue => this.onDownload(this.state.hwInfoEntity.idHomeworkInfo, this.state.hwInfoEntity.attechement)}> {this.state.hwInfoEntity.attechement} </Button>
                             }
                             <br />
                             <br/>
-                            <label for="attachement">Якщо хочете змінити прикріплений файл, оберіть інший файл</label>
+                            <label for="attachement">If you want to change the attached file, select another one</label>
                             <br />
                             <input
                                 id="attachement"
@@ -160,12 +155,12 @@ class ChangeHomeworkInfo extends React.Component {
                         </div>
 
                         <div class="row" >
-                            <div class="col" class="pull-left">  <button type="submit" className="btn btn-primary mr-2" style={{ marginTop: 0.5 + "em" }}>Змінити домашнє завдання</button> </div>
+                            <div class="col" class="pull-left">  <button type="submit" className="btn btn-primary mr-2" style={{ marginTop: 0.5 + "em" }}>Update homework's information</button> </div>
 
-                            <div class="col" class="pull-left">  <button type="reset" className="btn btn-secondary" style={{ marginTop: 0.5 + "em" }}>Повернути попередні дані</button> </div>
+                            <div class="col" class="pull-left">  <button type="reset" className="btn btn-secondary" style={{ marginTop: 0.5 + "em" }}>Reset data</button> </div>
 
                             <div class="col" class="pull-left">    <Button type="button" animated basic color='red' style={{ marginTop: 0.5 + "em", marginLeft: 0.5 + "em", marginBottom: 1 + "em" }} onClick={selectValue => this.DeleteRecord()}>
-                                <Button.Content visible>Видалити оголошення</Button.Content>
+                                <Button.Content visible>Delete homework</Button.Content>
                                 <Button.Content hidden>
                                     <Icon name='trash' />
                                 </Button.Content>

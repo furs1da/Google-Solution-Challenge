@@ -1,15 +1,13 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import DatePicker, { registerLocale } from "react-datepicker";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import { userService } from '../services';
 import { Button, Icon, Popup, Input } from "semantic-ui-react";
 import 'semantic-ui-css/semantic.min.css';
-import uk from "date-fns/locale/uk";
-registerLocale("uk", uk);
+
 
 class CreateTeacher extends React.Component {
 
@@ -53,30 +51,30 @@ class CreateTeacher extends React.Component {
              
                 validationSchema={Yup.object().shape({
                     nameTeacher: Yup.string()
-                        .required("Ім'я  обов'язкове."),
+                        .required("Name is required."),
                     patronymicTeacher: Yup.string()
-                        .required("По батькові обов'язкове."),
+                        .required("Patronymic is required."),
                     surnameTeacher: Yup.string()
-                        .required("Прізвище обов'язкове."),
+                        .required("Surname is required."),
                     emailTeacher: Yup.string()
-                        .email('Неправильний формат пошти.')
-                        .required("Пошта обов'язкова."),
+                        .email('Wrong format of Email.')
+                        .required("Email is required."),
                     passwordTeacher: Yup.string()
-                        .min(6, 'Пароль повинен містити хоча б 6 символів!')
-                        .required("Пароль обов'язковий"),
+                        .min(6, 'Password must contain at least 6 characters!')
+                        .required("Password is required."),
                     confirmPasswordTeacher: Yup.string()
-                        .oneOf([Yup.ref('passwordTeacher'), null], 'Паролі не співпадають!')
-                        .required('Треба підтвердити пароль!'),
+                        .oneOf([Yup.ref('passwordTeacher'), null], 'Passwords do not match!')
+                        .required('You must confirm your password!'),
                     phoneTeacher: Yup.string()
-                        .required("Номер телефону обов'язковий"),
+                        .required("Phone number is required."),
                     genderTeacher: Yup.string()
-                        .required('Оберіть гендер'),
+                        .required('Gender is required.'),
                     adressTeacher: Yup.string()
-                        .required("Адреса обов'язкова"),
+                        .required("Adress is required."),
                     dateOfBirthTeacher: Yup.date()
-                        .required("Дата народження обов'язкова!"),
+                        .required("Date of Birth is required."),
                     selectedOption: Yup.array()
-                        .min(1, "Оберіть будь ласка хоча б один предмет").nullable().required("1 предмет обов'язковий")
+                        .min(1, "Please select at least one subject.").nullable().required("Please select at least one subject.")
                         .of(
                             Yup.object()
                                 .shape({
@@ -106,26 +104,26 @@ class CreateTeacher extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Створити вчителя</h1>
+                        <h1>Create teacher's account</h1>
                         <hr />
                         <div className="form-row">
                             <div className="form-group col-5">
-                                <label htmlFor="nameTeacher">Ім'я</label>
+                                <label htmlFor="nameTeacher">Name</label>
                                 <Field name="nameTeacher" type="text" className={'form-control' + (errors.nameTeacher && touched.nameTeacher ? ' is-invalid' : '')} />
                                 <ErrorMessage name="nameTeacher" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col-5">
-                                <label htmlFor="patronymicTeacher">По батькові</label>
+                                <label htmlFor="patronymicTeacher">Patronymic</label>
                                 <Field name="patronymicTeacher" type="text" className={'form-control' + (errors.patronymicTeacher && touched.patronymicTeacher ? ' is-invalid' : '')} />
                                 <ErrorMessage name="patronymicTeacher" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col-5">
-                                <label htmlFor="surnameTeacher">Прізвище</label>
+                                <label htmlFor="surnameTeacher">Surname</label>
                                 <Field name="surnameTeacher" type="text" className={'form-control' + (errors.surnameTeacher && touched.surnameTeacher ? ' is-invalid' : '')} />
                                 <ErrorMessage name="surnameTeacher" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col">
-                                <label htmlFor="dateOfBirthTeacher">День народження</label>
+                                <label htmlFor="dateOfBirthTeacher">Date of Birth</label>
                                 <br />
                                 <DatePicker
                                     selected={values.dateOfBirthTeacher}
@@ -137,13 +135,12 @@ class CreateTeacher extends React.Component {
                                     showYearDropdown
                                     adjustDateOnChange
                                     dropdownMode="select"
-                                    locale="uk"
                                 />
                             </div>
                         </div>
                         <div className="form-group col">
-                            <label htmlFor="genderTeacher">Гендер</label>
-                            <Field name="genderTeacher" as="select" placeholder="Оберіть гендер..." className={'form-control' + (errors.genderTeacher && touched.genderTeacher ? ' is-invalid' : '')}>
+                            <label htmlFor="genderTeacher">Gender</label>
+                            <Field name="genderTeacher" as="select" placeholder="Select gender..." className={'form-control' + (errors.genderTeacher && touched.genderTeacher ? ' is-invalid' : '')}>
                                 {this.state.genders.map((gender, i) => (
                                     <option key={gender.idGender} value={gender.idGender}>{gender.genderType}</option>
                                 ))}
@@ -151,25 +148,25 @@ class CreateTeacher extends React.Component {
                             <ErrorMessage name="title" component="div" className="invalid-feedback" />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="emailTeacher">Електронна пошта</label>
+                            <label htmlFor="emailTeacher">Email</label>
                             <Field name="emailTeacher" type="text" className={'form-control' + (errors.emailTeacher && touched.emailTeacher ? ' is-invalid' : '')} />
                             <ErrorMessage name="emailTeacher" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="adressTeacher">Адреса</label>
+                            <label htmlFor="adressTeacher">Adress</label>
                             <Field name="adressTeacher" type="text" className={'form-control' + (errors.adressTeacher && touched.adressTeacher ? ' is-invalid' : '')} />
                             <ErrorMessage name="adressTeacher" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="phoneTeacher">Номер телефону</label>
+                            <label htmlFor="phoneTeacher">Phone number</label>
                             <Field name="phoneTeacher" type="text" className={'form-control' + (errors.phoneTeacher && touched.phoneTeacher ? ' is-invalid' : '')} />
                             <ErrorMessage name="phoneTeacher" component="div" className="invalid-feedback" />
                         </div>
                      
                         <div className="form-group">
-                            <label for="imageOfTeacher">Загрузити фото</label>
+                            <label for="imageOfTeacher">Upload photo</label>
                             <br/>
                             <input
                                 id="imageOfTeacher"
@@ -183,7 +180,7 @@ class CreateTeacher extends React.Component {
 
                         <div className="form-row">                  
                             <div className="form-group col">
-                                <label htmlFor="passwordTeacher">Пароль</label>
+                                <label htmlFor="passwordTeacher">Password</label>
                                 <Input name="passwordTeacher" type={this.state.showPassword ? 'text' : 'password'} className={'form-control' + (errors.passwordTeacher && touched.passwordTeacher ? ' is-invalid' : '')}
                                     onChange={password => setFieldValue('passwordTeacher', password.target.value)}
                                     icon={
@@ -195,7 +192,7 @@ class CreateTeacher extends React.Component {
                                 <ErrorMessage name="passwordTeacher" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col">
-                                <label htmlFor="confirmPasswordTeacher">Підтвердити пароль</label>
+                                <label htmlFor="confirmPasswordTeacher">Confirm password</label>
                                 <Input name="confirmPasswordTeacher" type={this.state.showPassword ? 'text' : 'password'} className={'form-control' + (errors.confirmPasswordTeacher && touched.confirmPasswordTeacher ? ' is-invalid' : '')}
                                     onChange={password => setFieldValue('confirmPasswordTeacher', password.target.value)}
                                     icon={
@@ -210,9 +207,9 @@ class CreateTeacher extends React.Component {
 
 
                         <div className="form-group col">
-                            <label htmlFor="selectedOption">Предмети</label>                               
+                            <label htmlFor="selectedOption">Subjects</label>                               
                             <Select 
-                                placeholder="Оберіть предмети..."
+                                placeholder="Select subject..."
                                 isMulti
                                 name="selectedOption"
                                 options={this.state.subjects}
@@ -223,8 +220,8 @@ class CreateTeacher extends React.Component {
                         </div>
                                                   
                         <div className="form-group">
-                            <button type="submit" className="btn btn-primary mr-2">Додати обліковий запис вчителя</button>
-                            <button type="reset" className="btn btn-secondary">Скинути дані</button>
+                            <button type="submit" className="btn btn-primary mr-2">Add a teacher account</button>
+                            <button type="reset" className="btn btn-secondary">Reset data</button>
                         </div>
                         {status &&
                             <div className={'alert alert-danger'}>{status}</div>

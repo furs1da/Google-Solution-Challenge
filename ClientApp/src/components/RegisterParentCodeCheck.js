@@ -31,7 +31,7 @@ class RegisterPageParentCode extends React.Component {
                 enableReinitialize={true}
                 validationSchema={Yup.object().shape({
                     classCode: Yup.string()
-                        .required('Введь код класу!'),                
+                        .required('Enter class code!'),                
                 })}
                 onSubmit={({ classCode }, { setStatus, setSubmitting }) => {
                     setStatus();             
@@ -52,17 +52,17 @@ class RegisterPageParentCode extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue }) => (
                     <Form>
-                        <h1>Будь ласка введіть код класу</h1>
+                        <h1>Please enter class code</h1>
                         <hr/>
                         <div className="form-row">
                             <div className="form-group col-5">
-                                <label htmlFor="classCode">Будь ласка введіть код класу</label>
+                                <label htmlFor="classCode">Please enter class code</label>
                                 <Field name="classCode" type="text" className={'form-control' + (errors.classCode && touched.classCode ? ' is-invalid' : '')} />
                                 <ErrorMessage name="classCode" component="div" className="invalid-feedback" />
                             </div>                 
                         </div>                      
                         <div className="form-group">
-                            <button type="submit" className="btn btn-primary mr-2">Продовжити</button>                       
+                            <button type="submit" className="btn btn-primary mr-2">Continue</button>                       
                         </div>
                         {status &&
                             <div className={'alert alert-danger'}>{status}</div>

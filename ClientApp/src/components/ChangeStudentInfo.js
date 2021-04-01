@@ -3,14 +3,12 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { authenticationService } from '../services';
 import { userService } from '../services';
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { Button, Icon, Popup, Input } from "semantic-ui-react";
 import 'semantic-ui-css/semantic.min.css';
-import uk from "date-fns/locale/uk";
-registerLocale("uk", uk);
+
 
 class ChangePupil extends React.Component {
 
@@ -40,7 +38,7 @@ class ChangePupil extends React.Component {
         userService.DeleteRecordStudentAdmin(this.props.location.state.idStudentList, values.adminCode).then(response => {
             console.log(response)
             setFieldValue("messageServer", response)
-            if (response === "Доступ дозволений!") {
+            if (response === "Access is allowed!") {
                 this.props.history.push({
                     pathname: '/listOfStudents',
                 });
@@ -71,15 +69,15 @@ class ChangePupil extends React.Component {
     }
     DeleteRecord(setFieldValue, values) {
         confirmAlert({
-            title: "Підтвердіть дію",
-            message: "Ви впевнені, що хочете видалити цей обліковий запис?",
+            title: "Confirm the action",
+            message: "Are you sure you want to delete this account?",
             buttons: [
                 {
-                    label: "Так",
+                    label: "Yes",
                     onClick: () => { this.DeleteRecordConfirmed(setFieldValue, values) }
                 },
                 {
-                    label: "Ні"
+                    label: "No"
                 }
             ]
         });
@@ -111,30 +109,30 @@ class ChangePupil extends React.Component {
                 enableReinitialize={true}
                 validationSchema={Yup.object().shape({
                     namePupil: Yup.string()
-                        .required("Ім'я  обов'язкове."),
+                        .required("Name is required."),
                     patronymicPupil: Yup.string()
-                        .required("По батькові обов'язкове."),
+                        .required("Patronymic is required."),
                     surnamePupil: Yup.string()
-                        .required("Прізвище обов'язкове."),
+                        .required("Surname is required."),
                     emailPupil: Yup.string()
-                        .email('Неправильний формат пошти.')
-                        .required("Пошта обов'язкова."),
+                        .email('Wrong format of email.')
+                        .required("Email is required."),
                     passwordPupil: Yup.string()
-                        .min(6, 'Пароль повинен містити хоча б 6 символів!')
-                        .required("Пароль обов'язковий"),
+                        .min(6, 'Password must contain at least 6 characters!')
+                        .required("Password is required."),
                     confirmPasswordPupil: Yup.string()
-                        .oneOf([Yup.ref('passwordPupil'), null], 'Паролі не співпадають!')
-                        .required('Треба підтвердити пароль!'),
+                        .oneOf([Yup.ref('passwordPupil'), null], 'Passwords do not match!')
+                        .required('You must confirm the password!'),
                     phonePupil: Yup.string()
-                        .required("Номер телефону обов'язковий"),
+                        .required("Phone number is required."),
                     genderPupil: Yup.string()
-                        .required("Оберіть гендер"),
+                        .required("Gender is required."),
                     adressPupil: Yup.string()
-                        .required("Адреса обов'язкова"),
+                        .required("Address is required."),
                     classCode: Yup.string()
-                        .required('Введіть код класу'),
+                        .required('Code of the class is required'),
                     dateOfBirthPupil: Yup.date()
-                        .required("Дата народження обов'язкова!"),
+                        .required("Date of birth is required!"),
                     adminCode: '',
                     messageServer: '',
 
@@ -157,26 +155,26 @@ class ChangePupil extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue }) => (
                     <Form>
-                        <h1>Змінити дані адміністратора</h1>
+                        <h1>Change the student information</h1>
                         <hr />
                         <div className="form-row">
                             <div className="form-group col-5">
-                                <label htmlFor="namePupil">Ім'я</label>
+                                <label htmlFor="namePupil">Name</label>
                                 <Field name="namePupil" type="text" className={'form-control' + (errors.namePupil && touched.namePupil ? ' is-invalid' : '')} />
                                 <ErrorMessage name="namePupil" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col-5">
-                                <label htmlFor="patronymicPupil">По батькові</label>
+                                <label htmlFor="patronymicPupil">Patronymic</label>
                                 <Field name="patronymicPupil" type="text" className={'form-control' + (errors.patronymicPupil && touched.patronymicPupil ? ' is-invalid' : '')} />
                                 <ErrorMessage name="patronymicPupil" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col-5">
-                                <label htmlFor="surnamePupil">Прізвище</label>
+                                <label htmlFor="surnamePupil">Surname</label>
                                 <Field name="surnamePupil" type="text" className={'form-control' + (errors.surnamePupil && touched.surnamePupil ? ' is-invalid' : '')} />
                                 <ErrorMessage name="surnamePupil" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col">
-                                <label htmlFor="dateOfBirthPupil">Дата народження</label>
+                                <label htmlFor="dateOfBirthPupil">Date of birth</label>
                                 <br />
                                 <DatePicker
                                     selected={values.dateOfBirthPupil}
@@ -188,13 +186,12 @@ class ChangePupil extends React.Component {
                                     showYearDropdown
                                     adjustDateOnChange
                                     dropdownMode="select"
-                                    locale="uk"
                                 />
                             </div>
                         </div>
                         <div className="form-group col">
-                            <label htmlFor="genderPupil">Гендер</label>
-                            <Field name="genderPupil" as="select" placeholder="Оберіть гендер..." className={'form-control' + (errors.genderPupil && touched.genderPupil ? ' is-invalid' : '')}>
+                            <label htmlFor="genderPupil">Gender</label>
+                            <Field name="genderPupil" as="select" placeholder="Select gender..." className={'form-control' + (errors.genderPupil && touched.genderPupil ? ' is-invalid' : '')}>
                                 {this.state.genders.map((gender, i) => (
                                     <option key={gender.idGender} value={gender.idGender}>{gender.genderType}</option>
                                 ))}
@@ -202,40 +199,40 @@ class ChangePupil extends React.Component {
                             <ErrorMessage name="title" component="div" className="invalid-feedback" />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="emailPupil">Електронна пошта</label>
+                            <label htmlFor="emailPupil">Email</label>
                             <Field name="emailPupil" type="text" className={'form-control' + (errors.emailPupil && touched.emailPupil ? ' is-invalid' : '')} />
                             <ErrorMessage name="emailPupil" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="adressPupil">Адреса</label>
+                            <label htmlFor="adressPupil">Address</label>
                             <Field name="adressPupil" type="text" className={'form-control' + (errors.adressPupil && touched.adressPupil ? ' is-invalid' : '')} />
                             <ErrorMessage name="adressPupil" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="classCode">Введіть інший код класу, якщо хочете перемістити учня в інший клас...</label>
+                            <label htmlFor="classCode">Enter another class code if you want to move the student to another class...</label>
                             <Field name="classCode" type="text" className={'form-control' + (errors.classCode && touched.classCode ? ' is-invalid' : '')} />
                             <ErrorMessage name="classCode" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="phonePupil">Номер телефону</label>
+                            <label htmlFor="phonePupil">Phone number</label>
                             <Field name="phonePupil" type="text" className={'form-control' + (errors.phonePupil && touched.phonePupil ? ' is-invalid' : '')} />
                             <ErrorMessage name="phonePupil" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="motoPupil">Девіз</label>
+                            <label htmlFor="motoPupil">Moto</label>
                             <Field name="motoPupil" type="text" className={'form-control' + (errors.motoPupil && touched.motoPupil ? ' is-invalid' : '')} />
                             <ErrorMessage name="motoPupil" component="div" className="invalid-feedback" />
                         </div>
                         <div>
-                            <h4>Фото учня</h4>
+                            <h4>Image of the student</h4>
                             <img class="img-fluid" style={{ maxHeight: 250 + "px", marginBottom: 1 + "em" }} src={'data:image/png;base64,' + this.state.student.imageOfPupil} />
                         </div>
                         <div className="form-group">
-                            <label for="imageOfTeacher">Загрузити фото учня, якщо ви хочете змінити фото учня</label>
+                            <label for="imageOfTeacher">Upload another student photo, if you want to change student photo</label>
                             <br/>
                             <input
                                 id="imageOfPupil"
@@ -249,7 +246,7 @@ class ChangePupil extends React.Component {
                    
                         <div className="form-row">
                             <div className="form-group col">
-                                <label htmlFor="passwordPupil">Пароль</label>
+                                <label htmlFor="passwordPupil">Password</label>
                                 <Input name="passwordPupil" type={this.state.showPassword ? 'text' : 'password'} value={values.passwordPupil} className={'form-control' + (errors.passwordPupil && touched.passwordPupil ? ' is-invalid' : '')}
                                     onChange={password => setFieldValue('passwordPupil', password.target.value)}
                                     icon={
@@ -261,7 +258,7 @@ class ChangePupil extends React.Component {
                                 <ErrorMessage name="passwordPupil" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col">
-                                <label htmlFor="confirmPasswordPupil">Підтвердити пароль</label>
+                                <label htmlFor="confirmPasswordPupil">Confirm password</label>
                                 <Input name="confirmPasswordPupil" type={this.state.showPassword ? 'text' : 'password'} value={values.confirmPasswordPupil} className={'form-control' + (errors.confirmPasswordPupil && touched.confirmPasswordPupil ? ' is-invalid' : '')}
                                     onChange={password => setFieldValue('confirmPasswordPupil', password.target.value)}
                                     icon={
@@ -274,17 +271,17 @@ class ChangePupil extends React.Component {
                             </div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="adminCode">Код доступу</label>
+                            <label htmlFor="adminCode">Admin code</label>
                             <Field name="adminCode" type="text" className={'form-control' + (errors.adminCode && touched.adminCode ? ' is-invalid' : '')} />
                             <ErrorMessage name="adminCode" component="div" className="invalid-feedback" />
                         </div>        
                         <div class="row" >
-                            <div class="col" class="pull-left">  <button type="submit" className="btn btn-primary mr-2" style={{ marginTop: 0.5 + "em" }}>Змінити  обліковий запис адміністратора</button> </div>
+                            <div class="col" class="pull-left">  <button type="submit" className="btn btn-primary mr-2" style={{ marginTop: 0.5 + "em" }}>Change student's information</button> </div>
 
-                            <div class="col" class="pull-left">   <button type="button" className="btn btn-secondary" style={{ marginTop: 0.5 + "em" }} onClick={selectValue => this.ReturnRecord(setFieldValue)}>Повернути попередні дані</button> </div>
+                            <div class="col" class="pull-left">   <button type="button" className="btn btn-secondary" style={{ marginTop: 0.5 + "em" }} onClick={selectValue => this.ReturnRecord(setFieldValue)}>Reset data</button> </div>
 
                             <div class="col" class="pull-left">    <Button type="button" animated basic color='red' style={{ marginTop: 0.5 + "em", marginLeft: 0.5 + "em", marginBottom: 1 + "em" }} onClick={selectValue => this.DeleteRecord(setFieldValue, values)}>
-                                <Button.Content visible>Видалити обліковий запис</Button.Content>
+                                <Button.Content visible>Delete student's account</Button.Content>
                                 <Button.Content hidden>
                                     <Icon name='trash' />
                                 </Button.Content>

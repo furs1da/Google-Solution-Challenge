@@ -1,15 +1,8 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
-import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
-import { saveAs } from 'file-saver';
 import 'semantic-ui-css/semantic.min.css';
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -27,7 +20,7 @@ class ListOfParentsAdmin extends React.Component {
             parentsList: [],
             secondSelectDisable: true,
             thirdSelectDisable: true,
-            receiver: 'Оберіть учня',
+            receiver: 'Select student',
             error: '',
         };
     }
@@ -42,7 +35,7 @@ class ListOfParentsAdmin extends React.Component {
         this.setState({
             secondSelectDisable: false,
             thirdSelectDisable: true,
-            receiver: 'Оберіть учня',
+            receiver: 'Select student',
         });
 
         setFieldValue('classLetterSelect', '')
@@ -56,7 +49,7 @@ class ListOfParentsAdmin extends React.Component {
 
         this.setState({
             thirdSelectDisable: false,
-            receiver: 'Оберіть учня',         
+            receiver: 'Select student',         
         });
         setFieldValue('studentSelect', '')
         userService.GetAllPupilsForClass(values.flowSelect, selectValue.value).then(studentsList => this.setState({ studentsList })).catch(error => this.setState({ error }));
@@ -86,15 +79,15 @@ class ListOfParentsAdmin extends React.Component {
 
     DeleteRecord(idParent, values) {
         confirmAlert({
-            title: "Підтвердіть дію",
-            message: "Ви впевнені, що хочете видалити цей обліковий запис?",
+            title: "Confirm the action",
+            message: "Are you sure that you want to delete this account?",
             buttons: [
                 {
-                    label: "Так",
+                    label: "Yes",
                     onClick: () => { this.DeleteRecordConfirmed(idParent, values) }
                 },
                 {
-                    label: "Ні"
+                    label: "No"
                 }
             ]
         });
@@ -111,10 +104,11 @@ class ListOfParentsAdmin extends React.Component {
                 }}>
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched, setStatus }) => (
                     <Form>
+                        <h1>Select class</h1>
                         <div className="form-group col">
-                            <label htmlFor="flowSelect">Оберіть паралель</label>
+                            <label htmlFor="flowSelect">Select grade</label>
                             <Select
-                                placeholder="Оберіть паралель..."
+                                placeholder="Select grade..."
                                 name="flowSelect"
                                 options={this.state.flowsList}
                                 className={'basic-multi-select' + (errors.flowSelect && touched.flowSelect ? ' is-invalid' : '')}
@@ -126,9 +120,9 @@ class ListOfParentsAdmin extends React.Component {
                         </div>
 
                         <div className="form-group col">
-                            <label htmlFor="classLetterSelect">Оберіть клас</label>
+                            <label htmlFor="classLetterSelect">Select class</label>
                             <Select
-                                placeholder="Оберіть клас..."
+                                placeholder="Select class..."
                                 name="classLetterSelect"
                                 options={this.state.classLettersList}
                                 className={'basic-multi-select' + (errors.classLetterSelect && touched.classLetterSelect ? ' is-invalid' : '')}
@@ -140,9 +134,9 @@ class ListOfParentsAdmin extends React.Component {
                         </div>
 
                         <div className="form-group col">
-                            <label htmlFor="studentSelect">Оберіть учня</label>
+                            <label htmlFor="studentSelect">Select student</label>
                             <Select
-                                placeholder="Оберіть учня..."
+                                placeholder="Select student..."
                                 name="studentSelect"
                                 options={this.state.studentsList}
                                 className={'basic-multi-select' + (errors.studentSelect && touched.studentSelect ? ' is-invalid' : '')}
@@ -153,24 +147,24 @@ class ListOfParentsAdmin extends React.Component {
                             <ErrorMessage name="studentSelect" component="div" className="invalid-feedback" />
                         </div>
 
-                        <h1>Усі батьки у {this.state.receiver}</h1>
+                        <h1>Student's parent {this.state.receiver}</h1>
                         {this.state.parentsList.map(parentEntity =>
                             <div class="card" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>
                                 <div class="card-header">
                                     ПІБ: {parentEntity.fio}
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">Дата народження: {new Date(parentEntity.dateOfBirth).toLocaleDateString()}</h5>
-                                    <h5 class="card-title">Електронна пошта: {parentEntity.mail}</h5>
+                                    <h5 class="card-title">Date of birth: {new Date(parentEntity.dateOfBirth).toLocaleDateString()}</h5>
+                                    <h5 class="card-title">Email: {parentEntity.mail}</h5>
                                     <br />
-                                    <h5 class="card-title">Телефон: {parentEntity.phone}</h5>
+                                    <h5 class="card-title">Mobile phone: {parentEntity.phone}</h5>
                                     <br />
-                                    <h5 class="card-title">Домашня адресса: {parentEntity.adress}</h5>
+                                    <h5 class="card-title">Home address: {parentEntity.adress}</h5>
                                     <br />
-                                    <h5 class="card-title">Місце роботи: {parentEntity.workPlace}</h5>
+                                    <h5 class="card-title">Place of work: {parentEntity.workPlace}</h5>
                                     <br />
                                     <Button animated basic color='red' onClick={selectValue => this.DeleteRecord(parentEntity.idParent, values)}>
-                                        <Button.Content visible>Видалити дані</Button.Content>
+                                        <Button.Content visible>Delete account</Button.Content>
                                         <Button.Content hidden>
                                             <Icon name='trash' />
                                         </Button.Content>

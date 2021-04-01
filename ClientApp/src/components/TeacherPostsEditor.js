@@ -1,11 +1,7 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
 import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -55,15 +51,15 @@ class ChangePostInfo extends React.Component {
     }
     DeleteRecord() {
         confirmAlert({
-            title: "Підтвердіть дію",
-            message: "Ви впевнені, що хочете видалити цей обліковий запис?",
+            title: "Confirm the action",
+            message: "Are you sure that you want to delete this post?",
             buttons: [
                 {
-                    label: "Так",
+                    label: "Yes",
                     onClick: () => { this.DeleteRecordConfirmed() }
                 },
                 {
-                    label: "Ні"
+                    label: "No"
                 }
             ]
         });
@@ -80,9 +76,9 @@ class ChangePostInfo extends React.Component {
                 }}
                 validationSchema={Yup.object().shape({
                     title: Yup.string()
-                        .required('Додайте тему поста'),
+                        .required('Add topic'),
                     content: Yup.string()
-                        .required('Додайте зміст поста'),
+                        .required('Add content'),
                 })}
                 enableReinitialize
                 onSubmit={({ title, content, attachement }, { setStatus, setSubmitting }) => {
@@ -104,16 +100,16 @@ class ChangePostInfo extends React.Component {
             >
                 {({ errors, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form> 
-                        <h1>Змінити пост</h1>
+                        <h1>Change the post</h1>
                         <hr />
                         <div className="form-group col">
-                            <label htmlFor="title">Змінити тему поста</label>
+                            <label htmlFor="title">Change topic of the post</label>
                             <Field name="title" type="text" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
                             <ErrorMessage name="title" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group col">
-                            <label>Опис поста</label>
+                            <label>Post's content</label>
                             <MyTextArea
                                 label=""
                                 name="content"
@@ -121,14 +117,14 @@ class ChangePostInfo extends React.Component {
                             />
                         </div>
                         <div className="form-group col">
-                            <label>Прикріплений файл</label>
+                            <label>Attached file</label>
                             <br />
                             {this.state.postEntity.attechement !== 'nodata' &&               
                                 <Button type="button" variant="outline-primary" onClick={selectValue => this.onDownload(this.state.postEntity.idPost, this.state.postEntity.filename)}> {this.state.postEntity.filename} </Button>
                             }  
                             <br />
                             <br />
-                            <label for="attachement">Якщо хочете змінити прикріплений файл, оберіть інший файл</label>
+                            <label for="attachement">If you want to change the attached file, attach another file</label>
                             <br />
                             <input
                                 id="attachement"
@@ -140,12 +136,12 @@ class ChangePostInfo extends React.Component {
                             />
                         </div>
                         <div class="row" >
-                            <div class="col" class="pull-left">  <button type="submit" className="btn btn-primary mr-2" style={{ marginTop: 0.5 + "em" }}>Змінити пост</button> </div>
+                            <div class="col" class="pull-left">  <button type="submit" className="btn btn-primary mr-2" style={{ marginTop: 0.5 + "em" }}>Change post's information</button> </div>
 
-                            <div class="col" class="pull-left">  <button type="reset" className="btn btn-secondary" style={{ marginTop: 0.5 + "em" }}>Повернути попередні дані</button> </div>
+                            <div class="col" class="pull-left">  <button type="reset" className="btn btn-secondary" style={{ marginTop: 0.5 + "em" }}>Reset data</button> </div>
 
                             <div class="col" class="pull-left">    <Button type="button" animated basic color='red' style={{ marginTop: 0.5 + "em", marginLeft: 0.5 + "em", marginBottom: 1 + "em" }} onClick={selectValue => this.DeleteRecord()}>
-                                <Button.Content visible>Видалити оголошення</Button.Content>
+                                <Button.Content visible>Delete post</Button.Content>
                                 <Button.Content hidden>
                                     <Icon name='trash' />
                                 </Button.Content>

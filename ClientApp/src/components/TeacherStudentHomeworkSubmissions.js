@@ -1,14 +1,8 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
-import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
 import { saveAs } from 'file-saver';
 import { Button } from 'react-bootstrap';
 
@@ -116,12 +110,12 @@ class HomeworkStudentSubmissionsTeacher extends React.Component {
             >
                 {({ errors, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Усі завантаження домашніх робот</h1>
+                        <h1>All homework submissions</h1>
                         <hr />
                         <div className="form-group col">
-                            <label htmlFor="zeroSelect">Оберіть предмет</label>
+                            <label htmlFor="zeroSelect">Select subject</label>
                             <Select
-                                placeholder="Оберіть предмет..."
+                                placeholder="Select subject..."
                                 name="zeroSelect"
                                 options={this.state.zeroSelectGroup}
                                 className={'basic-multi-select' + (errors.zeroSelect && touched.zeroSelect ? ' is-invalid' : '')}
@@ -131,9 +125,9 @@ class HomeworkStudentSubmissionsTeacher extends React.Component {
                         </div>
                         {this.state.firstSelectGroupVisibility === true &&
                             <div className="form-group col">
-                                <label htmlFor="firstSelect">Оберіть паралель</label>
+                                <label htmlFor="firstSelect">Select grade</label>
                             <Select
-                                placeholder="Оберіть паралель..."
+                                placeholder="Select grade..."
                                     name="firstSelect"
                                     options={this.state.firstSelectGroup}
                                     className={'basic-multi-select' + (errors.firstSelect && touched.firstSelect ? ' is-invalid' : '')}
@@ -145,9 +139,9 @@ class HomeworkStudentSubmissionsTeacher extends React.Component {
 
                         {this.state.secondSelectGroupVisibility === true &&
                             <div className="form-group col">
-                                <label htmlFor="secondSelect">Оберіть клас</label>
+                                <label htmlFor="secondSelect">Select class</label>
                             <Select
-                                placeholder="Оберіть клас..."
+                                placeholder="Select class..."
                                     name="secondSelect"
                                     options={this.state.secondSelectGroup}
                                     className={'basic-multi-select' + (errors.secondSelect && touched.secondSelect ? ' is-invalid' : '')}
@@ -158,9 +152,9 @@ class HomeworkStudentSubmissionsTeacher extends React.Component {
                         }
                         {this.state.thirdSelectGroupVisibility === true &&
                             <div className="form-group col">
-                                <label htmlFor="thirdSelect">Обрати домашні завдання певного учня</label>
+                                <label htmlFor="thirdSelect">Select homework submissions from selected student</label>
                             <Select
-                                placeholder="Оберіть учня..."
+                                placeholder="Select student..."
                                     name="thirdSelect"
                                     options={this.state.thirdSelectGroup}
                                     className={'basic-multi-select' + (errors.thirdSelect && touched.thirdSelect ? ' is-invalid' : '')}
@@ -171,9 +165,9 @@ class HomeworkStudentSubmissionsTeacher extends React.Component {
                         }
                         {this.state.fourthSelectGroupVisibility === true &&
                             <div className="form-group col">
-                                <label htmlFor="fourthSelect">Обрати певне домашнє завдання</label>
+                                <label htmlFor="fourthSelect">Select homework assignment</label>
                             <Select
-                                placeholder="Оберіть певне дз..."
+                                placeholder="Select homework..."
                                     name="fourthSelect"
                                     options={this.state.fourthSelectGroup}
                                     className={'basic-multi-select' + (errors.fourthSelect && touched.fourthSelect ? ' is-invalid' : '')}
@@ -184,22 +178,22 @@ class HomeworkStudentSubmissionsTeacher extends React.Component {
                         }
 
 
-                        <h1>Усі завантаження з предмету "{this.state.subjectLabel}"</h1>
+                        <h1>All submissions from "{this.state.subjectLabel}"</h1>
                         {this.state.hwSubmissions.map(hw =>
                             <div class="card" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>
                                 <div class="card-header">
                                     Тема: {hw.title}
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">Учень: {hw.studentName}</h5>
-                                    <h5 class="card-title">Дата завантаження: {new Date(hw.dateSubmission).toLocaleDateString()}</h5>
-                                    <h5 class="card-title">Дотримання дедлайну: {hw.dueFlag}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">Коментарі від учня:</h6>
+                                    <h5 class="card-title">Student: {hw.studentName}</h5>
+                                    <h5 class="card-title">Date of the submission: {new Date(hw.dateSubmission).toLocaleDateString()}</h5>
+                                    <h5 class="card-title">Deadline: {hw.dueFlag}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">Comments from the student:</h6>
                                     <p class="card-text">  {hw.comments}</p>
 
                                     <Button variant="outline-primary" onClick={selectValue => this.onDownload(hw.idSubmission, hw.attechement)}> {hw.attechement} </Button>
                                     <br />
-                                    <Button variant="outline-success" block onClick={selectValue => this.onCheckHomework(hw)} style={{ marginTop: 0.5 + "em" }}> Поставити оцінку </Button>                    
+                                    <Button variant="outline-success" block onClick={selectValue => this.onCheckHomework(hw)} style={{ marginTop: 0.5 + "em" }}> Give a mark </Button>                    
                                 </div>
                             </div>  
                            

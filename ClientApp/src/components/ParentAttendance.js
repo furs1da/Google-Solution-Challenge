@@ -1,14 +1,8 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
-import * as Yup from 'yup';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
 import { Button, Table } from 'react-bootstrap';
 
 
@@ -56,12 +50,12 @@ class WatchParentAttendance extends React.Component {
                 {({ errors, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
                         <div class="container">
-                            <h1>Відвідуванність</h1>
+                            <h1>Attendance</h1>
                             <hr />
                         <div className="form-group col">
-                            <label htmlFor="firstSelect">Виберіть одного з ваших дітей</label>
+                            <label htmlFor="firstSelect">Select one of your children</label>
                             <Select
-                                placeholder="Оберіть дитину..."
+                                placeholder="Select one of your childre..."
                                 name="firstSelect"
                                 options={this.state.firstSelectGroup}
                                 className={'basic-multi-select' + (errors.zeroSelect && touched.zeroSelect ? ' is-invalid' : '')}
@@ -71,9 +65,9 @@ class WatchParentAttendance extends React.Component {
                         </div>
                         {this.state.zeroSelectGroupVisibility === true &&
                             <div className="form-group col">
-                                <label htmlFor="zeroSelect">Виберіть предмет</label>
+                                <label htmlFor="zeroSelect">Select subject</label>
                             <Select
-                                placeholder="Оберіть предмет..."
+                                    placeholder="Select subject..."
                                     name="zeroSelect"
                                     options={this.state.zeroSelectGroup}
                                     className={'basic-multi-select' + (errors.zeroSelect && touched.zeroSelect ? ' is-invalid' : '')}
@@ -86,8 +80,8 @@ class WatchParentAttendance extends React.Component {
                             {this.state.atttendances &&
                                     <Table responsive bordered hover>
                                         <thead class="thead-dark">
-                                        <th>Дата уроку</th>
-                                        <th>Присутній(-ня)</th>
+                                        <th>Date of the lesson</th>
+                                        <th>Present</th>
                                     </thead>
                                     <tbody>
                                         {this.state.atttendances.map(attendanceEntity =>

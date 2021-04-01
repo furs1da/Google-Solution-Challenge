@@ -7,13 +7,11 @@ import { userService } from '../services';
 import { Button, Table } from 'react-bootstrap';
 
 const MyTextArea = ({ label, ...props }) => {
-    // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
-    // which we can spread on <input> and alse replace ErrorMessage entirely.
     const [field, meta] = useField(props);
     return (
         <>
             <label htmlFor={props.id || props.name}>{label}</label>
-            <textarea className="text-area" {...field} {...props} style={{ width: 100+"%"}} />
+            <textarea className="text-area" {...field} {...props} style={{ width: 100 + "%" }} />
             {meta.touched && meta.error ? (
                 <div className="error">{meta.error}</div>
             ) : null}
@@ -30,11 +28,11 @@ class FeedBackAdmin extends React.Component {
             thirdSelectGroup: [],
             fourthSelectGroup: [],
             fifthSelectGroup: [],
-            receiver: 'Оберіть отримувача',
-            secondSelectText: 'Оберіть адмністратора',
-            thirdSelectText: 'Оберіть клас',
-            fourthSelectText: 'Оберіть учня',
-            fifthSelectText: 'Оберіть одного з батьків',
+            receiver: 'Select receiver',
+            secondSelectText: 'Select administrator',
+            thirdSelectText: 'Select grade',
+            fourthSelectText: 'Select student',
+            fifthSelectText: 'Select parent',
             thirdSelectVisibility: false,
             fourthSelectVisibility: false,
             fifthelectVisibility: false,
@@ -45,23 +43,23 @@ class FeedBackAdmin extends React.Component {
             roles: [
                 {
                     value: "1",
-                    label: "Адміністратор"
+                    label: "Administrator"
                 },
                 {
                     value: "2",
-                    label: "Вчитель"
+                    label: "Teacher"
                 },
                 {
                     value: "3",
-                    label: "Класний керівник"
+                    label: "Classroom Teacher"
                 },
                 {
                     value: "4",
-                    label: "Учень"
+                    label: "Student"
                 },
                 {
                     value: "5",
-                    label: "Батьки"
+                    label: "Parent"
                 }
             ],
              error: '',
@@ -79,7 +77,7 @@ class FeedBackAdmin extends React.Component {
             thirdSelectVisibility: false,
             fourthSelectVisibility: false,
             fifthelectVisibility: false,
-            receiver: 'Оберіть отримувача',
+            receiver: 'Select receiver',
         });
 
         setFieldValue('secondSelect', '')
@@ -92,21 +90,21 @@ class FeedBackAdmin extends React.Component {
             userService.GetAllAdmins().then(secondSelectGroup => this.setState({ secondSelectGroup })).catch(error => this.setState({ error }));
             this.setState({
                 secondSelectDisable: false,
-                secondSelectText: 'Оберіть адмністратора',
+                secondSelectText: 'Select administrator',
             });
         }
         else if (selected.value === "2") {
             userService.GetAllSubjects().then(secondSelectGroup => this.setState({ secondSelectGroup })).catch(error => this.setState({ error }));
             this.setState({
                 secondSelectDisable: false,
-                secondSelectText: 'Оберіть предмет',
+                secondSelectText: 'Select subject',
             });
         }
         else {
             userService.GetAllFlows().then(secondSelectGroup => this.setState({ secondSelectGroup })).catch(error => this.setState({ error }));
             this.setState({
                 secondSelectDisable: false,
-                secondSelectText: 'Оберіть паралель',
+                secondSelectText: 'Select grade',
             });
         }
     }
@@ -118,7 +116,7 @@ class FeedBackAdmin extends React.Component {
             thirdSelectVisibility: false,
             fourthSelectVisibility: false,
             fifthelectVisibility: false,
-            receiver: 'Оберіть отримувача',
+            receiver: 'Select receiver',
         });
 
         setFieldValue('thirdSelect', '')
@@ -136,7 +134,7 @@ class FeedBackAdmin extends React.Component {
             userService.GetSubjectTeachers(selected.value).then(thirdSelectGroup => this.setState({ thirdSelectGroup })).catch(error => this.setState({ error }));
             this.setState({
                 thirdSelectDisable: false,
-                thirdSelectText: 'Оберіть вчителя',
+                thirdSelectText: 'Select grade',
                 thirdSelectVisibility: true,
             });
         }
@@ -144,7 +142,7 @@ class FeedBackAdmin extends React.Component {
             userService.GetFlowClassLetters(selected.value).then(thirdSelectGroup => this.setState({ thirdSelectGroup })).catch(error => this.setState({ error }));
             this.setState({
                 thirdSelectDisable: false,
-                thirdSelectText: 'Оберіть клас',
+                thirdSelectText: 'Select grade',
                 thirdSelectVisibility: true,
             });
         }
@@ -158,7 +156,7 @@ class FeedBackAdmin extends React.Component {
         this.setState({
             fourthSelectVisibility: false,
             fifthelectVisibility: false,
-            receiver: 'Оберіть отримувача',
+            receiver: 'Select receiver',
         });
 
         setFieldValue('fourthSelect', '')
@@ -176,7 +174,7 @@ class FeedBackAdmin extends React.Component {
             userService.GetAllPupilsForClass(values.secondSelect, selected.value).then(fourthSelectGroup => this.setState({ fourthSelectGroup })).catch(error => this.setState({ error }));
             this.setState({
                 fourthSelectDisable: false,
-                fourthSelectText: 'Оберіть учня',
+                fourthSelectText: 'Select student',
                 fourthSelectVisibility: true,
             });
         }
@@ -187,7 +185,7 @@ class FeedBackAdmin extends React.Component {
 
         setFieldValue('fourthSelect', selected.value)
         this.setState({
-            receiver: 'Оберіть отримувача',
+            receiver: 'Select receiver',
             fifthelectVisibility: false,
         });
 
@@ -203,7 +201,7 @@ class FeedBackAdmin extends React.Component {
             userService.GetAllParentsForPupil(selected.value).then(fifthSelectGroup => this.setState({ fifthSelectGroup })).catch(error => this.setState({ error }));
             this.setState({
                 fifthelectVisibility: true,
-                fourthSelectText: 'Оберіть одного з батьків',
+                fourthSelectText: 'Select parent',
                 fifthelectDisable: false,
             });
         }
@@ -236,9 +234,9 @@ class FeedBackAdmin extends React.Component {
 
                 validationSchema={Yup.object().shape({
                     title: Yup.string()
-                        .required('Вкажіть тему!'),
+                        .required('Add topic!'),
                     content: Yup.string()
-                        .required('Додайте зміст!')
+                        .required('Add content!')
                 })}
                 onSubmit={({ firstSelect, secondSelect, thirdSelect, fourthSelect, fifthSelect, title, content, attachement }, { setStatus, setSubmitting }) => {
                     setStatus();
@@ -259,14 +257,14 @@ class FeedBackAdmin extends React.Component {
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form className="justify-content-md-center">
                         <div class="container">
-                            <h1>Написати повідомлення</h1>
+                            <h1>Send mail</h1>
                             <hr />
                             <h3>{this.state.receiver}</h3>
                             <div class="row">
                         <div class="col">
-                            <label htmlFor="firstSelect">Оберіть тип людини</label>
+                            <label htmlFor="firstSelect">Select type of person</label>
                             <Select
-                                placeholder="Оберіть тип людини..."
+                                placeholder="Select type of person..."
                                 name="firstSelect"
                                 options={this.state.roles}
                                 className={'basic-multi-select' + (errors.firstSelect && touched.firstSelect ? ' is-invalid' : '')}
@@ -278,7 +276,7 @@ class FeedBackAdmin extends React.Component {
                         <div className="col">
                             <label htmlFor="secondSelect">{this.state.secondSelectText}</label>
                             <Select
-                                placeholder="Оберіть..."
+                                placeholder="Select..."
                                 name="secondSelect"
                                 options={this.state.secondSelectGroup}
                                 className={'basic-multi-select' + (errors.secondSelect && touched.secondSelect ? ' is-invalid' : '')}
@@ -293,7 +291,7 @@ class FeedBackAdmin extends React.Component {
                             <div className="col">
                                 <label htmlFor="thirdSelect">{this.state.thirdSelectText}</label>
                             <Select
-                                placeholder="Оберіть..."
+                                    placeholder="Select..."
                                     name="thirdSelect"
                                     options={this.state.thirdSelectGroup}
                                     className={'basic-multi-select' + (errors.thirdSelect && touched.thirdSelect ? ' is-invalid' : '')}
@@ -309,7 +307,7 @@ class FeedBackAdmin extends React.Component {
                             <div className="form-group col">
                                 <label htmlFor="fourthSelect">{this.state.fourthSelectText}</label>
                             <Select
-                                placeholder="Оберіть..."
+                                    placeholder="Select..."
                                     name="fourthSelect"
                                     options={this.state.fourthSelectGroup}
                                     className={'basic-multi-select' + (errors.fourthSelect && touched.fourthSelect ? ' is-invalid' : '')}
@@ -324,7 +322,7 @@ class FeedBackAdmin extends React.Component {
                             <div className="col">
                                 <label htmlFor="fifthSelect">{this.state.fifthSelectText}</label>
                             <Select
-                                placeholder="Оберіть..."
+                                    placeholder="Select..."
                                     name="fifthSelect"
                                     options={this.state.fifthSelectGroup}
                                     className={'basic-multi-select' + (errors.fifthSelect && touched.fifthSelect ? ' is-invalid' : '')}
@@ -338,24 +336,24 @@ class FeedBackAdmin extends React.Component {
                                 }   </div>
                             <div class="row">
                         <div className="col">
-                            <label htmlFor="title">Тема</label>
+                            <label htmlFor="title">Topic</label>
                             <Field name="title" type="text" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
                             <ErrorMessage name="title" component="div" className="invalid-feedback" />
                         </div>
                             </div>
                             <div class="row">
                                 <div className="col">
-                             <label htmlFor="content">Зміст</label>
+                             <label htmlFor="content">Content</label>
                             <MyTextArea                              
                                 name="content"
                                 rows="10"
-                                placeholder="Напишіть зміст повідомлення..."
+                                placeholder="Add content..."
                             />
                         </div>
                             </div>
                             <div class="row">
                         <div class ="col">
-                                    <label for="attachement">Прикріпити файл</label>
+                                    <label for="attachement">Attach file</label>
                                     <br/>
                             <input
                                 id="attachement"
@@ -369,8 +367,8 @@ class FeedBackAdmin extends React.Component {
                             </div>
 
                             <div class="col" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>
-                                <Button type="submit" block variant="primary">Надіслати</Button>
-                                <Button type="reset" block variant="secondary">Скинути дані</Button>
+                                <Button type="submit" block variant="primary">Send</Button>
+                                <Button type="reset" block variant="secondary">Reset data</Button>
                         </div>
                         {status &&
                             <div className={'alert alert-danger'}>{status}</div>

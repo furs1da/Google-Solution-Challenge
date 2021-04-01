@@ -1,5 +1,4 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import DatePicker, { registerLocale } from "react-datepicker";
@@ -10,8 +9,7 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { Button, Icon, Popup, Input } from "semantic-ui-react";
 import 'semantic-ui-css/semantic.min.css';
-import uk from "date-fns/locale/uk";
-registerLocale("uk", uk);
+
 
 class EditTeacher extends React.Component {
 
@@ -43,7 +41,7 @@ class EditTeacher extends React.Component {
         userService.DeleteRecordTeacherAdmin(this.props.location.state.idTeacherList, values.adminCode).then(response => {
             console.log(response)
             setFieldValue("messageServer", response)
-            if (response === "Доступ дозволений!") {
+            if (response === "Access is allowed!") {
                 this.props.history.push({
                     pathname: '/listOfTeachers',
                 });
@@ -74,15 +72,15 @@ class EditTeacher extends React.Component {
     }
     DeleteRecord(setFieldValue, values)  {
         confirmAlert({
-            title: "Підтвердіть дію",
-            message: "Ви впевнені, що хочете видалити цей обліковий запис?",
+            title: "Confirm the action",
+            message: "Are you sure you want to delete this account?",
             buttons: [
                 {
-                    label: "Так",
+                    label: "Yes",
                     onClick: () => { this.DeleteRecordConfirmed(setFieldValue, values) }
                 },
                 {
-                    label: "Ні"
+                    label: "No"
                 }
             ]
         });
@@ -115,30 +113,30 @@ class EditTeacher extends React.Component {
            
                 validationSchema={Yup.object().shape({
                     nameTeacher: Yup.string()
-                        .required("Ім'я  обов'язкове."),
+                        .required("Name is required."),
                     patronymicTeacher: Yup.string()
-                        .required("По батькові обов'язкове."),
+                        .required("Patronymic is required."),
                     surnameTeacher: Yup.string()
-                        .required("Прізвище обов'язкове."),
+                        .required("Surname is required."),
                     emailTeacher: Yup.string()
-                        .email('Неправильний формат пошти.')
-                        .required("Пошта обов'язкова."),
+                        .email('Wrong format of email.')
+                        .required("Email is required."),
                     passwordTeacher: Yup.string()
-                        .min(6, 'Пароль повинен містити хоча б 6 символів!')
-                        .required("Пароль обов'язковий"),
+                        .min(6, 'Password must contain at least 6 characters!')
+                        .required("Password is required."),
                     confirmPasswordTeacher: Yup.string()
-                        .oneOf([Yup.ref('passwordTeacher'), null], 'Паролі не співпадають!')
-                        .required('Треба підтвердити пароль!'),
+                        .oneOf([Yup.ref('passwordTeacher'), null], 'Password do not match.')
+                        .required('You must confirm the password!'),
                     phoneTeacher: Yup.string()
-                        .required("Номер телефону обов'язковий"),
+                        .required("Phone number is required."),
                     genderTeacher: Yup.string()
-                        .required("Оберіть гендер"),
+                        .required("gender is required."),
                     adressTeacher: Yup.string()
-                        .required("Адреса обов'язкова"),
+                        .required("Address is required."),
                     dateOfBirthTeacher: Yup.date()
-                        .required("Дата народження обов'язкова!"),
+                        .required("Date of Birth is required."),
                     selectedOption: Yup.array()
-                        .min(1, "Оберіть будь ласка хоча б один предмет").nullable().required("1 предмет обов'язковий")
+                        .min(1, "Please select at least 1 subject").nullable().required("Please select at least 1 subject")
                         .of(
                             Yup.object()
                                 .shape({
@@ -148,7 +146,7 @@ class EditTeacher extends React.Component {
 
                     ),
                     adminCode: Yup.string()
-                        .required('Введіть спеціальний код для створення облікового запису админістратора')
+                        .required('Enter a special code to create an teacher account.')
                 })}
                 enableReinitialize
                 onSubmit={({ nameTeacher, patronymicTeacher, surnameTeacher, emailTeacher, passwordTeacher, dateOfBirthTeacher, genderTeacher, phoneTeacher, adressTeacher, imageOfTeacher, selectedOption, adminCode}, { setStatus, setSubmitting }) => {
@@ -169,26 +167,26 @@ class EditTeacher extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Змінити дані про вчителя</h1>
+                        <h1>Change teacher's information</h1>
                         <hr />
                         <div className="form-row">
                             <div className="form-group col-5">
-                                <label htmlFor="nameTeacher">Ім'я</label>
+                                <label htmlFor="nameTeacher">Name</label>
                                 <Field name="nameTeacher" type="text" className={'form-control' + (errors.nameTeacher && touched.nameTeacher ? ' is-invalid' : '')}/>
                                 <ErrorMessage name="nameTeacher" component="div" className="invalid-feedback" />
                             </div>                
                             <div className="form-group col-5">
-                                <label htmlFor="patronymicTeacher">По батькові</label>
+                                <label htmlFor="patronymicTeacher">Patronymic</label>
                                 <Field name="patronymicTeacher" type="text" className={'form-control' + (errors.patronymicTeacher && touched.patronymicTeacher ? ' is-invalid' : '')}  />
                                 <ErrorMessage name="patronymicTeacher" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col-5">
-                                <label htmlFor="surnameTeacher">Прізвище</label>
+                                <label htmlFor="surnameTeacher">Surname</label>
                                 <Field name="surnameTeacher" type="text" className={'form-control' + (errors.surnameTeacher && touched.surnameTeacher ? ' is-invalid' : '')} />
                                 <ErrorMessage name="surnameTeacher" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col">
-                                <label htmlFor="dateOfBirthTeacher">Дата народження</label>
+                                <label htmlFor="dateOfBirthTeacher">Date of Birth</label>
                                 <br />
                                 <DatePicker
                                     selected={values.dateOfBirthTeacher}
@@ -201,13 +199,12 @@ class EditTeacher extends React.Component {
                                     showYearDropdown
                                     adjustDateOnChange
                                     dropdownMode="select"
-                                    locale="uk"
                                 />
                             </div>
                         </div>
                         <div className="form-group col">
-                            <label htmlFor="genderTeacher">Гендер</label>
-                            <Field name="genderTeacher" as="select" placeholder="Оберіть гендер..." className={'form-control' + (errors.genderTeacher && touched.genderTeacher ? ' is-invalid' : '')} >
+                            <label htmlFor="genderTeacher">Gender</label>
+                            <Field name="genderTeacher" as="select" placeholder="Select gender..." className={'form-control' + (errors.genderTeacher && touched.genderTeacher ? ' is-invalid' : '')} >
                                 {this.state.genders.map((gender, i) => (
                                     <option key={gender.idGender} value={gender.idGender}>{gender.genderType}</option>
                                 ))}
@@ -215,28 +212,28 @@ class EditTeacher extends React.Component {
                             <ErrorMessage name="title" component="div" className="invalid-feedback" />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="emailTeacher">Електронна пошта</label>
+                            <label htmlFor="emailTeacher">Email</label>
                             <Field name="emailTeacher" type="text" className={'form-control' + (errors.emailTeacher && touched.emailTeacher ? ' is-invalid' : '')} autoComplete="off"/>
                             <ErrorMessage name="emailTeacher" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="adressTeacher">Адреса</label>
+                            <label htmlFor="adressTeacher">Adress</label>
                             <Field name="adressTeacher" type="text" className={'form-control' + (errors.adressTeacher && touched.adressTeacher ? ' is-invalid' : '')} />
                             <ErrorMessage name="adressTeacher" component="div" className="invalid-feedback" />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="phoneTeacher">Номер телефону</label>
+                            <label htmlFor="phoneTeacher">Phone number</label>
                             <Field name="phoneTeacher" type="text" className={'form-control' + (errors.phoneTeacher && touched.phoneTeacher ? ' is-invalid' : '')}  />
                             <ErrorMessage name="phoneTeacher" component="div" className="invalid-feedback" />
                         </div>
                         <div>
-                        <h4>Фото вчителя</h4>
+                            <h4>Photo of the teacher</h4>
                             <img class="img-fluid" style={{ maxHeight: 250 + "px", marginBottom: 1 + "em" }} src={'data:image/png;base64,' + this.state.teacher.imageOfTeacher} /> 
                         </div>
                         <div className="form-group">
-                            <label for="imageOfTeacher">Загрузити фото вчителя, якщо ви хочете змінити фото вчителя</label>
+                            <label for="imageOfTeacher">Upload teacher photo if you want to change teacher's photo</label>
                             <br/>
                             <input
                                 id="imageOfTeacher"
@@ -251,7 +248,7 @@ class EditTeacher extends React.Component {
 
                         <div className="form-row">
                             <div className="form-group col">
-                                <label htmlFor="passwordTeacher">Пароль</label>
+                                <label htmlFor="passwordTeacher">Password</label>
                                 <Input name="passwordTeacher" type={this.state.showPassword ? 'text' : 'password'} value={values.passwordTeacher} className={'form-control' + (errors.passwordTeacher && touched.passwordTeacher ? ' is-invalid' : '')}
                                     onChange={password => setFieldValue('passwordTeacher', password.target.value)}
                                     icon={
@@ -263,7 +260,7 @@ class EditTeacher extends React.Component {
                                 <ErrorMessage name="passwordTeacher" component="div" className="invalid-feedback" />
                             </div>
                             <div className="form-group col">
-                                <label htmlFor="confirmPasswordTeacher">Підтвердити пароль</label>
+                                <label htmlFor="confirmPasswordTeacher">Confirm password</label>
                                 <Input name="confirmPasswordTeacher" type={this.state.showPassword ? 'text' : 'password'} value={values.confirmPasswordTeacher} className={'form-control' + (errors.confirmPasswordTeacher && touched.confirmPasswordTeacher ? ' is-invalid' : '')}
                                     onChange={password => setFieldValue('confirmPasswordTeacher', password.target.value)}
                                     icon={
@@ -278,9 +275,9 @@ class EditTeacher extends React.Component {
 
 
                         <div className="form-group col">
-                            <label htmlFor="selectedOption">Оберіть предмети, які буде вести вчитель</label>
+                            <label htmlFor="selectedOption">Choose the subjects that the teacher will teach</label>
                             <Select
-                                placeholder="Оберіть предмети..."
+                                placeholder="Select subjects..."
                                 isMulti
                                 name="selectedOption"
                                 menuPlacement="top"
@@ -293,17 +290,17 @@ class EditTeacher extends React.Component {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="adminCode">Код доступу</label>
+                            <label htmlFor="adminCode">Admin's code</label>
                             <Field name="adminCode" type="text" className={'form-control' + (errors.adminCode && touched.adminCode ? ' is-invalid' : '')} />
                             <ErrorMessage name="adminCode" component="div" className="invalid-feedback" />
                         </div>       
                         <div class="row" >
-                            <div class="col" class="pull-left">  <button type="submit" className="btn btn-primary mr-2" style={{ marginTop: 0.5 + "em" }}>Змінити  обліковий запис адміністратора</button> </div>
+                            <div class="col" class="pull-left">  <button type="submit" className="btn btn-primary mr-2" style={{ marginTop: 0.5 + "em" }}>Change the teacher's account</button> </div>
 
-                            <div class="col" class="pull-left">   <button type="button" className="btn btn-secondary" style={{ marginTop: 0.5 + "em" }} onClick={selectValue => this.ReturnRecord(setFieldValue)}>Повернути попередні дані</button> </div>
+                            <div class="col" class="pull-left">   <button type="button" className="btn btn-secondary" style={{ marginTop: 0.5 + "em" }} onClick={selectValue => this.ReturnRecord(setFieldValue)}>Reset data</button> </div>
 
                             <div class="col" class="pull-left">    <Button type="button" animated basic color='red' style={{ marginTop: 0.5 + "em", marginLeft: 0.5 + "em", marginBottom: 1 + "em" }} onClick={selectValue => this.DeleteRecord(setFieldValue, values)}>
-                                <Button.Content visible>Видалити обліковий запис</Button.Content>
+                                <Button.Content visible>Delete account</Button.Content>
                                 <Button.Content hidden>
                                     <Icon name='trash' />
                                 </Button.Content>

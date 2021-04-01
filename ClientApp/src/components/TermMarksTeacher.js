@@ -1,17 +1,11 @@
 ﻿import React from 'react';
-import { render } from "react-dom";
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
 import * as Yup from 'yup';
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import { authenticationService } from '../services';
 import { userService } from '../services';
-import { SelectField } from "./SelectField";
-import DataTable from "react-data-table-component";
 import { Button, Table } from 'react-bootstrap';
-import uk from "date-fns/locale/uk";
-registerLocale("uk", uk);
 
 class ThematicalGrades extends React.Component {
 
@@ -22,8 +16,8 @@ class ThematicalGrades extends React.Component {
             secondSelectGroup: [],
             firstSelectGroup: [],
             zeroSelectGroup: [],
-            receiver: 'Виберіть клас',
-            secondSelectText: 'Виберіть клас',
+            receiver: 'Select grade',
+            secondSelectText: 'Select class',
             secondSelectVisibility: false,
             datepickerVisibility: false,
             firstSelectDisable: true,
@@ -58,7 +52,7 @@ class ThematicalGrades extends React.Component {
         userService.GetFlowClassLettersTeacher(selected.value).then(secondSelectGroup => this.setState({ secondSelectGroup })).catch(error => this.setState({ error }));
         this.setState({
             secondSelectGroup: false,
-            secondSelectText: 'Оберіть клас',
+            secondSelectText: 'Select class',
             secondSelectDisable: false,
             secondSelectVisibility: true,
             datepickerVisibility: false,
@@ -115,8 +109,8 @@ class ThematicalGrades extends React.Component {
         if (selected.target.value === '') {
             newArray[elementsIndex] = { ...newArray[elementsIndex], grade: -1 }
         }
-        else if (selected.target.value > 12)
-            selected.target.value = 12;
+        else if (selected.target.value > 100)
+            selected.target.value = 100;
 
         else if (selected.target.value < 1)
             selected.target.value = 1;
@@ -147,15 +141,15 @@ class ThematicalGrades extends React.Component {
                 }}
                 validationSchema={Yup.object().shape({
                     zeroSelect: Yup.string()
-                        .required('Оберіть предмет'),
+                        .required('Select subject'),
                     firstSelect: Yup.string()
-                        .required('Оберіть паралель'),
+                        .required('Select grade'),
                     secondSelect: Yup.string()
-                        .required('Оберіть клас'),
+                        .required('Select class'),
                     dateOfStart: Yup.date()
-                        .required('Оберіть початку дату тематичної'),
+                        .required('Select the start of the theme'),
                     dateOfEnd: Yup.date()
-                        .required('Оберіть кінцеву дату тематичної'),
+                        .required('Select the end of the theme'),
                 })}
                 onSubmit={({ zeroSelect, firstSelect, secondSelect, dateOfStart, dateOfEnd }, { setStatus, setSubmitting }) => {
                     setStatus();
@@ -175,12 +169,12 @@ class ThematicalGrades extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Виставити тематичні оцінки</h1>
+                        <h1>Give thematic marks</h1>
                         <hr />
                         <div className="form-group col">
-                            <label htmlFor="zeroSelect">Виберіть предмет</label>
+                            <label htmlFor="zeroSelect">Select subject</label>
                             <Select
-                                placeholder="Оберіть предмет..."
+                                placeholder="Select subject..."
                                 name="zeroSelect"
                                 options={this.state.zeroSelectGroup}
                                 className={'basic-multi-select' + (errors.zeroSelect && touched.zeroSelect ? ' is-invalid' : '')}
@@ -190,9 +184,9 @@ class ThematicalGrades extends React.Component {
                         </div>
 
                         <div className="form-group col">
-                            <label htmlFor="firstSelect">Виберіть паралель</label>
+                            <label htmlFor="firstSelect">Select grade</label>
                             <Select
-                                placeholder="Оберіть паралель..."
+                                placeholder="Select grade..."
                                 name="firstSelect"
                                 options={this.state.firstSelectGroup}
                                 className={'basic-multi-select' + (errors.firstSelect && touched.firstSelect ? ' is-invalid' : '')}
@@ -205,7 +199,7 @@ class ThematicalGrades extends React.Component {
                         <div className="form-group col">
                             <label htmlFor="secondSelect">{this.state.secondSelectText}</label>
                             <Select
-                                placeholder="Оберіть..."
+                                placeholder="Select..."
                                 name="secondSelect"
                                 options={this.state.secondSelectGroup}
                                 className={'basic-multi-select' + (errors.secondSelect && touched.secondSelect ? ' is-invalid' : '')}
@@ -215,12 +209,12 @@ class ThematicalGrades extends React.Component {
                             />
                             <ErrorMessage name="secondSelect" component="div" className="invalid-feedback" />
                         </div>
-                        <h1>{this.state.secondSelectText} клас</h1>
+                        <h1>{this.state.secondSelectText} class</h1>
 
                         {this.state.datepickerVisibility === true &&
                             <div class="row">
                             <div className="form-group col">
-                                <label htmlFor="dateOfStart">Дата початку тематичної</label>
+                                <label htmlFor="dateOfStart">The start of the theme</label>
                                 <br />
                             <DatePicker
                                 locale="uk"
@@ -233,7 +227,7 @@ class ThematicalGrades extends React.Component {
                             </div>
                        
                             <div className="form-group col">
-                                <label htmlFor="dateOfEnd">Кінцева дата тематичної</label>
+                                <label htmlFor="dateOfEnd">The end of the theme</label>
                                 <br />
                             <DatePicker
                                 locale="uk"
@@ -253,15 +247,15 @@ class ThematicalGrades extends React.Component {
                             {this.state.pupils &&
                                 <Table responsive bordered hover>
                                 <thead class="thead-dark">
-                                        <th>ПІБ</th>
-                                        <th>Тематична оцінка</th>
-                                        <th>Оцінки за вибраний період часу</th>               
+                                        <th>Full Name</th>
+                                        <th>Thematic mark</th>
+                                        <th>Marks for the selected period of time</th>               
                                     </thead>
                                     <tbody>
                                         {this.state.pupils.map(pupil =>
                                             <tr>
                                                 <td key={pupil.idPupil}><p> {pupil.fio}</p> </td>
-                                                <td> <Field name="gradeStudent" type="number" max="12" min="0" onChange={selectValue => this.onChangeGrade(selectValue, setFieldValue, pupil.idStudent)} style={{ width: 100 + "%", lineHeight: 2.0 + "em", fontSize: 1.5 + "em" }}/> </td>                                               
+                                                <td> <Field name="gradeStudent" type="number" max="100" min="0" onChange={selectValue => this.onChangeGrade(selectValue, setFieldValue, pupil.idStudent)} style={{ width: 100 + "%", lineHeight: 2.0 + "em", fontSize: 1.5 + "em" }}/> </td>                                               
                                                 <td> {pupil.gradesPeriod}</td>
                                             </tr>
                                         )}
@@ -273,8 +267,8 @@ class ThematicalGrades extends React.Component {
 
 
                         <div className="form-group">
-                            <button type="submit" className="btn btn-primary mr-2">Поставити тематичні оцінки</button>
-                            <button type="reset" className="btn btn-secondary">Скинути дані</button>
+                            <button type="submit" className="btn btn-primary mr-2">Give thematic marks</button>
+                            <button type="reset" className="btn btn-secondary">Reset data</button>
                         </div>
                         {status &&
                             <div className={'alert alert-danger'}>{status}</div>

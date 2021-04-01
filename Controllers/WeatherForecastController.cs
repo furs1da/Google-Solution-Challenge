@@ -26,9 +26,9 @@ namespace shagDiplom.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private IUserService _userService; // класс который помогает извлекать отсортированые данные с бд
-        private schoolManagementSystemDatabaseContext db = new schoolManagementSystemDatabaseContext();  // контекст бд
-        private const string adminAccessCode = "Sapere aude";  // пароль администратора, который нужен для многих операций для профиля администратора, когда данные либо удаляют, либо изменяют с большим влянием на систему 
+        private IUserService _userService; 
+        private schoolManagementSystemDatabaseContext db = new schoolManagementSystemDatabaseContext();  
+        private const string adminAccessCode = "Sapere aude"; // admin access code to make some important changes in the system
 
         private readonly ILogger<WeatherForecastController> _logger;
 
@@ -41,13 +41,12 @@ namespace shagDiplom.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public IActionResult Login([FromBody] AuthenticateModel model) //аутентификация в систему и вход, всего есть 4 таблицы с данными пользователей "Администратор", "Родитель", "Ученик", "Учитель"
+        public IActionResult Login([FromBody] AuthenticateModel model) 
         {
-            var userPupil = _userService.AuthenticatePupil(model.Username, model.Password, db);  //аутентификация в систему для учеников
-            var userTeacher = _userService.AuthenticateTeacher(model.Username, model.Password, db);  //аутентификация в систему для учителей
-            var userParent = _userService.AuthenticateParent(model.Username, model.Password, db);  //аутентификация в систему для родителей
-            var userAdmin = _userService.AuthenticateAdmin(model.Username, model.Password, db);   //аутентификация в систему для администраторов
-            // Когда находим подходящую почту и пароль, возвращаем данные на клиент без пароля, которые потом сохраняться localeStorage с указыванием роли и аутеризованым пользователем
+            var userPupil = _userService.AuthenticatePupil(model.Username, model.Password, db);  
+            var userTeacher = _userService.AuthenticateTeacher(model.Username, model.Password, db);  
+            var userParent = _userService.AuthenticateParent(model.Username, model.Password, db);  
+            var userAdmin = _userService.AuthenticateAdmin(model.Username, model.Password, db);       
             if (userPupil != null)
                 return Ok(userPupil);
             else if (userTeacher != null)
@@ -57,7 +56,7 @@ namespace shagDiplom.Controllers
             else if (userAdmin != null)
                 return Ok(userAdmin);
             else
-                return BadRequest(new { message = "Ви ввели неправильну пошту чи пароль!" });
+                return BadRequest(new { message = "You have entered an incorrect email or password" });
         }
 
         [AllowAnonymous]
@@ -67,11 +66,11 @@ namespace shagDiplom.Controllers
 
             if (_userService.checkEmailExistence(model.EmailPupil, db))
             {
-                return BadRequest(new { message = "Ця електронна пошта вже зареєстрована!" });
+                return BadRequest(new { message = "This email is already registered!" });
             }
             else if (db.Classes.Where(classCodeCheck => classCodeCheck.AccessCode == classCode).FirstOrDefault() == null)
             {
-                return BadRequest(new { message = "Код класу неправильний!" });
+                return BadRequest(new { message = "Class code is invalid!" });
             }
 
             Pupil showPiece = db.Pupil
@@ -133,7 +132,7 @@ namespace shagDiplom.Controllers
                 return Ok(userPupil);
             }
             else
-                return BadRequest(new { message = "Помилка на сервері" });
+                return BadRequest(new { message = "Server eror" });
         }
 
         [Authorize(Roles = roleContext.Admin)]
@@ -142,11 +141,11 @@ namespace shagDiplom.Controllers
         {
             if (_userService.checkEmailExistence(model.EmailPupil, db))
             {
-                return BadRequest(new { message = "Ця електронна пошта вже зареєстрована!" });
+                return BadRequest(new { message = "This email is already registered!" });
             }
             else if (db.Classes.Where(classCodeCheck => classCodeCheck.AccessCode == classCode).FirstOrDefault() == null)
             {
-                return BadRequest(new { message = "Код класу неправильний!" });
+                return BadRequest(new { message = "Class code is invalid!" });
             }
             try
             {
@@ -176,7 +175,7 @@ namespace shagDiplom.Controllers
                 tempPupil.Gender = int.Parse(model.GenderPupil);
                 if (model.ImageOfPupil == null)
                 {
-                    return BadRequest(new { message = "Ви забули додати фото" });
+                    return BadRequest(new { message = "You forgot to add photo." });
                 }
                 using (var ms = new MemoryStream())
                 {
@@ -188,21 +187,30 @@ namespace shagDiplom.Controllers
                 db.Pupil.Add(tempPupil);
                 db.SaveChanges();
 
+                ClassStudent showPieceTemp = db.ClassStudent
+                   .OrderByDescending(p => p.Id)
+                   .FirstOrDefault();
                 ClassStudent classStudent = new ClassStudent();
-                classStudent.IdStudent = tempPupil.IdPupil;
-                classStudent.Id = db.ClassStudent.Count() + 1; // поменять
+                if (showPiece == null)
+                {
+                    classStudent.Id = db.ClassStudent.Count() + 1;
+                }
+                else
+                {
+                    classStudent.Id = (showPieceTemp.Id) + 1;
+                }
+                classStudent.IdStudent = tempPupil.IdPupil;               
                 Classes classIdFinder = db.Classes.Where(classCodeCheck => classCodeCheck.AccessCode == classCode).FirstOrDefault();
                 classStudent.IdClass = classIdFinder.IdClass;
                 db.ClassStudent.Add(classStudent);
 
                 db.SaveChanges();
-                // Дождаться завершения сохранения 
 
                 return Ok();
             }
             catch (Exception)
             {
-                return BadRequest(new { message = "Помилка серверу" });
+                return BadRequest(new { message = "Server error." });
             }
         }
 
@@ -212,7 +220,7 @@ namespace shagDiplom.Controllers
         {
             if (_userService.checkEmailExistence(model.EmailTeacher, db))
             {
-                return BadRequest(new { message = "Ця електронна пошта вже зареєстрована!" });
+                return BadRequest(new { message = "This email is already registered!" });
             }
             try
             {
@@ -241,10 +249,9 @@ namespace shagDiplom.Controllers
                 tempTeacher.Email = model.EmailTeacher;
                 tempTeacher.DateOfBirth = Convert.ToDateTime(model.DateOfBirthTeacher);
                 tempTeacher.Gender = int.Parse(model.GenderTeacher);
-                //tempPupil.ImageOfPupil = Encoding.ASCII.GetBytes(model.ImageOfPupil);
                 if (model.ImageOfTeacher == null)
                 {
-                    return BadRequest(new { message = "Ви забули додати фото!" });
+                    return BadRequest(new { message = "You forgot to add photo!" });
                 }
                 using (var ms = new MemoryStream())
                 {
@@ -258,14 +265,16 @@ namespace shagDiplom.Controllers
 
                 for (int i = 0; i < listSelected.Count(); i++)
                 {
+                  
+
                     SubjectTeacher subjectTeacher = new SubjectTeacher();
+                 
+                    
                     subjectTeacher.TeacherId = tempTeacher.IdTeacher;
                     subjectTeacher.SubjectId = int.Parse(listSelected[i].value);
                     db.SubjectTeacher.Add(subjectTeacher);
                     db.SaveChanges();
                 }
-
-                // Дождаться завершения сохранения 
 
                 return Ok();
             }
@@ -291,7 +300,7 @@ namespace shagDiplom.Controllers
                     Teacher tempTeacher = db.Teacher.Where(teacherEntity => teacherEntity.IdTeacher == teacherId).SingleOrDefault();
                     if (_userService.checkEmailExistence(model.EmailTeacher, db) && tempTeacher.Email != model.EmailTeacher)
                     {
-                        return BadRequest(new { message = "Ця пошта вже зареєстрована!" });
+                        return BadRequest(new { message = "This email is already registered!" });
                     }
                     tempTeacher.Name = model.NameTeacher;
                     tempTeacher.Surname = model.SurnameTeacher;
@@ -359,7 +368,7 @@ namespace shagDiplom.Controllers
                 }
             }
             else
-                return Ok(JsonConvert.SerializeObject("У доступі відмовлено!"));
+                return Ok(JsonConvert.SerializeObject("Access is denied!"));
         }
         [Authorize(Roles = roleContext.Admin)]
         [HttpPut("changeAdmin")]
@@ -373,7 +382,7 @@ namespace shagDiplom.Controllers
                     Admin tempAdmin = db.Admin.Where(adminEntity => adminEntity.IdAdmin == admminId).SingleOrDefault();
                     if (_userService.checkEmailExistence(model.EmailAdmin, db) && tempAdmin.Email != model.EmailAdmin)
                     {
-                        return BadRequest(new { message = "Ця пошта вже зареєстрована!" });
+                        return BadRequest(new { message = "This email is already registered!" });
                     }
                     tempAdmin.Name = model.NameAdmin;
                     tempAdmin.Surname = model.SurnameAdmin;
@@ -393,7 +402,7 @@ namespace shagDiplom.Controllers
                 }
             }
             else
-                return BadRequest(JsonConvert.SerializeObject("У доступі відмовлено!"));
+                return BadRequest(JsonConvert.SerializeObject("Access is denied!"));
         }
         [Authorize(Roles = roleContext.Admin)]
         [HttpPut("ChangePersonalAdmin")]
@@ -407,7 +416,7 @@ namespace shagDiplom.Controllers
 
                 if (_userService.checkEmailExistence(emailAdmin, db) && tempAdmin.Email != emailAdmin)
                 {
-                    return BadRequest(new { message = "Ця пошта вже зареєстрована!" });
+                    return BadRequest(new { message = "This email is already registered!" });
                 }
 
                 tempAdmin.Password = passwordAdmin;
@@ -434,7 +443,7 @@ namespace shagDiplom.Controllers
 
                 if (_userService.checkEmailExistence(emailParent, db) && tempParent.Email != emailParent)
                 {
-                    return BadRequest(new { message = "Ця пошта вже зареєстрована!" });
+                    return BadRequest(new { message = "This email is already registered!" });
                 }
 
                 tempParent.Password = passwordParent;
@@ -462,7 +471,7 @@ namespace shagDiplom.Controllers
 
                 if (_userService.checkEmailExistence(emailTeacher, db) && tempTeacher.Email != emailTeacher)
                 {
-                    return BadRequest(new { message = "Ця пошта вже зареєстрована!" });
+                    return BadRequest(new { message = "This email is already registered!" });
                 }
 
                 tempTeacher.Password = passwordTeacher;
@@ -497,7 +506,7 @@ namespace shagDiplom.Controllers
 
                 if (_userService.checkEmailExistence(emailPupil, db) && tempPupil.Email != emailPupil)
                 {
-                    return BadRequest(new { message = "Ця пошта вже зареєстрована!" });
+                    return BadRequest(new { message = "This email is already registered!" });
                 }
 
                 tempPupil.Password = passwordPupil;
@@ -533,11 +542,11 @@ namespace shagDiplom.Controllers
                 {
                     Classes classIdFinder = db.Classes.Where(classCodeCheck => classCodeCheck.AccessCode == classCode).FirstOrDefault();
                     if (classIdFinder == null)
-                        return BadRequest(new { message = "Ви ввели невірний код класу!" });
+                        return BadRequest(new { message = "You have entered an invlalid class code!" });
                     Pupil tempPupil = db.Pupil.Where(pupilEntity => pupilEntity.IdPupil == pupilId).SingleOrDefault();
                     if (_userService.checkEmailExistence(model.EmailPupil, db) && tempPupil.Email != model.EmailPupil)
                     {
-                        return BadRequest(new { message = "Ця електронна пошта вже зареєстрована!" });
+                        return BadRequest(new { message = "This email is already registered!" });
                     }
                     tempPupil.Name = model.NamePupil;
                     tempPupil.Surname = model.SurnamePupil;
@@ -594,7 +603,7 @@ namespace shagDiplom.Controllers
                 }
             }
             else
-                return BadRequest(JsonConvert.SerializeObject("У доступі відмовлено!"));
+                return BadRequest(JsonConvert.SerializeObject("Access is denied!"));
         }
 
         [Authorize(Roles = roleContext.Admin)]
@@ -626,7 +635,7 @@ namespace shagDiplom.Controllers
             }
             catch (Exception)
             {
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
             }
         }
 
@@ -641,7 +650,7 @@ namespace shagDiplom.Controllers
                 try
                 {
                     if (db.Classes.Where(clEntity => clEntity.AccessCode == accessCode).FirstOrDefault() != null)
-                        return BadRequest(new { message = "Такий код доступу вже існує!" });
+                        return BadRequest(new { message = "System already has the same class code!" });
 
                     Classes tempClass = db.Classes.Where(clEntity => clEntity.IdClass == idClass).FirstOrDefault();
                     tempClass.IdClassroomTeacher = idClassroomTeacher;
@@ -655,7 +664,7 @@ namespace shagDiplom.Controllers
                 }
             }
             else {
-                return BadRequest(new { message = "Відмолено у доступі!" });
+                return BadRequest(new { message = "Access is denied!" });
             }
         }
 
@@ -729,7 +738,7 @@ namespace shagDiplom.Controllers
                 {
                     if (id == 0)
                     {
-                        return BadRequest(new { message = "Не можна видаляти нульвого вчителя!!!" });
+                        return BadRequest(new { message = "You cannot delete 0 order teacher!!!" });
                     }
                     Teacher tempTeacher = db.Teacher.Where(teacherEntity => teacherEntity.IdTeacher == id).SingleOrDefault();
 
@@ -793,7 +802,7 @@ namespace shagDiplom.Controllers
             }
             else
             {
-                return Ok(JsonConvert.SerializeObject("У доступі відмовлено!"));
+                return Ok(JsonConvert.SerializeObject("Access is denied!"));
             }
         }
         [Authorize(Roles = roleContext.Admin)]
@@ -822,7 +831,7 @@ namespace shagDiplom.Controllers
 
                     db.Admin.Remove(tempAdmin);
                     db.SaveChanges();
-                    return Ok(JsonConvert.SerializeObject("Доступ дозволений!"));
+                    return Ok(JsonConvert.SerializeObject("Access is allowed!"));
                 }
                 catch (Exception ex)
                 {
@@ -831,7 +840,7 @@ namespace shagDiplom.Controllers
             }
             else
             {
-                return Ok(JsonConvert.SerializeObject("У доступі відмовлено!"));
+                return Ok(JsonConvert.SerializeObject("Access is denied!"));
             }
         }
         [Authorize(Roles = roleContext.Admin)]
@@ -932,7 +941,7 @@ namespace shagDiplom.Controllers
 
                     db.Pupil.Remove(tempPupil);
                     db.SaveChanges();
-                    return Ok(JsonConvert.SerializeObject("Доступ дозволений!"));
+                    return Ok(JsonConvert.SerializeObject("Access is allowed!"));
                 }
                 catch (Exception ex)
                 {
@@ -941,7 +950,7 @@ namespace shagDiplom.Controllers
             }
             else
             {
-                return Ok(JsonConvert.SerializeObject("У доступі відмовлено!"));
+                return Ok(JsonConvert.SerializeObject("Access is denied!"));
             }
         }
 
@@ -1216,11 +1225,11 @@ namespace shagDiplom.Controllers
         {
             if (db.Classes.Where(classEntity => (classEntity.FlowNumber == int.Parse(model.flow)) && (classEntity.ClassLetter == int.Parse(model.letter))).FirstOrDefault() != null)
             {
-                return BadRequest(new { message = "Такий клас вже існує" });
+                return BadRequest(new { message = "This class is already existed!" });
             }
             else if (db.Classes.Where(classEntity => classEntity.AccessCode == model.accessCode).FirstOrDefault() != null)
             {
-                return BadRequest(new { message = "Такий код доступу вже існує" });
+                return BadRequest(new { message = "This class code is alredy existed!" });
             }
             try
             {
@@ -1244,7 +1253,6 @@ namespace shagDiplom.Controllers
 
                 db.Classes.Add(tempClass);
                 db.SaveChanges();
-                // Дождаться завершения сохранения 
 
                 return Ok();
             }
@@ -1260,11 +1268,11 @@ namespace shagDiplom.Controllers
         {
             if (_userService.checkEmailExistence(model.EmailAdmin, db))
             {
-                return BadRequest(new { message = "Ця пошта вже зареєстрована!" });
+                return BadRequest(new { message = "This email is already registered!" });
             }
             else if (adminAccessCode != adminCode)
             {
-                return BadRequest(new { message = "Відмовлено в доступі... Неправильний код доступу..." });
+                return BadRequest(new { message = "Access in denied... An invalid admin access code..." });
             }
             try
             {
@@ -1307,13 +1315,13 @@ namespace shagDiplom.Controllers
         {
             Classes classIdFinder = db.Classes.Where(classCodeAccess => classCodeAccess.AccessCode == classCode).FirstOrDefault();
             if (classCode == null)
-                return BadRequest(new { message = "Неправильний код доступу!" });
+                return BadRequest(new { message = "Class code is invalid!" });
             else if (classIdFinder != null)
             {
                 return Ok(classIdFinder.IdClass);
             }
             else
-                return BadRequest(new { message = "Неправильний код доступу!" });
+                return BadRequest(new { message = "Class code is invalid!" });
         }
 
         [AllowAnonymous]
@@ -1329,7 +1337,7 @@ namespace shagDiplom.Controllers
                 return Ok(users);
             }
             else
-                return BadRequest(new { message = "У цьому класі ще немає студентів!" });
+                return BadRequest(new { message = "This class does not have any students!" });
         }
         [Authorize(Roles = roleContext.Parent)]
         [HttpGet("GetAllStudentsFromClassRegisteredParent/{id}")]
@@ -1341,17 +1349,17 @@ namespace shagDiplom.Controllers
             var userIdClass = db.ClassStudent.Where(record => record.IdClass == id);
             var studentParentCheck = db.ParentStudent.Where(record => record.IdParent == parentModel.IdParent);
             if(students == null || studentParentCheck == null)
-                return BadRequest(new { message = "У цьому класі ще немає студентів!" });
+                return BadRequest(new { message = "This class does not have any students!" });
             students = students.Where(student => userIdClass.Any(selectedItem => student.IdPupil == selectedItem.IdStudent)).ToList();
             if (students == null)
-                return BadRequest(new { message = "У цьому класі ще немає студентів!" });
+                return BadRequest(new { message = "This class does not have any students!" });
             students = students.Where(student => studentParentCheck.Any(selectedItem => student.IdPupil != selectedItem.IdStudent)).ToList();
             if (students != null)
             {
                 return Ok(students);
             }
             else
-                return BadRequest(new { message = "У цьому класі ще немає студентів!" });
+                return BadRequest(new { message = "This class does not have any students!" });
         }
 
 
@@ -1361,7 +1369,7 @@ namespace shagDiplom.Controllers
         {
             if (_userService.checkEmailExistence(model.EmailParent, db))
             {
-                return BadRequest(new { message = "Ця пошта вже зареєстрована!" });
+                return BadRequest(new { message = "This email is already registered!" });
             }
             Pupil pupilModel = db.Pupil.Where(classEntity => classEntity.IdPupil == int.Parse(idPupil)).FirstOrDefault();
             bool checkForParent = false;
@@ -1429,7 +1437,7 @@ namespace shagDiplom.Controllers
 
             }
             else
-                return BadRequest(new { message = "Ми не можемо дозволити вам указати цю дитину як вашу. Не співпадають ні один з критеріїв: по-батькові, адреса проживання та прізвище." });
+                return BadRequest(new { message = "We cannot allow you to identify this child as yours.None of the criteria match: patronymic, address and surname." });
         }
 
 
@@ -1477,7 +1485,7 @@ namespace shagDiplom.Controllers
                 return Ok();
             }
             else
-                return BadRequest(new { message = "Ми не можемо дозволити вам указати цю дитину як вашу. Не співпадають ні один з критеріїв: по-батькові, адреса проживання та прізвище." });
+                return BadRequest(new { message = "We cannot allow you to identify this child as yours.None of the criteria match: patronymic, address and surname." });
         }
 
 
@@ -1495,11 +1503,11 @@ namespace shagDiplom.Controllers
 
             if (db.Curricular.Where(lessonEntity => lessonEntity.ClassId == classModel.IdClass && lessonEntity.LessonOrder == int.Parse(model.lessonOrder) && lessonEntity.DayId == int.Parse(model.dayId)).FirstOrDefault() != null)
             {
-                return BadRequest(new { message = "У цьому класі вже є урок у цей час!" });
+                return BadRequest(new { message = "This class already has a lesson at this time!" });
             }
             else if (db.Curricular.Where(lessonEntity => lessonEntity.TeacherId == int.Parse(model.teacherId) && lessonEntity.LessonOrder == int.Parse(model.lessonOrder) && lessonEntity.DayId == int.Parse(model.dayId)).FirstOrDefault() != null)
             {
-                return BadRequest(new { message = "У вчителя є урок у цей час!" });
+                return BadRequest(new { message = "This teacher already has a lesson at this time!" });
             }
             try
             {
@@ -1586,7 +1594,7 @@ namespace shagDiplom.Controllers
                 return Ok(teachersSelect);
             }
             else
-                return BadRequest(new { message = "Поки що нема вчителів, які навчають цьому предмету!" });
+                return BadRequest(new { message = "We have not had any teacher who teaches this lesson yet!" });
         }
 
         [Authorize]
@@ -1607,7 +1615,7 @@ namespace shagDiplom.Controllers
                 return Ok(teachersSelect);
             }
             else
-                return BadRequest(new { message = "Поки що нема вчителів, які навчають цьому предмету!" });
+                return BadRequest(new { message = "We have not had any teacher who teaches this lesson yet!" });
         }
 
         [Authorize]
@@ -1628,7 +1636,7 @@ namespace shagDiplom.Controllers
                 return Ok(subjectsSelect);
             }
             else
-                return BadRequest(new { message = "Цей вчитель ще не навчає нічого!" });
+                return BadRequest(new { message = "This teacher does not teach anything." });
         }
 
 
@@ -1648,7 +1656,7 @@ namespace shagDiplom.Controllers
                 return Ok(lettersSelect);
             }
             else
-                return BadRequest(new { message = "У нас немає класів на цій паралелі!" });
+                return BadRequest(new { message = "We do not have any classes in selected grade!" });
         }
 
         [Authorize]
@@ -1689,7 +1697,7 @@ namespace shagDiplom.Controllers
                 return Ok(studentsSelect);
             }
             else
-                return BadRequest(new { message = "У цьому класі немає учнів!" });
+                return BadRequest(new { message = "There is not any students in this class!" });
         }
 
         [Authorize]
@@ -1707,7 +1715,7 @@ namespace shagDiplom.Controllers
                 return Ok(studentsAttendance);
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
         [Authorize]
@@ -1727,13 +1735,13 @@ namespace shagDiplom.Controllers
                         themGrades += gradeEntity.Grade1 + ", ";
                     }
                     if (themGrades == "")
-                        themGrades = "Не має оцінок";
+                        themGrades = "We do not have any marks";
                     studentsThematical.Add(new ThematicalStudentModel(student.IdPupil, student.Name + " " + student.Patronymic + " " + student.Surname,  -1, themGrades));
                 }
                 return Ok(studentsThematical);
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
 
@@ -1743,15 +1751,13 @@ namespace shagDiplom.Controllers
         {
             Pupil pupilModel = db.Pupil.Where(pupilEntity => pupilEntity.IdPupil == int.Parse(idStudent)).FirstOrDefault();
             if(pupilModel == null)
-                return Ok(JsonConvert.SerializeObject("Будь ласка виберіть учня."));
+                return Ok(JsonConvert.SerializeObject("Please select a student."));
             List<Attendance> attendanceList = db.Attendance.Where(attendanceEntity => attendanceEntity.AttendanceCheck == false && attendanceEntity.IdStudent == pupilModel.IdPupil && attendanceEntity.IdSubject == int.Parse(idSubject) && attendanceEntity.DateOfLesson >= Convert.ToDateTime(startDate) && attendanceEntity.DateOfLesson <= Convert.ToDateTime(dateEnd)).ToList();
             Subject subjectModel = db.Subject.Where(subjectModel => subjectModel.IdSubject == int.Parse(idSubject)).FirstOrDefault();
             if (attendanceList == null || attendanceList.Count() == 0)
-                return Ok(JsonConvert.SerializeObject("За цей період часу учень " + pupilModel.Name + " " + pupilModel.Patronymic + " " + pupilModel.Surname + " не пропускав уроків."));
-            else if (pupilModel.Gender == 2)
-                return Ok(JsonConvert.SerializeObject("За цей період часу учень " + pupilModel.Name + " " + pupilModel.Patronymic + " " + pupilModel.Surname + " пропустила " + attendanceList.Count() + " уроків по предмету " + subjectModel.SubjectName));
+                return Ok(JsonConvert.SerializeObject("During this period of time the student " + pupilModel.Name + " " + pupilModel.Patronymic + " " + pupilModel.Surname + " did not miss any lessons."));
             else
-                return Ok(JsonConvert.SerializeObject("За цей період часу учень " + pupilModel.Name + " " + pupilModel.Patronymic + " " + pupilModel.Surname + " пропустив " + attendanceList.Count() + " уроків по предмету " + subjectModel.SubjectName));
+                return Ok(JsonConvert.SerializeObject("During this period of time the student " + pupilModel.Name + " " + pupilModel.Patronymic + " " + pupilModel.Surname + " miss " + attendanceList.Count() + " lessons on " + subjectModel.SubjectName));
         }
 
         [Authorize]
@@ -1760,14 +1766,12 @@ namespace shagDiplom.Controllers
         {
             Pupil pupilModel = db.Pupil.Where(pupilEntity => pupilEntity.IdPupil == int.Parse(idStudent)).FirstOrDefault();
             if (pupilModel == null)
-                return Ok(JsonConvert.SerializeObject("Будь ласка виберіть учня."));
+                return Ok(JsonConvert.SerializeObject("Please select a student."));
             List<Attendance> attendanceList = db.Attendance.Where(attendanceEntity => attendanceEntity.AttendanceCheck == false && attendanceEntity.IdStudent == pupilModel.IdPupil && attendanceEntity.DateOfLesson >= Convert.ToDateTime(startDate) && attendanceEntity.DateOfLesson <= Convert.ToDateTime(dateEnd)).ToList();
             if (attendanceList == null || attendanceList.Count() == 0)
-                return Ok(JsonConvert.SerializeObject("За цей період часу учень " + pupilModel.Name + " " + pupilModel.Patronymic + " " + pupilModel.Surname + " не пропускав уроків."));
-            else if (pupilModel.Gender == 2)
-                return Ok(JsonConvert.SerializeObject("За цей період часу учень " + pupilModel.Name + " " + pupilModel.Patronymic + " " + pupilModel.Surname + " пропустила " + attendanceList.Count() + " уроків."));
+                return Ok(JsonConvert.SerializeObject("During this period of time the student " + pupilModel.Name + " " + pupilModel.Patronymic + " " + pupilModel.Surname + " did not miss any lessons."));
             else
-                return Ok(JsonConvert.SerializeObject("За цей період часу учень " + pupilModel.Name + " " + pupilModel.Patronymic + " " + pupilModel.Surname + " пропустив " + attendanceList.Count() + " уроків."));
+                return Ok(JsonConvert.SerializeObject("During this period of time the student " + pupilModel.Name + " " + pupilModel.Patronymic + " " + pupilModel.Surname + " miss " + attendanceList.Count() + " lessons."));
         }
 
 
@@ -1798,7 +1802,7 @@ namespace shagDiplom.Controllers
                 return Ok(studentsGrades.OrderByDescending(p => p.dateGrade));
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
         [Authorize]
@@ -1820,7 +1824,7 @@ namespace shagDiplom.Controllers
                 return Ok(studentsGrades.OrderByDescending(p => p.idGrade));
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
         [Authorize]
@@ -1837,7 +1841,7 @@ namespace shagDiplom.Controllers
                 return Ok(JsonConvert.SerializeObject(finalGrade.Grade));              
             }
             else
-                return Ok(JsonConvert.SerializeObject("Ще не виставлена"));
+                return Ok(JsonConvert.SerializeObject("We do not have the final mark."));
         }
 
         [Authorize]
@@ -1856,24 +1860,24 @@ namespace shagDiplom.Controllers
                     if (attendanceModel.AttendanceCheck == false)
                     {
                         if (pupilModel.Gender == 1)
-                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "IndianRed", "Відсутній", attendanceModel.DateOfLesson));
+                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "IndianRed", "No", attendanceModel.DateOfLesson));
                         else
-                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "IndianRed", "Відсутня", attendanceModel.DateOfLesson));
+                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "IndianRed", "No", attendanceModel.DateOfLesson));
                     }
 
                     else
                     {
                         if (pupilModel.Gender == 1)
-                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "LightGreen", "Присутній", attendanceModel.DateOfLesson));
+                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "LightGreen", "Yes", attendanceModel.DateOfLesson));
                         else
-                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "LightGreen", "Присутня", attendanceModel.DateOfLesson));
+                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "LightGreen", "Yes", attendanceModel.DateOfLesson));
                     }
                        
                 }
                 return Ok(attendanceGrades.OrderByDescending(p => p.dateOfLesson));
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
 
@@ -1891,25 +1895,19 @@ namespace shagDiplom.Controllers
                 {
                     if (attendanceModel.AttendanceCheck == false)
                     {
-                        if (pupilModel.Gender == 1)
-                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "IndianRed", "Відсутній", attendanceModel.DateOfLesson));
-                        else
-                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "IndianRed", "Відсутня", attendanceModel.DateOfLesson));
+                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "IndianRed", "No", attendanceModel.DateOfLesson));
                     }
 
                     else
-                    {
-                        if (pupilModel.Gender == 1)
-                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "LightGreen", "Присутній", attendanceModel.DateOfLesson));
-                        else
-                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "LightGreen", "Присутня", attendanceModel.DateOfLesson));
+                    {                      
+                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "LightGreen", "Yes", attendanceModel.DateOfLesson));
                     }
 
                 }
                 return Ok(attendanceGrades.OrderByDescending(p => p.dateOfLesson));
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
         [Authorize]
@@ -1926,17 +1924,17 @@ namespace shagDiplom.Controllers
 
                     if (gradeModel.HomeworkGrade == false)
                     {
-                        studentsGrades.Add(new WatchGradesModel(gradeModel.IdGrade, teacherModel.Name + " " + teacherModel.Patronymic + " " + teacherModel.Surname, gradeModel.Grade1, "Робота в класі", gradeModel.DateOfGrade, gradeModel.Feedback));
+                        studentsGrades.Add(new WatchGradesModel(gradeModel.IdGrade, teacherModel.Name + " " + teacherModel.Patronymic + " " + teacherModel.Surname, gradeModel.Grade1, "Class Work", gradeModel.DateOfGrade, gradeModel.Feedback));
                     }
                     else
                     {
-                        studentsGrades.Add(new WatchGradesModel(gradeModel.IdGrade, teacherModel.Name + " " + teacherModel.Patronymic + " " + teacherModel.Surname, gradeModel.Grade1, "Домашня робота", gradeModel.DateOfGrade, gradeModel.Feedback));
+                        studentsGrades.Add(new WatchGradesModel(gradeModel.IdGrade, teacherModel.Name + " " + teacherModel.Patronymic + " " + teacherModel.Surname, gradeModel.Grade1, "Homework", gradeModel.DateOfGrade, gradeModel.Feedback));
                     }
                 }
                 return Ok(studentsGrades.OrderByDescending(p => p.dateGrade));
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
         [Authorize]
@@ -1955,7 +1953,7 @@ namespace shagDiplom.Controllers
                 return Ok(studentsGrades.OrderByDescending(p => p.idGrade));
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
         [Authorize]
@@ -1968,7 +1966,7 @@ namespace shagDiplom.Controllers
                 return Ok(JsonConvert.SerializeObject(finalGrade.Grade));
             }
             else
-                return Ok(JsonConvert.SerializeObject("Ще не виставлена"));
+                return Ok(JsonConvert.SerializeObject("We do not have this mark."));
         }
 
 
@@ -1994,13 +1992,13 @@ namespace shagDiplom.Controllers
                         finalGrades += gradeEntity.Grade + ", ";
                     }
                     if (finalGrades == "")
-                        finalGrades = "Не має оцінок";
+                        finalGrades = "No marks";
                     studentsThematical.Add(new ThematicalStudentModel(student.IdPupil, student.Name + " " + student.Patronymic + " " + student.Surname, -1, finalGrades));
                 }
                 return Ok(studentsThematical);
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
 
@@ -2157,7 +2155,7 @@ namespace shagDiplom.Controllers
                 return Ok(parentsSelect);
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
 
@@ -2185,7 +2183,7 @@ namespace shagDiplom.Controllers
                 return Ok(adminsSelect);
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
         [Authorize(Roles = roleContext.Admin)]
@@ -2363,12 +2361,12 @@ namespace shagDiplom.Controllers
                     db.SaveChanges();
                 }
                 else
-                    return BadRequest(new { message = "Будь ласка оберіть тип отримувача!" });
+                    return BadRequest(new { message = "Please select type of person!" });
                 return Ok();
             }
             catch (Exception)
             {
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
             }
         }
 
@@ -2547,12 +2545,12 @@ namespace shagDiplom.Controllers
                     db.SaveChanges();
                 }
                 else
-                    return BadRequest(new { message = "Будь ласка оберіть тип отримувача!" });
+                    return BadRequest(new { message = "Please select type of person!" });
                 return Ok();
             }
             catch (Exception)
             {
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
             }
         }
 
@@ -2668,12 +2666,12 @@ namespace shagDiplom.Controllers
                     db.SaveChanges();
                 }
                 else
-                    return BadRequest(new { message = "Будь ласка оберіть тип отримувача!" });
+                    return BadRequest(new { message = "Please select type of person!" });
                 return Ok();
             }
             catch (Exception)
             {
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
             }
         }
 
@@ -2754,12 +2752,12 @@ namespace shagDiplom.Controllers
                     db.SaveChanges();
                 }
                 else
-                    return BadRequest(new { message = "Будь ласка оберіть тип отримувача!" });
+                    return BadRequest(new { message = "Please select type of person!" });
                 return Ok();
             }
             catch (Exception)
             {
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
             }
         }
 
@@ -3046,12 +3044,12 @@ namespace shagDiplom.Controllers
                     db.SaveChanges();
                 }
                 else
-                    return BadRequest(new { message = "Будь ласка оберіть тип отримувача." });
+                    return BadRequest(new { message = "Please select type of person." });
                 return Ok();
             }
             catch (Exception)
             {
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
             }
         }
 
@@ -3203,12 +3201,12 @@ namespace shagDiplom.Controllers
                     db.SaveChanges();
                 }
                 else
-                    return BadRequest(new { message = "Будь ласка оберіть тип отримувача." });
+                    return BadRequest(new { message = "Please select type of person." });
                 return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" + ex });
+                return BadRequest(new { message = "We do not have any information on your request!" + ex });
             }
         }
 
@@ -3276,7 +3274,7 @@ namespace shagDiplom.Controllers
                 return Ok(JsonConvert.SerializeObject(teacher.Name + " " + teacher.Patronymic + " " + teacher.Surname));
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
         [Authorize(Roles = roleContext.Parent)]
@@ -3289,7 +3287,7 @@ namespace shagDiplom.Controllers
                 return Ok(JsonConvert.SerializeObject(teacher.Name + " " + teacher.Patronymic + " " + teacher.Surname));
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
 
@@ -3457,7 +3455,7 @@ namespace shagDiplom.Controllers
         {         
             List<Subject> subjects = db.Subject.ToList();
             List<SelectModel> subjectsSelect = new List<SelectModel>();
-            subjectsSelect.Add(new SelectModel("-1", "Усі предмети"));
+            subjectsSelect.Add(new SelectModel("-1", "All subjects"));
             foreach (Subject subject in subjects)
             {
                 subjectsSelect.Add(new SelectModel(subject.IdSubject.ToString(), subject.SubjectName));
@@ -3495,7 +3493,7 @@ namespace shagDiplom.Controllers
                 return Ok(teachersList);
             }
             else
-                return BadRequest(new { message = "На жаль, в школі ще нема вчителів!" });
+                return BadRequest(new { message = "Unfortunately, there are no teachers in the school yet!" });
         }
 
         [Authorize(Roles = roleContext.Admin)]
@@ -3517,7 +3515,7 @@ namespace shagDiplom.Controllers
                 return Ok(studentsList);
             }
             else
-                return BadRequest(new { message = "У цьому класі ще немає учнів!" });
+                return BadRequest(new { message = "There are no students in this class yet!" });
         }
 
         [Authorize(Roles = roleContext.Parent)]
@@ -3543,7 +3541,7 @@ namespace shagDiplom.Controllers
                 return Ok(studentsList);
             }
             else
-                return BadRequest(new { message = "Додайте одного з ваших дітей..." });
+                return BadRequest(new { message = "Add one of your children..." });
         }
 
 
@@ -3563,7 +3561,7 @@ namespace shagDiplom.Controllers
                 return Ok(adminsList);
             }
             else
-                return BadRequest(new { message = "Помилка на сервері!" });
+                return BadRequest(new { message = "Server error!" });
         }
 
         [Authorize(Roles = roleContext.Admin)]
@@ -3586,7 +3584,7 @@ namespace shagDiplom.Controllers
                 return Ok(classAdminList);
             }
             else
-                return BadRequest(new { message = "На цій паралелі ще немає класів!" });
+                return BadRequest(new { message = "There are no classes in this grade yet!" });
         }
 
         [Authorize(Roles = roleContext.Teacher)]
@@ -3614,7 +3612,7 @@ namespace shagDiplom.Controllers
                 return Ok(hwInfoTeacherList);
             }
             else
-                return BadRequest(new { message = "Будь ласка опублікуйте хоча б одне домашнє завдання з цього предмету!" });
+                return BadRequest(new { message = "Please post at least one homework assignment on this subject!" });
         }
 
 
@@ -3642,7 +3640,7 @@ namespace shagDiplom.Controllers
                 return Ok(PostTeacherList);
             }
             else
-                return BadRequest(new { message = "Будь ласка опублікуйте хоча б один пост з цього предмету!" });
+                return BadRequest(new { message = "Please post at least one homework assignment on this subject!" });
         }
 
         [Authorize(Roles = roleContext.Admin)]
@@ -3662,10 +3660,10 @@ namespace shagDiplom.Controllers
                     string actual = "", receiver = "";
                     if (announcementEntity.Actual == true)
                     {
-                        actual = "Актуальне оголошення";
+                        actual = "This announcement is actual";
                     }
                     else
-                        actual = "Неактуальне оголошення";
+                        actual = "This announcement is NOT actual";
 
                     if (announcementEntity.IdClass != null)
                     {
@@ -3675,31 +3673,31 @@ namespace shagDiplom.Controllers
                     }
                     else if (announcementEntity.IdFlow != null)
                     {                                     
-                        receiver = announcementEntity.IdFlow +  " паралель";
+                        receiver = announcementEntity.IdFlow +  " grade";
                     }
                     else if (announcementEntity.IdRole != null)
                     {
                         if (announcementEntity.IdRole == 1)
                         {
-                            receiver = "Для всіх адміністраторів";
+                            receiver = "For all administrators";
                         }
                         else if (announcementEntity.IdRole == 2)
                         {
-                            receiver = "Для всіх учнів";
+                            receiver = "For all students";
                         }
                         else if (announcementEntity.IdRole == 3)
                         {
-                            receiver = "Для всіх батьків";
+                            receiver = "For all parents";
                         }
                         else 
                         {
-                            receiver = "Для всіх вчителів";
+                            receiver = "For all teachers";
                         }
                     }
                     else 
                     {
                         Subject subjectModel = db.Subject.Where(subjectEntity => subjectEntity.IdSubject == announcementEntity.IdSubject).FirstOrDefault();
-                        receiver = "Вчителі з предмету \"" + subjectModel.SubjectName + "\"";
+                        receiver = "Teachers on subject \"" + subjectModel.SubjectName + "\"";
                     }
 
 
@@ -3708,7 +3706,7 @@ namespace shagDiplom.Controllers
                 return Ok(announcementAdminList);
             }
             else
-                return BadRequest(new { message = "Будь ласка зробіть хоча б одно оголошення, щоб переглядати даті цієї сторінки!" });
+                return BadRequest(new { message = "Please make at least one announcement to watch the data on this page!" });
         }
 
 
@@ -3729,7 +3727,7 @@ namespace shagDiplom.Controllers
                 return Ok(parentsList);
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
 
@@ -3820,7 +3818,7 @@ namespace shagDiplom.Controllers
 
             if (pupils == null)
             {
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
             }
             List<SelectModel> pupilsSelect = new List<SelectModel>();
             foreach (Pupil pupil in pupils)
@@ -3866,9 +3864,9 @@ namespace shagDiplom.Controllers
                     hwFileCheck = hw.Filename;
                 }
               if(hwSubModel != null)
-                homeworkInfo.Add(new HomeworkInfoModel(hw.IdHomework, hw.Description, hw.DueDate, teacherModel.Name +  " " + teacherModel.Patronymic + " " + teacherModel.Surname, hwFileCheck, hw.Title, "Зроблено."));
+                homeworkInfo.Add(new HomeworkInfoModel(hw.IdHomework, hw.Description, hw.DueDate, teacherModel.Name +  " " + teacherModel.Patronymic + " " + teacherModel.Surname, hwFileCheck, hw.Title, "Submitted."));
               else
-                homeworkInfo.Add(new HomeworkInfoModel(hw.IdHomework, hw.Description, hw.DueDate, teacherModel.Name + " " + teacherModel.Patronymic + " " + teacherModel.Surname, hwFileCheck, hw.Title, "Очікує завантаження..."));
+                homeworkInfo.Add(new HomeworkInfoModel(hw.IdHomework, hw.Description, hw.DueDate, teacherModel.Name + " " + teacherModel.Patronymic + " " + teacherModel.Surname, hwFileCheck, hw.Title, "Awaits submission..."));
             }
             return Ok(homeworkInfo);
         }
@@ -4418,7 +4416,7 @@ namespace shagDiplom.Controllers
                 return Ok(teachersSelect);
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
         [Authorize(Roles = roleContext.Parent)]
@@ -4436,7 +4434,7 @@ namespace shagDiplom.Controllers
                 return Ok(teachersSelect);
             }
             else
-                return BadRequest(new { message = "Не має відповідної інформації до вашого запиту!" });
+                return BadRequest(new { message = "We do not have any information on your request!" });
         }
 
         [Authorize]
