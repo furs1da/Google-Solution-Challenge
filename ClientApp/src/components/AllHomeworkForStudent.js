@@ -62,9 +62,9 @@ class HomeworkStudent extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Домашні завдання</h1>
+                        <h1>Homework assignments</h1>
                         <hr />
-                        <h3>Оберіть предмет</h3>
+                        <h3>Select subject</h3>
                         <div className="form-group col">
                             <label htmlFor="zeroSelect">Select the subject</label>
                             <Select

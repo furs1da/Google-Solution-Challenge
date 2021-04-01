@@ -55,7 +55,7 @@ class WatchStudentGrades extends React.Component {
                                 onChange={selectSubject => this.onChangeSubject(selectSubject, setFieldValue)} />
                             <ErrorMessage name="zeroSelect" component="div" className="invalid-feedback" />
                         </div>
-                        <h3>Поточні оцінки</h3>
+                        <h3>Current marks</h3>
                         <div>
                             {this.state.grades &&
                                 <Table responsive bordered hover>

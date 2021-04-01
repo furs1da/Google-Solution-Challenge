@@ -19,7 +19,7 @@ class LoginPage extends React.Component {
     render() {
         return (
             <div>
-                <h2>Увійдіть до системи</h2>
+                <h2>Login</h2>
                 <Formik
                     initialValues={{
                         username: '',
