@@ -24,6 +24,7 @@ class CreateTeacher extends React.Component {
     componentDidMount() {
         userService.GetAllGenders().then(genders => this.setState({ genders }));
         userService.GetAllSubjects().then(subjects => this.setState({ subjects }));      
+
     }
 
     onTogglePassword = () =>

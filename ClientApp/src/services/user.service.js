@@ -1317,7 +1317,6 @@ function ChangeClass(idClassroomTeacher, accessCode, adminCode, idClass) {
         .then(handleResponse);
 }
 
-
 function CreateLesson(flow, letter, dayId, subjectId, teacherId, lessonOrder) {
 
     const formData = new FormData();

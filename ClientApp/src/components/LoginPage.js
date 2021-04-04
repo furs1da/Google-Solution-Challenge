@@ -3,7 +3,8 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 import { authenticationService } from '../services';
-
+import { Button, Icon, Popup, Input } from "semantic-ui-react";
+import 'semantic-ui-css/semantic.min.css';
 /* eslint-disable */
 
 class LoginPage extends React.Component {
