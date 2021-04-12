@@ -8,7 +8,7 @@ and it might be free, so I decided to make this project.
 
 This project is made using ReactJS as a client-side, ASP.Net Core 3.1 as a server-side and SQL Server from Google Cloud as a database engine. 
 
-Accounts to check system's functions: (password - 123456 everywhere)
+Accounts to check system's functions: (password - 123456 everywhere):
 googlesolutionchallenge@gmail.com - admin;  
 carstmp+9eh3i@gmail.com - teacher;
 abd.um.uhamma.da.li.t.mp@gmail.com - student;
