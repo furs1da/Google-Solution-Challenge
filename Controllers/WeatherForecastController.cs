@@ -26,8 +26,8 @@ namespace shagDiplom.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private IUserService _userService; 
-        private schoolManagementSystemDatabaseContext db = new schoolManagementSystemDatabaseContext();  
+        private IUserService _userService;
+        private schoolManagementSystemDatabaseContext db = new schoolManagementSystemDatabaseContext();
         private const string adminAccessCode = "Sapere aude"; // admin access code to make some important changes in the system
 
         private readonly ILogger<WeatherForecastController> _logger;
@@ -41,12 +41,12 @@ namespace shagDiplom.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public IActionResult Login([FromBody] AuthenticateModel model) 
+        public IActionResult Login([FromBody] AuthenticateModel model)
         {
-            var userPupil = _userService.AuthenticatePupil(model.Username, model.Password, db);  
-            var userTeacher = _userService.AuthenticateTeacher(model.Username, model.Password, db);  
-            var userParent = _userService.AuthenticateParent(model.Username, model.Password, db);  
-            var userAdmin = _userService.AuthenticateAdmin(model.Username, model.Password, db);       
+            var userPupil = _userService.AuthenticatePupil(model.Username, model.Password, db);
+            var userTeacher = _userService.AuthenticateTeacher(model.Username, model.Password, db);
+            var userParent = _userService.AuthenticateParent(model.Username, model.Password, db);
+            var userAdmin = _userService.AuthenticateAdmin(model.Username, model.Password, db);
             if (userPupil != null)
                 return Ok(userPupil);
             else if (userTeacher != null)
@@ -199,7 +199,7 @@ namespace shagDiplom.Controllers
                 {
                     classStudent.Id = (showPieceTemp.Id) + 1;
                 }
-                classStudent.IdStudent = tempPupil.IdPupil;               
+                classStudent.IdStudent = tempPupil.IdPupil;
                 Classes classIdFinder = db.Classes.Where(classCodeCheck => classCodeCheck.AccessCode == classCode).FirstOrDefault();
                 classStudent.IdClass = classIdFinder.IdClass;
                 db.ClassStudent.Add(classStudent);
@@ -265,11 +265,24 @@ namespace shagDiplom.Controllers
 
                 for (int i = 0; i < listSelected.Count(); i++)
                 {
-                  
+
+                    SubjectTeacher showPieceSb = db.SubjectTeacher
+                           .OrderByDescending(p => p.Id)
+                           .FirstOrDefault();
 
                     SubjectTeacher subjectTeacher = new SubjectTeacher();
-                 
+                    if (showPieceSb == null)
+                    {
+                        subjectTeacher.Id = db.SubjectTeacher.Count() + 1;
+                    }
+                    else
+                    {
+                        subjectTeacher.Id = (showPieceSb.Id) + 1;
+                    }
+
                     
+
+
                     subjectTeacher.TeacherId = tempTeacher.IdTeacher;
                     subjectTeacher.SubjectId = int.Parse(listSelected[i].value);
                     db.SubjectTeacher.Add(subjectTeacher);
@@ -567,7 +580,7 @@ namespace shagDiplom.Controllers
                             tempPupil.ImageOfPupil = ms.ToArray();
                         }
                     }
-                   
+
                     db.SaveChanges();
 
                     ClassStudent classStudentTemp = db.ClassStudent.Where(clStEntity => clStEntity.IdStudent == tempPupil.IdPupil).FirstOrDefault();
@@ -663,7 +676,8 @@ namespace shagDiplom.Controllers
                     return BadRequest(new { message = ex.Message });
                 }
             }
-            else {
+            else
+            {
                 return BadRequest(new { message = "Access is denied!" });
             }
         }
@@ -793,7 +807,7 @@ namespace shagDiplom.Controllers
                     db.SaveChanges();
                     db.Teacher.Remove(tempTeacher);
                     db.SaveChanges();
-                    return Ok(JsonConvert.SerializeObject("Доступ дозволений!"));
+                    return Ok(JsonConvert.SerializeObject("Access is allowed!"));
                 }
                 catch (Exception ex)
                 {
@@ -1009,7 +1023,8 @@ namespace shagDiplom.Controllers
                     db.SaveChanges();
                     return Ok();
                 }
-                else {
+                else
+                {
                     return BadRequest();
                 }
             }
@@ -1348,7 +1363,7 @@ namespace shagDiplom.Controllers
             var students = _userService.GetAllPupils(db);
             var userIdClass = db.ClassStudent.Where(record => record.IdClass == id);
             var studentParentCheck = db.ParentStudent.Where(record => record.IdParent == parentModel.IdParent);
-            if(students == null || studentParentCheck == null)
+            if (students == null || studentParentCheck == null)
                 return BadRequest(new { message = "This class does not have any students!" });
             students = students.Where(student => userIdClass.Any(selectedItem => student.IdPupil == selectedItem.IdStudent)).ToList();
             if (students == null)
@@ -1531,7 +1546,7 @@ namespace shagDiplom.Controllers
                 tempLesson.LessonOrder = int.Parse(model.lessonOrder);
                 db.Curricular.Add(tempLesson);
                 db.SaveChanges();
-                // Дождаться завершения сохранения 
+             
 
                 return Ok();
             }
@@ -1725,7 +1740,7 @@ namespace shagDiplom.Controllers
             var students = _userService.GetAllStudentsForClass(db, int.Parse(idFlow), int.Parse(idLetter));
             if (students != null)
             {
-                List<ThematicalStudentModel> studentsThematical = new List<ThematicalStudentModel>(); 
+                List<ThematicalStudentModel> studentsThematical = new List<ThematicalStudentModel>();
                 foreach (Pupil student in students)
                 {
                     string themGrades = "";
@@ -1736,7 +1751,7 @@ namespace shagDiplom.Controllers
                     }
                     if (themGrades == "")
                         themGrades = "We do not have any marks";
-                    studentsThematical.Add(new ThematicalStudentModel(student.IdPupil, student.Name + " " + student.Patronymic + " " + student.Surname,  -1, themGrades));
+                    studentsThematical.Add(new ThematicalStudentModel(student.IdPupil, student.Name + " " + student.Patronymic + " " + student.Surname, -1, themGrades));
                 }
                 return Ok(studentsThematical);
             }
@@ -1750,7 +1765,7 @@ namespace shagDiplom.Controllers
         public IActionResult GetAllAbsenceSubject(string startDate, string dateEnd, string idSubject, string idStudent)
         {
             Pupil pupilModel = db.Pupil.Where(pupilEntity => pupilEntity.IdPupil == int.Parse(idStudent)).FirstOrDefault();
-            if(pupilModel == null)
+            if (pupilModel == null)
                 return Ok(JsonConvert.SerializeObject("Please select a student."));
             List<Attendance> attendanceList = db.Attendance.Where(attendanceEntity => attendanceEntity.AttendanceCheck == false && attendanceEntity.IdStudent == pupilModel.IdPupil && attendanceEntity.IdSubject == int.Parse(idSubject) && attendanceEntity.DateOfLesson >= Convert.ToDateTime(startDate) && attendanceEntity.DateOfLesson <= Convert.ToDateTime(dateEnd)).ToList();
             Subject subjectModel = db.Subject.Where(subjectModel => subjectModel.IdSubject == int.Parse(idSubject)).FirstOrDefault();
@@ -1777,7 +1792,7 @@ namespace shagDiplom.Controllers
 
         [Authorize]
         [HttpGet("GetAllGradesPupil/{id}")]
-        public IActionResult GetAllGradesPupil( int id)
+        public IActionResult GetAllGradesPupil(int id)
         {
             string emailCurrentUser = User.FindFirst(ClaimTypes.Name).Value;
             Pupil pupilModel = db.Pupil.Where(classEntity => classEntity.Email == emailCurrentUser).FirstOrDefault();
@@ -1790,15 +1805,15 @@ namespace shagDiplom.Controllers
                 {
                     Teacher teacherModel = db.Teacher.Where(teacherEntity => teacherEntity.IdTeacher == gradeModel.TeacherId).FirstOrDefault();
 
-                    if (gradeModel.HomeworkGrade == false)
+                    if (gradeModel.ClassGrade == true)
                     {
-                        studentsGrades.Add(new WatchGradesModel(gradeModel.IdGrade, teacherModel.Name + " " + teacherModel.Patronymic + " " + teacherModel.Surname, gradeModel.Grade1, "Робота в класі", gradeModel.DateOfGrade, gradeModel.Feedback));
+                        studentsGrades.Add(new WatchGradesModel(gradeModel.IdGrade, teacherModel.Name + " " + teacherModel.Patronymic + " " + teacherModel.Surname, gradeModel.Grade1, "Class Work", gradeModel.DateOfGrade, gradeModel.Feedback));
                     }
-                    else 
+                    else
                     {
-                        studentsGrades.Add(new WatchGradesModel(gradeModel.IdGrade, teacherModel.Name + " " + teacherModel.Patronymic + " " + teacherModel.Surname, gradeModel.Grade1, "Домашня робота", gradeModel.DateOfGrade, gradeModel.Feedback));
+                        studentsGrades.Add(new WatchGradesModel(gradeModel.IdGrade, teacherModel.Name + " " + teacherModel.Patronymic + " " + teacherModel.Surname, gradeModel.Grade1, "Homework", gradeModel.DateOfGrade, gradeModel.Feedback));
                     }
-                 }
+                }
                 return Ok(studentsGrades.OrderByDescending(p => p.dateGrade));
             }
             else
@@ -1817,9 +1832,9 @@ namespace shagDiplom.Controllers
             {
                 List<WatchThematicalGrades> studentsGrades = new List<WatchThematicalGrades>();
                 foreach (GradeThematical gradeModel in listGrades)
-                {        
-                   studentsGrades.Add(new WatchThematicalGrades(gradeModel.IdThematic, gradeModel.Grade, gradeModel.DateFrom, gradeModel.DateTo));
-                  
+                {
+                    studentsGrades.Add(new WatchThematicalGrades(gradeModel.IdThematic, gradeModel.Grade, gradeModel.DateFrom, gradeModel.DateTo));
+
                 }
                 return Ok(studentsGrades.OrderByDescending(p => p.idGrade));
             }
@@ -1838,7 +1853,7 @@ namespace shagDiplom.Controllers
 
             if (finalGrade != null)
             {
-                return Ok(JsonConvert.SerializeObject(finalGrade.Grade));              
+                return Ok(JsonConvert.SerializeObject(finalGrade.Grade));
             }
             else
                 return Ok(JsonConvert.SerializeObject("We do not have the final mark."));
@@ -1872,7 +1887,7 @@ namespace shagDiplom.Controllers
                         else
                             attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "LightGreen", "Yes", attendanceModel.DateOfLesson));
                     }
-                       
+
                 }
                 return Ok(attendanceGrades.OrderByDescending(p => p.dateOfLesson));
             }
@@ -1895,12 +1910,12 @@ namespace shagDiplom.Controllers
                 {
                     if (attendanceModel.AttendanceCheck == false)
                     {
-                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "IndianRed", "No", attendanceModel.DateOfLesson));
+                        attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "IndianRed", "No", attendanceModel.DateOfLesson));
                     }
 
                     else
-                    {                      
-                            attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "LightGreen", "Yes", attendanceModel.DateOfLesson));
+                    {
+                        attendanceGrades.Add(new AttendanceWatchModel(attendanceModel.IdAttendance, "LightGreen", "Yes", attendanceModel.DateOfLesson));
                     }
 
                 }
@@ -1922,7 +1937,7 @@ namespace shagDiplom.Controllers
                 {
                     Teacher teacherModel = db.Teacher.Where(teacherEntity => teacherEntity.IdTeacher == gradeModel.TeacherId).FirstOrDefault();
 
-                    if (gradeModel.HomeworkGrade == false)
+                    if (gradeModel.ClassGrade == true)
                     {
                         studentsGrades.Add(new WatchGradesModel(gradeModel.IdGrade, teacherModel.Name + " " + teacherModel.Patronymic + " " + teacherModel.Surname, gradeModel.Grade1, "Class Work", gradeModel.DateOfGrade, gradeModel.Feedback));
                     }
@@ -2002,14 +2017,14 @@ namespace shagDiplom.Controllers
         }
 
 
-        
+
         [Authorize(Roles = roleContext.Admin)]
         [HttpGet("GetAllInfoTeacher/{id}")]
         public IActionResult GetAllInfoTeacher(int id)
         {
-           Teacher teacher = db.Teacher.Where(teacherEntity => teacherEntity.IdTeacher == id).FirstOrDefault();      
-           return Ok(teacher);
-          
+            Teacher teacher = db.Teacher.Where(teacherEntity => teacherEntity.IdTeacher == id).FirstOrDefault();
+            return Ok(teacher);
+
         }
         [Authorize(Roles = roleContext.Admin)]
         [HttpGet("GetAllInfoAnnouncementAdmin/{id}")]
@@ -2025,15 +2040,15 @@ namespace shagDiplom.Controllers
         public IActionResult GetAllInfoHomeworkTeacher(int id)
         {
             HomeworkInfo hwInfo = db.HomeworkInfo.Where(hwEntity => hwEntity.IdHomework == id).FirstOrDefault();
-         
-                string hwFileCheck = "nodata";
-                if (hwInfo.Filename != null)
-                {
-                    hwFileCheck = hwInfo.Filename;
-                }
+
+            string hwFileCheck = "nodata";
+            if (hwInfo.Filename != null)
+            {
+                hwFileCheck = hwInfo.Filename;
+            }
             HomeworkInfoForTeacher hwInfoTeacher = new HomeworkInfoForTeacher(hwInfo.IdHomework, hwInfo.Description, hwInfo.DueDate, hwInfo.IdFlow, hwFileCheck, hwInfo.Title);
 
-            
+
             return Ok(hwInfoTeacher);
 
         }
@@ -2048,7 +2063,7 @@ namespace shagDiplom.Controllers
             {
                 hwFileCheck = postInfo.Filename;
             }
-            TeacherPostWatchModel postTeacher = new TeacherPostWatchModel(postInfo.IdPost, "", postInfo.Title, postInfo.PostContent, hwFileCheck,  postInfo.DateOfPost);
+            TeacherPostWatchModel postTeacher = new TeacherPostWatchModel(postInfo.IdPost, "", postInfo.Title, postInfo.PostContent, hwFileCheck, postInfo.DateOfPost);
 
 
             return Ok(postTeacher);
@@ -2115,7 +2130,7 @@ namespace shagDiplom.Controllers
             Pupil student = db.Pupil.Where(pupilEntity => pupilEntity.IdPupil == id).FirstOrDefault();
             return Ok(student);
         }
-        
+
         [Authorize(Roles = roleContext.Admin)]
         [HttpGet("GetClassCodeStudent/{id}")]
         public IActionResult GetClassCodeStudent(int id)
@@ -2772,18 +2787,18 @@ namespace shagDiplom.Controllers
 
                 Teacher teacherModel = db.Teacher.Where(classEntity => classEntity.Email == emailCurrentUser).FirstOrDefault();
 
-                    HomeworkInfo showPiece = db.HomeworkInfo
-                   .OrderByDescending(p => p.IdHomework)
-                   .FirstOrDefault();
-                    HomeworkInfo homeworkInfoTemp = new HomeworkInfo();
-                    if (showPiece == null)
-                    {
+                HomeworkInfo showPiece = db.HomeworkInfo
+               .OrderByDescending(p => p.IdHomework)
+               .FirstOrDefault();
+                HomeworkInfo homeworkInfoTemp = new HomeworkInfo();
+                if (showPiece == null)
+                {
                     homeworkInfoTemp.IdHomework = db.HomeworkInfo.Count() + 1;
-                    }
-                    else
-                    {
+                }
+                else
+                {
                     homeworkInfoTemp.IdHomework = (showPiece.IdHomework) + 1;
-                    }
+                }
                 homeworkInfoTemp.IdTeacher = teacherModel.IdTeacher;
                 homeworkInfoTemp.IdSubject = int.Parse(model.zeroSelect);
                 homeworkInfoTemp.IdFlow = int.Parse(model.FirstSelect);
@@ -2791,19 +2806,19 @@ namespace shagDiplom.Controllers
                 homeworkInfoTemp.Description = model.Content;
                 homeworkInfoTemp.DueDate = Convert.ToDateTime(model.DueDate);
                 if (model.Attachement != null)
+                {
+                    using (var ms = new MemoryStream())
                     {
-                        using (var ms = new MemoryStream())
-                        {
-                            model.Attachement.CopyTo(ms);
+                        model.Attachement.CopyTo(ms);
                         homeworkInfoTemp.Attachements = ms.ToArray();
                         homeworkInfoTemp.AttchFormatExst = model.Attachement.ContentType;
                         homeworkInfoTemp.Filename = model.Attachement.FileName;
-                        }
                     }
-                    db.HomeworkInfo.Add(homeworkInfoTemp);
-                    db.SaveChanges();            
-               
-               
+                }
+                db.HomeworkInfo.Add(homeworkInfoTemp);
+                db.SaveChanges();
+
+
                 return Ok();
             }
             catch (Exception ex)
@@ -2850,7 +2865,7 @@ namespace shagDiplom.Controllers
                     {
                         homeworkSubmissionTemp.IdSubmission = (showPiece.IdSubmission) + 1;
                     }
-                    HomeworkInfo hwInfo =  db.HomeworkInfo.Where(hwEntity => hwEntity.IdHomework == int.Parse(model.homeworkId)).FirstOrDefault();
+                    HomeworkInfo hwInfo = db.HomeworkInfo.Where(hwEntity => hwEntity.IdHomework == int.Parse(model.homeworkId)).FirstOrDefault();
 
                     homeworkSubmissionTemp.StudentId = pupilModel.IdPupil;
                     homeworkSubmissionTemp.IdTeacher = hwInfo.IdTeacher;
@@ -3180,7 +3195,7 @@ namespace shagDiplom.Controllers
                         announcementTemp.IdAnnouncement = (showPiece.IdAnnouncement) + 1;
                     }
                     announcementTemp.IdAdminSender = adminModel.IdAdmin;
-                    Classes tempClass = db.Classes.Where(clEnt => clEnt.ClassLetter == int.Parse(model.ThirdSelect) &&clEnt.FlowNumber == int.Parse(model.SecondSelect)).FirstOrDefault();
+                    Classes tempClass = db.Classes.Where(clEnt => clEnt.ClassLetter == int.Parse(model.ThirdSelect) && clEnt.FlowNumber == int.Parse(model.SecondSelect)).FirstOrDefault();
                     announcementTemp.IdClass = tempClass.IdClass;
 
                     announcementTemp.AnnouncementContent = model.Content;
@@ -3192,7 +3207,7 @@ namespace shagDiplom.Controllers
                         using (var ms = new MemoryStream())
                         {
                             model.Attachement.CopyTo(ms);
-                            announcementTemp.Attachements = ms.ToArray();
+                            //announcementTemp.Attachements = ms.ToArray();
                             announcementTemp.AttchFormatExst = model.Attachement.ContentType;
                             announcementTemp.Filename = model.Attachement.FileName;
                         }
@@ -3309,7 +3324,7 @@ namespace shagDiplom.Controllers
             return Ok(lettersSelect);
 
         }
-        
+
         [Authorize(Roles = roleContext.Teacher)]
         [HttpGet("GetAllHomeworkTitlesBySubjectAndTeacherAndClass/{idFlow}/{idSubject}")]
         public IActionResult GetAllHomeworkTitlesBySubjectAndTeacherAndClass(int idFlow, int idSubject)
@@ -3329,7 +3344,7 @@ namespace shagDiplom.Controllers
             return Ok(hwsSelect);
         }
 
-        
+
         [Authorize(Roles = roleContext.Teacher)]
         [HttpGet("GetAllHomeworkSubmissionBySubjectAndTeacherAndClass/{idClassLetter}/{idFlow}/{idSubject}")]
         public IActionResult GetAllHomeworkSubmissionBySubjectAndTeacherAndClass(int idClassLetter, int idFlow, int idSubject)
@@ -3343,20 +3358,20 @@ namespace shagDiplom.Controllers
             List<HomeworkSubmission> homeworkSubmList = db.HomeworkSubmission.Where(hwSub => pupilList.Select(pupilEntity => pupilEntity.IdPupil).Contains(hwSub.StudentId)).ToList();
             homeworkSubmList = db.HomeworkSubmission.Where(hwSub => homeworkInfoList.Select(hwInfoEntity => hwInfoEntity.IdHomework).Contains(hwSub.HomeworkId)).OrderByDescending(hwSub => hwSub.IdSubmission).ToList();
 
-            List <HomeworkSubmissionModel> homeworkSubmInfo = new List<HomeworkSubmissionModel>();
-            if(homeworkSubmList != null)
-            foreach (HomeworkSubmission hw in homeworkSubmList)
-            {
-                HomeworkInfo homeworkInfoTemp = db.HomeworkInfo.Where(hwInfoModel => hwInfoModel.IdHomework == hw.HomeworkId).FirstOrDefault();
-                Pupil studentTemp = pupilList.Where(studentEntity => studentEntity.IdPupil == hw.StudentId).FirstOrDefault();
-                if (studentTemp != null)
+            List<HomeworkSubmissionModel> homeworkSubmInfo = new List<HomeworkSubmissionModel>();
+            if (homeworkSubmList != null)
+                foreach (HomeworkSubmission hw in homeworkSubmList)
                 {
-                    if (DateTime.Compare(hw.DateOfSubmission, homeworkInfoTemp.DueDate) <= 0)
-                        homeworkSubmInfo.Add(new HomeworkSubmissionModel(hw.IdSubmission, hw.Comments, hw.DateOfSubmission, studentTemp.Name + " " + studentTemp.Patronymic + " " + studentTemp.Surname, hw.Filename, homeworkInfoTemp.Title, "Вчасно.", "LightGreen"));
-                    else
-                        homeworkSubmInfo.Add(new HomeworkSubmissionModel(hw.IdSubmission, hw.Comments, hw.DateOfSubmission, studentTemp.Name + " " + studentTemp.Patronymic + " " + studentTemp.Surname, hw.Filename, homeworkInfoTemp.Title, "З запізненням.", "LightCoral"));
+                    HomeworkInfo homeworkInfoTemp = db.HomeworkInfo.Where(hwInfoModel => hwInfoModel.IdHomework == hw.HomeworkId).FirstOrDefault();
+                    Pupil studentTemp = pupilList.Where(studentEntity => studentEntity.IdPupil == hw.StudentId).FirstOrDefault();
+                    if (studentTemp != null)
+                    {
+                        if (DateTime.Compare(hw.DateOfSubmission, homeworkInfoTemp.DueDate) <= 0)
+                            homeworkSubmInfo.Add(new HomeworkSubmissionModel(hw.IdSubmission, hw.Comments, hw.DateOfSubmission, studentTemp.Name + " " + studentTemp.Patronymic + " " + studentTemp.Surname, hw.Filename, homeworkInfoTemp.Title, "In time.", "LightGreen"));
+                        else
+                            homeworkSubmInfo.Add(new HomeworkSubmissionModel(hw.IdSubmission, hw.Comments, hw.DateOfSubmission, studentTemp.Name + " " + studentTemp.Patronymic + " " + studentTemp.Surname, hw.Filename, homeworkInfoTemp.Title, "Late submission.", "LightCoral"));
+                    }
                 }
-            }
             return Ok(homeworkSubmInfo);
         }
 
@@ -3368,8 +3383,8 @@ namespace shagDiplom.Controllers
             Teacher teacherModel = db.Teacher.Where(classEntity => classEntity.Email == emailCurrentUser).FirstOrDefault();
 
             List<HomeworkInfo> homeworkInfoList = new List<HomeworkInfo>();
-            List<HomeworkSubmission> homeworkSubmList = new List<HomeworkSubmission>();          
-            
+            List<HomeworkSubmission> homeworkSubmList = new List<HomeworkSubmission>();
+
             if (idHWTitle == -1)
             {
                 homeworkInfoList = db.HomeworkInfo.Where(hwInfoModel => hwInfoModel.IdSubject == idSubject && hwInfoModel.IdTeacher == teacherModel.IdTeacher).ToList();
@@ -3385,25 +3400,25 @@ namespace shagDiplom.Controllers
                 homeworkSubmList = db.HomeworkSubmission.Where(hwSub => pupilList.Select(pupilEntity => pupilEntity.IdPupil).Contains(hwSub.StudentId)).ToList();
                 homeworkSubmList = homeworkSubmList.Where(hwSub => homeworkInfoList.Select(hwInfoEntity => hwInfoEntity.IdHomework).Contains(hwSub.HomeworkId)).OrderByDescending(hwSub => hwSub.IdSubmission).ToList();
             }
-            else 
+            else
             {
                 homeworkSubmList = db.HomeworkSubmission.Where(hwSub => hwSub.StudentId == idStudent).ToList();
                 homeworkSubmList = homeworkSubmList.Where(hwSub => homeworkInfoList.Select(hwInfoEntity => hwInfoEntity.IdHomework).Contains(hwSub.HomeworkId)).OrderByDescending(hwSub => hwSub.IdSubmission).ToList();
             }
-           
+
 
             List<HomeworkSubmissionModel> homeworkSubmInfo = new List<HomeworkSubmissionModel>();
-            if(homeworkSubmList!=null)
-            foreach (HomeworkSubmission hw in homeworkSubmList)
-            {
-                HomeworkInfo homeworkInfoTemp = db.HomeworkInfo.Where(hwInfoModel => hwInfoModel.IdHomework == hw.HomeworkId).FirstOrDefault();
-                Pupil studentTemp = db.Pupil.Where(studentEntity => studentEntity.IdPupil == hw.StudentId).FirstOrDefault();
+            if (homeworkSubmList != null)
+                foreach (HomeworkSubmission hw in homeworkSubmList)
+                {
+                    HomeworkInfo homeworkInfoTemp = db.HomeworkInfo.Where(hwInfoModel => hwInfoModel.IdHomework == hw.HomeworkId).FirstOrDefault();
+                    Pupil studentTemp = db.Pupil.Where(studentEntity => studentEntity.IdPupil == hw.StudentId).FirstOrDefault();
 
-                if (DateTime.Compare(hw.DateOfSubmission, homeworkInfoTemp.DueDate) <= 0)
-                    homeworkSubmInfo.Add(new HomeworkSubmissionModel(hw.IdSubmission, hw.Comments, hw.DateOfSubmission, studentTemp.Name + " " + studentTemp.Patronymic + " " + studentTemp.Surname, hw.Filename, homeworkInfoTemp.Title, "Вчасно.", "LightGreen"));
-                else
-                    homeworkSubmInfo.Add(new HomeworkSubmissionModel(hw.IdSubmission, hw.Comments, hw.DateOfSubmission, studentTemp.Name + " " + studentTemp.Patronymic + " " + studentTemp.Surname, hw.Filename, homeworkInfoTemp.Title, "З запізненням.", "LightCoral"));
-            }
+                    if (DateTime.Compare(hw.DateOfSubmission, homeworkInfoTemp.DueDate) <= 0)
+                        homeworkSubmInfo.Add(new HomeworkSubmissionModel(hw.IdSubmission, hw.Comments, hw.DateOfSubmission, studentTemp.Name + " " + studentTemp.Patronymic + " " + studentTemp.Surname, hw.Filename, homeworkInfoTemp.Title, "In time.", "LightGreen"));
+                    else
+                        homeworkSubmInfo.Add(new HomeworkSubmissionModel(hw.IdSubmission, hw.Comments, hw.DateOfSubmission, studentTemp.Name + " " + studentTemp.Patronymic + " " + studentTemp.Surname, hw.Filename, homeworkInfoTemp.Title, "Late submission.", "LightCoral"));
+                }
             return Ok(homeworkSubmInfo);
         }
 
@@ -3452,7 +3467,7 @@ namespace shagDiplom.Controllers
         [Authorize(Roles = roleContext.Admin)]
         [HttpGet("GetAllSubjectsAdmin")]
         public IActionResult GetAllSubjectsAdmin()
-        {         
+        {
             List<Subject> subjects = db.Subject.ToList();
             List<SelectModel> subjectsSelect = new List<SelectModel>();
             subjectsSelect.Add(new SelectModel("-1", "All subjects"));
@@ -3469,7 +3484,7 @@ namespace shagDiplom.Controllers
         {
             List<Teacher> teachers = new List<Teacher>();
             if (idSubject == -1)
-              teachers = _userService.GetAllTeachers(db).ToList();
+                teachers = _userService.GetAllTeachers(db).ToList();
             else
             {
                 List<SubjectTeacher> teacherSubject = db.SubjectTeacher.Where(subjectEntity => subjectEntity.SubjectId == idSubject).ToList();
@@ -3569,7 +3584,7 @@ namespace shagDiplom.Controllers
         public IActionResult GetAllClassesByFlowAdmin(int flowId)
         {
             List<Classes> classList = db.Classes.Where(classesEntity => classesEntity.FlowNumber == flowId).ToList();
-            
+
             if (classList != null)
             {
                 List<ClassesModelForAdmin> classAdminList = new List<ClassesModelForAdmin>();
@@ -3669,11 +3684,11 @@ namespace shagDiplom.Controllers
                     {
                         Classes classesModel = db.Classes.Where(classEntity => classEntity.IdClass == announcementEntity.IdClass).FirstOrDefault();
                         ClassLetters classLettersModel = db.ClassLetters.Where(classLetterEntity => classLetterEntity.IdLetter == classesModel.ClassLetter).FirstOrDefault();
-                        receiver = classesModel.FlowNumber + " - " + classLettersModel.ClassLetter + " клас";
+                        receiver = classesModel.FlowNumber + " - " + classLettersModel.ClassLetter + " class";
                     }
                     else if (announcementEntity.IdFlow != null)
-                    {                                     
-                        receiver = announcementEntity.IdFlow +  " grade";
+                    {
+                        receiver = announcementEntity.IdFlow + " grade";
                     }
                     else if (announcementEntity.IdRole != null)
                     {
@@ -3689,12 +3704,12 @@ namespace shagDiplom.Controllers
                         {
                             receiver = "For all parents";
                         }
-                        else 
+                        else
                         {
                             receiver = "For all teachers";
                         }
                     }
-                    else 
+                    else
                     {
                         Subject subjectModel = db.Subject.Where(subjectEntity => subjectEntity.IdSubject == announcementEntity.IdSubject).FirstOrDefault();
                         receiver = "Teachers on subject \"" + subjectModel.SubjectName + "\"";
@@ -3767,7 +3782,7 @@ namespace shagDiplom.Controllers
             var roles = _userService.GetAllRoles(db);
             List<SelectModel> rolesSelect = new List<SelectModel>();
             foreach (Roles role in roles)
-            {              
+            {
                 rolesSelect.Add(new SelectModel(role.IdRole.ToString(), role.Role));
             }
             return Ok(rolesSelect);
@@ -3851,7 +3866,7 @@ namespace shagDiplom.Controllers
             ClassStudent classStudentModel = db.ClassStudent.Where(classStudentEntity => classStudentEntity.IdStudent == pupilModel.IdPupil).FirstOrDefault();
             Classes classModel = db.Classes.Where(classEntity => classEntity.IdClass == classStudentModel.IdClass).FirstOrDefault();
 
-            List<HomeworkInfo>  hwModelList = db.HomeworkInfo.Where(hwEntity => hwEntity.IdFlow == classModel.FlowNumber && hwEntity.IdSubject == id).ToList();
+            List<HomeworkInfo> hwModelList = db.HomeworkInfo.Where(hwEntity => hwEntity.IdFlow == classModel.FlowNumber && hwEntity.IdSubject == id).ToList();
 
             List<HomeworkInfoModel> homeworkInfo = new List<HomeworkInfoModel>();
             foreach (HomeworkInfo hw in hwModelList)
@@ -3859,14 +3874,14 @@ namespace shagDiplom.Controllers
                 Teacher teacherModel = db.Teacher.Where(teaherEntity => teaherEntity.IdTeacher == hw.IdTeacher).FirstOrDefault();
                 HomeworkSubmission hwSubModel = db.HomeworkSubmission.Where(hwEntity => hwEntity.HomeworkId == hw.IdHomework && hwEntity.StudentId == pupilModel.IdPupil).FirstOrDefault();
                 string hwFileCheck = "nodata";
-                if(hw.Filename != null)
+                if (hw.Filename != null)
                 {
                     hwFileCheck = hw.Filename;
                 }
-              if(hwSubModel != null)
-                homeworkInfo.Add(new HomeworkInfoModel(hw.IdHomework, hw.Description, hw.DueDate, teacherModel.Name +  " " + teacherModel.Patronymic + " " + teacherModel.Surname, hwFileCheck, hw.Title, "Submitted."));
-              else
-                homeworkInfo.Add(new HomeworkInfoModel(hw.IdHomework, hw.Description, hw.DueDate, teacherModel.Name + " " + teacherModel.Patronymic + " " + teacherModel.Surname, hwFileCheck, hw.Title, "Awaits submission..."));
+                if (hwSubModel != null)
+                    homeworkInfo.Add(new HomeworkInfoModel(hw.IdHomework, hw.Description, hw.DueDate, teacherModel.Name + " " + teacherModel.Patronymic + " " + teacherModel.Surname, hwFileCheck, hw.Title, "Submitted."));
+                else
+                    homeworkInfo.Add(new HomeworkInfoModel(hw.IdHomework, hw.Description, hw.DueDate, teacherModel.Name + " " + teacherModel.Patronymic + " " + teacherModel.Surname, hwFileCheck, hw.Title, "Awaits submission..."));
             }
             return Ok(homeworkInfo);
         }
@@ -3905,13 +3920,13 @@ namespace shagDiplom.Controllers
             string emailCurrentUser = User.FindFirst(ClaimTypes.Name).Value;
             Teacher teacherModel = db.Teacher.Where(classEntity => classEntity.Email == emailCurrentUser).FirstOrDefault();
 
-            List <SubjectTeacher> subjectTeacherModelList = db.SubjectTeacher.Where(subjectTeachertEntity => subjectTeachertEntity.TeacherId == teacherModel.IdTeacher).ToList();
+            List<SubjectTeacher> subjectTeacherModelList = db.SubjectTeacher.Where(subjectTeachertEntity => subjectTeachertEntity.TeacherId == teacherModel.IdTeacher).ToList();
 
 
             List<AnnouncementSender> announcementListSubject = db.AnnouncementSender.Where(announcementEntity => subjectTeacherModelList.Select(stEntity => stEntity.SubjectId).ToList().Contains((int)announcementEntity.IdSubject)).ToList();
             List<AnnouncementSender> announcementListRole = db.AnnouncementSender.Where(announcementEntity => announcementEntity.IdRole == 4).ToList();
             List<AnnouncementsWatchModel> announcementsInfo = new List<AnnouncementsWatchModel>();
-            
+
             foreach (AnnouncementSender anncmnt in announcementListSubject)
             {
                 if (anncmnt.Actual == true)
@@ -3930,13 +3945,13 @@ namespace shagDiplom.Controllers
                 if (anncmnt.Actual == true)
                 {
                     Admin adminModel = db.Admin.Where(adminEntity => adminEntity.IdAdmin == anncmnt.IdAdminSender).FirstOrDefault();
-                string hwFileCheck = "nodata";
-                if (anncmnt.Filename != null)
-                {
-                    hwFileCheck = anncmnt.Filename;
-                }         
+                    string hwFileCheck = "nodata";
+                    if (anncmnt.Filename != null)
+                    {
+                        hwFileCheck = anncmnt.Filename;
+                    }
                     announcementsInfo.Add(new AnnouncementsWatchModel(anncmnt.IdAnnouncement, adminModel.Name + " " + adminModel.Patronymic + " " + adminModel.Surname, anncmnt.TitleAnnouncement, anncmnt.AnnouncementContent, hwFileCheck, anncmnt.DateOfAnnouncement));
-                }               
+                }
             }
             return Ok(announcementsInfo.OrderByDescending(p => p.idAnnouncement));
         }
@@ -3989,9 +4004,9 @@ namespace shagDiplom.Controllers
         [HttpGet("GetAllAnnouncementParent")]
         public IActionResult GetAllAnnouncementParent()
         {
-            
+
             List<AnnouncementSender> announcementListRole = db.AnnouncementSender.Where(announcementEntity => announcementEntity.IdRole == 3).ToList();
-            List<AnnouncementsWatchModel> announcementsInfo = new List<AnnouncementsWatchModel>();         
+            List<AnnouncementsWatchModel> announcementsInfo = new List<AnnouncementsWatchModel>();
             foreach (AnnouncementSender anncmnt in announcementListRole)
             {
                 if (anncmnt.Actual == true)
@@ -4036,7 +4051,7 @@ namespace shagDiplom.Controllers
         {
             string emailCurrentUser = User.FindFirst(ClaimTypes.Name).Value;
             Teacher teacherModel = db.Teacher.Where(classEntity => classEntity.Email == emailCurrentUser).FirstOrDefault();
-         
+
             List<FeedbackSender> feedbackList = db.FeedbackSender.Where(feedbackEntity => feedbackEntity.ReceiverIdTeacher == teacherModel.IdTeacher).ToList();
             List<FeedBackWatchModel> feedbackInfo = new List<FeedBackWatchModel>();
             foreach (FeedbackSender feedback in feedbackList)
@@ -4072,7 +4087,8 @@ namespace shagDiplom.Controllers
                     feedbackInfo.Add(new FeedBackWatchModel(feedback.IdFeedback, pupilModel.Name + " " + pupilModel.Patronymic + " " + pupilModel.Surname, feedback.TitleFeedBack, feedback.FeedbackContent, hwFileCheck, feedback.DateOfFeedBack));
                 }
 
-                else {
+                else
+                {
                     Teacher teacherSender = db.Teacher.Where(teacherEntity => teacherEntity.IdTeacher == feedback.SenderIdTeacher).FirstOrDefault();
                     string hwFileCheck = "nodata";
                     if (feedback.Filename != null)
@@ -4081,7 +4097,7 @@ namespace shagDiplom.Controllers
                     }
                     feedbackInfo.Add(new FeedBackWatchModel(feedback.IdFeedback, teacherSender.Name + " " + teacherSender.Patronymic + " " + teacherSender.Surname, feedback.TitleFeedBack, feedback.FeedbackContent, hwFileCheck, feedback.DateOfFeedBack));
                 }
-            }          
+            }
             return Ok(feedbackInfo.OrderByDescending(p => p.DateOfFeedback));
         }
         [Authorize(Roles = roleContext.Pupil)]
@@ -4200,7 +4216,7 @@ namespace shagDiplom.Controllers
         public IActionResult GetAllFeedbackAdmin()
         {
             string emailCurrentUser = User.FindFirst(ClaimTypes.Name).Value;
-            Admin  adminModel = db.Admin.Where(adminEntity => adminEntity.Email == emailCurrentUser).FirstOrDefault();
+            Admin adminModel = db.Admin.Where(adminEntity => adminEntity.Email == emailCurrentUser).FirstOrDefault();
 
             List<FeedbackSender> feedbackList = db.FeedbackSender.Where(feedbackEntity => feedbackEntity.ReceiverIdAdmin == adminModel.IdAdmin).ToList();
             List<FeedBackWatchModel> feedbackInfo = new List<FeedBackWatchModel>();

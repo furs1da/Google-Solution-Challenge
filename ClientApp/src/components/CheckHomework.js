@@ -51,14 +51,11 @@ class checkHomework extends React.Component {
                     gradeStudent: '',
                 }}
                 validationSchema={Yup.object().shape({
-                    comment: Yup.string()
-                        .required('It is necessary to write feedback about why you gave this exactly mark.'),
-                    gradeStudent: Yup.string()
-                        .required('You forgot to give a mark.'),
+                    
                 })}
-                onSubmit={({ comment, gradeStudent }, { setStatus, setSubmitting }) => {
+                onSubmit={({ comment, gradeStudent }, { setStatus}) => {
                     setStatus();
-                    userService.SubmitHomeworkGradeTeacher(this.state.hwObjesct.idSubmission, comment, gradeStudent)
+                    userService.SubmitHomeworkGradeTeacher(this.state.hwObject.idSubmission, comment, gradeStudent)
                         .then(
                             user => {
                                 this.props.history.push({
@@ -66,7 +63,7 @@ class checkHomework extends React.Component {
                                 });
                             },
                             error => {
-                                setSubmitting(false);
+                   
                                 setStatus(error);
                             }
                         );
@@ -78,7 +75,7 @@ class checkHomework extends React.Component {
                         <hr />
                         <div class="card" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>
                             <div class="card-header">
-                                Учень: {this.state.hwObject.studentName}
+                                Student: {this.state.hwObject.studentName}
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">Title: {this.state.hwObject.title}</h5>

@@ -64,7 +64,7 @@ class CreateClass extends React.Component {
             >
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Створити клас</h1>
+                        <h1>Create a class</h1>
                         <hr />
                         <div className="form-group col">
                             <label htmlFor="flow">Grade</label>

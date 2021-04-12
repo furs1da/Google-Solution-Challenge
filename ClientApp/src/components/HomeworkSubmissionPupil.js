@@ -68,7 +68,7 @@ class submitHomework extends React.Component {
                         <hr />
                         <div class="card" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>
                             <div class="card-header">
-                                Тема: {this.state.hwObject.title}
+                                Topic: {this.state.hwObject.title}
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">Teacher: {this.state.hwObject.teacherName}</h5>

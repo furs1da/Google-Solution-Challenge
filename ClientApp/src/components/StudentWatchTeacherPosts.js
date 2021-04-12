@@ -69,7 +69,7 @@ class WatchTeacherPosts extends React.Component {
                         {this.state.teacherPosts.map(post =>
                             <div class="card" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>
                                 <div class="card-header">
-                                    Тема: {post.title}
+                                    Topic: {post.title}
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">Teacher: {post.teacherName}</h5>

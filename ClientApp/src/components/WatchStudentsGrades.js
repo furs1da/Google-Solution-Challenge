@@ -94,7 +94,7 @@ class WatchStudentGrades extends React.Component {
                                     {this.state.themGrades.map(gradeEntity =>
                                             <tr>
                                             <td key={gradeEntity.idGrade}><p> {gradeEntity.grade}</p> </td>
-                                            <td><p>Від {new Date(gradeEntity.fromDate).toLocaleDateString()} до {new Date(gradeEntity.toDate).toLocaleDateString()}</p> </td>                                             
+                                            <td><p>Starting with {new Date(gradeEntity.fromDate).toLocaleDateString()} until {new Date(gradeEntity.toDate).toLocaleDateString()}</p> </td>                                             
                                             </tr>
                                         )}
 

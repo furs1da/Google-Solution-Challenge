@@ -142,7 +142,7 @@ export default class App extends Component {
                                 <Nav.Link as={Link} to="/attendanceParent">Attendance</Nav.Link>
                                 <Nav.Link as={Link} to="/gradesParent">Marks</Nav.Link>
                            
-                                    <NavDropdown title="Ваші діти" as={Link} to="/" id="collasible-nav-dropdown">
+                                    <NavDropdown title="Your children" as={Link} to="/" id="collasible-nav-dropdown">
                                     <NavDropdown.Item as={Link} to="/listOfChilds">List of children</NavDropdown.Item>
                                         <NavDropdown.Divider />
                                     <NavDropdown.Item as={Link} to="/addChild">Add a child</NavDropdown.Item>

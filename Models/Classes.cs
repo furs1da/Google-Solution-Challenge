@@ -19,8 +19,6 @@ namespace shagDiplom.Models
         public string AccessCode { get; set; }
 
         public virtual ClassLetters ClassLetterNavigation { get; set; }
-        public virtual FlowNumber FlowNumberNavigation { get; set; }
-        public virtual Teacher IdClassroomTeacherNavigation { get; set; }
         public virtual ICollection<AnnouncementSender> AnnouncementSender { get; set; }
         public virtual ICollection<ClassStudent> ClassStudent { get; set; }
         public virtual ICollection<Curricular> Curricular { get; set; }

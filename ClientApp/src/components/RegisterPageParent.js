@@ -142,7 +142,7 @@ class RegisterPageParent extends React.Component {
                         </div>
                         <div className="form-group col">
                             <label htmlFor="genderParent">Gender</label>
-                            <Field name="genderParent" as="select" placeholder="Оберіть гендер..." className={'form-control' + (errors.genderParent && touched.genderParent ? ' is-invalid' : '')}>
+                            <Field name="genderParent" as="select" placeholder="Select gender..." className={'form-control' + (errors.genderParent && touched.genderParent ? ' is-invalid' : '')}>
                                 {this.state.genders.map((gender, i) => (
                                     <option key={gender.idGender} value={gender.idGender}>{gender.genderType}</option>
                                 ))}

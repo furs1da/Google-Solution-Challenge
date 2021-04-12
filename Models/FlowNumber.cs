@@ -8,7 +8,6 @@ namespace shagDiplom.Models
         public FlowNumber()
         {
             AnnouncementSender = new HashSet<AnnouncementSender>();
-            Classes = new HashSet<Classes>();
             HomeworkInfo = new HashSet<HomeworkInfo>();
             TeacherPost = new HashSet<TeacherPost>();
         }
@@ -17,7 +16,6 @@ namespace shagDiplom.Models
         public int FlowNumber1 { get; set; }
 
         public virtual ICollection<AnnouncementSender> AnnouncementSender { get; set; }
-        public virtual ICollection<Classes> Classes { get; set; }
         public virtual ICollection<HomeworkInfo> HomeworkInfo { get; set; }
         public virtual ICollection<TeacherPost> TeacherPost { get; set; }
     }

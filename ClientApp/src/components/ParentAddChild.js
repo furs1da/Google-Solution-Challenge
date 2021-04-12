@@ -65,7 +65,7 @@ class AddChildParent extends React.Component {
                                 <ErrorMessage name="classCode" component="div" className="invalid-feedback" />
                             </div>
                         </div>
-                        <Button variant="outline-primary" block onClick={selectValue => this.ShowChildren(values.classCode)} style={{marginBottom: 1 + "em" }}> Показати дітей в обранному класі </Button>
+                        <Button variant="outline-primary" block onClick={selectValue => this.ShowChildren(values.classCode)} style={{marginBottom: 1 + "em" }}> Show children un the selected class </Button>
                         <div className="form-row">
                         <div className="form-group col">
                             <label htmlFor="idPupil">Select your child</label>

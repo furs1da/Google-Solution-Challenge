@@ -45,7 +45,7 @@ namespace shagDiplom.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-FCCHT4D;Database=schoolManagementSystemDatabase;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=35.184.26.136;Database=schoolManagementSystemDatabase;User ID=sqlserver;Password=123456;");
             }
         }
 
@@ -122,8 +122,7 @@ namespace shagDiplom.Models
 
             modelBuilder.Entity<AnnouncementSender>(entity =>
             {
-                entity.HasKey(e => e.IdAnnouncement)
-                    .HasName("PK_announcement");
+                entity.HasKey(e => e.IdAnnouncement);
 
                 entity.ToTable("announcementSender");
 
@@ -212,17 +211,17 @@ namespace shagDiplom.Models
 
                 entity.Property(e => e.IdSubject).HasColumnName("idSubject");
 
-                entity.HasOne(d => d.IdStudentNavigation)
-                    .WithMany(p => p.Attendance)
-                    .HasForeignKey(d => d.IdStudent)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_attendance_pupil");
-
                 entity.HasOne(d => d.IdSubjectNavigation)
                     .WithMany(p => p.Attendance)
                     .HasForeignKey(d => d.IdSubject)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_attendance_subjects");
+                    .HasConstraintName("FK_attendance_pupil");
+
+                entity.HasOne(d => d.IdSubject1)
+                    .WithMany(p => p.Attendance)
+                    .HasForeignKey(d => d.IdSubject)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_attendance_subject");
             });
 
             modelBuilder.Entity<ClassLetters>(entity =>
@@ -279,7 +278,8 @@ namespace shagDiplom.Models
                 entity.Property(e => e.AccessCode)
                     .IsRequired()
                     .HasColumnName("accessCode")
-                    .HasMaxLength(10);
+                    .HasMaxLength(10)
+                    .IsFixedLength();
 
                 entity.Property(e => e.ClassLetter).HasColumnName("classLetter");
 
@@ -292,18 +292,6 @@ namespace shagDiplom.Models
                     .HasForeignKey(d => d.ClassLetter)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_classes_classLetters");
-
-                entity.HasOne(d => d.FlowNumberNavigation)
-                    .WithMany(p => p.Classes)
-                    .HasForeignKey(d => d.FlowNumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_classes_flowNumber");
-
-                entity.HasOne(d => d.IdClassroomTeacherNavigation)
-                    .WithMany(p => p.Classes)
-                    .HasForeignKey(d => d.IdClassroomTeacher)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_classes_teacher");
             });
 
             modelBuilder.Entity<Curricular>(entity =>
@@ -342,7 +330,7 @@ namespace shagDiplom.Models
                     .WithMany(p => p.Curricular)
                     .HasForeignKey(d => d.SubjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_curricular_subjects");
+                    .HasConstraintName("FK_curricular_subject");
 
                 entity.HasOne(d => d.Teacher)
                     .WithMany(p => p.Curricular)
@@ -369,8 +357,7 @@ namespace shagDiplom.Models
 
             modelBuilder.Entity<FeedbackSender>(entity =>
             {
-                entity.HasKey(e => e.IdFeedback)
-                    .HasName("PK_feedbackAdminastration");
+                entity.HasKey(e => e.IdFeedback);
 
                 entity.ToTable("feedbackSender");
 
@@ -460,8 +447,7 @@ namespace shagDiplom.Models
 
             modelBuilder.Entity<FinalGrade>(entity =>
             {
-                entity.HasKey(e => e.IdFinalGrade)
-                    .HasName("PK_FinalGRade");
+                entity.HasKey(e => e.IdFinalGrade);
 
                 entity.ToTable("finalGrade");
 
@@ -485,7 +471,7 @@ namespace shagDiplom.Models
                     .WithMany(p => p.FinalGrade)
                     .HasForeignKey(d => d.IdSubject)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_finalGrade_subjects");
+                    .HasConstraintName("FK_finalGrade_subject");
             });
 
             modelBuilder.Entity<FlowNumber>(entity =>
@@ -512,11 +498,8 @@ namespace shagDiplom.Models
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.GenderType)
-                    .IsRequired()
                     .HasColumnName("genderType")
-                    .HasMaxLength(2)
-                    .IsUnicode(false)
-                    .IsFixedLength();
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Grade>(entity =>
@@ -566,7 +549,7 @@ namespace shagDiplom.Models
                     .WithMany(p => p.Grade)
                     .HasForeignKey(d => d.SubjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_grade_subjects");
+                    .HasConstraintName("FK_grade_subject");
 
                 entity.HasOne(d => d.Teacher)
                     .WithMany(p => p.Grade)
@@ -577,8 +560,7 @@ namespace shagDiplom.Models
 
             modelBuilder.Entity<GradeThematical>(entity =>
             {
-                entity.HasKey(e => e.IdThematic)
-                    .HasName("PK_GradeThematical");
+                entity.HasKey(e => e.IdThematic);
 
                 entity.ToTable("gradeThematical");
 
@@ -606,7 +588,7 @@ namespace shagDiplom.Models
                     .WithMany(p => p.GradeThematical)
                     .HasForeignKey(d => d.IdSubject)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_gradeThematical_subjects");
+                    .HasConstraintName("FK_gradeThematical_subject");
             });
 
             modelBuilder.Entity<HomeworkInfo>(entity =>
@@ -658,7 +640,7 @@ namespace shagDiplom.Models
                     .WithMany(p => p.HomeworkInfo)
                     .HasForeignKey(d => d.IdSubject)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_homeworkInfo_subjects");
+                    .HasConstraintName("FK_homeworkInfo_subject");
 
                 entity.HasOne(d => d.IdTeacherNavigation)
                     .WithMany(p => p.HomeworkInfo)
@@ -688,6 +670,7 @@ namespace shagDiplom.Models
                     .HasMaxLength(400);
 
                 entity.Property(e => e.Filename)
+                    .IsRequired()
                     .HasColumnName("filename")
                     .HasMaxLength(300)
                     .IsFixedLength();
@@ -915,8 +898,7 @@ namespace shagDiplom.Models
 
             modelBuilder.Entity<Subject>(entity =>
             {
-                entity.HasKey(e => e.IdSubject)
-                    .HasName("PK_subjects");
+                entity.HasKey(e => e.IdSubject);
 
                 entity.ToTable("subject");
 
@@ -934,7 +916,9 @@ namespace shagDiplom.Models
             {
                 entity.ToTable("subject_teacher");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
 
                 entity.Property(e => e.SubjectId).HasColumnName("subjectId");
 

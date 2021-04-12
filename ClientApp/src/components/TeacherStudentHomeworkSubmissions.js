@@ -182,7 +182,7 @@ class HomeworkStudentSubmissionsTeacher extends React.Component {
                         {this.state.hwSubmissions.map(hw =>
                             <div class="card" style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}>
                                 <div class="card-header">
-                                    Тема: {hw.title}
+                                    Topic: {hw.title}
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">Student: {hw.studentName}</h5>

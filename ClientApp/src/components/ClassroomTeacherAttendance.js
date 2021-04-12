@@ -5,8 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import { userService } from '../services';
 import { Button, Table } from 'react-bootstrap';
-import uk from "date-fns/locale/uk";
-registerLocale("uk", uk);
+
 
 class WatchClassroomTeacherAttendance extends React.Component {
 
@@ -166,7 +165,7 @@ class WatchClassroomTeacherAttendance extends React.Component {
                                         className={'form-control' + (errors.dateOfStart && touched.dateOfStart ? ' is-invalid' : '')}
                                         name="dateOfStart"
                                     onChange={date => this.onChangeStartDate(date, setFieldValue, values)}
-                                    locale="uk"
+                             
                                     />
                                 </div>
                                     <div class="col-4 ml-auto">
@@ -178,7 +177,7 @@ class WatchClassroomTeacherAttendance extends React.Component {
                                         className={'form-control' + (errors.dateOfEnd && touched.dateOfEnd ? ' is-invalid' : '')}
                                         name="dateOfEnd"
                                     onChange={date => this.onChangeEndDate(date, setFieldValue, values)}
-                                    locale="uk"
+                                   
                                     />
                                 </div>
                                 </div>

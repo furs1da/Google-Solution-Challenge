@@ -152,7 +152,7 @@ class EditPersonalDataTeacher extends React.Component {
                             <ErrorMessage name="phoneTeacher" component="div" className="invalid-feedback" />
                         </div>
                         <div>
-                            <h4>Фото вчителя</h4>
+                            <h4>Teacher's photo</h4>
                             <img class="img-fluid" style={{ maxHeight: 250 + "px", marginBottom: 1 + "em" }} src={'data:image/png;base64,' + this.state.teacher.imageOfTeacher}  />
                         </div>
                         <div className="form-group">

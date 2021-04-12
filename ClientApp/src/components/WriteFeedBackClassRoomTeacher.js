@@ -145,7 +145,7 @@ class FeedBackClassRoomTeacher extends React.Component {
                 {({ errors, status, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
                         {this.state.pageAccess === false &&
-                            <h1>Ви не є класним керівником</h1>
+                            <h1>You are not a classroom teacher</h1>
                         }
                         {this.state.pageAccess === true &&
                             <div>

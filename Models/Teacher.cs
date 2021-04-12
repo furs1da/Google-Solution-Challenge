@@ -7,7 +7,6 @@ namespace shagDiplom.Models
     {
         public Teacher()
         {
-            Classes = new HashSet<Classes>();
             Curricular = new HashSet<Curricular>();
             FeedbackSenderReceiverIdTeacherNavigation = new HashSet<FeedbackSender>();
             FeedbackSenderSenderIdTeacherNavigation = new HashSet<FeedbackSender>();
@@ -34,7 +33,6 @@ namespace shagDiplom.Models
 
         public virtual GenderTypes GenderNavigation { get; set; }
         public virtual Roles Role { get; set; }
-        public virtual ICollection<Classes> Classes { get; set; }
         public virtual ICollection<Curricular> Curricular { get; set; }
         public virtual ICollection<FeedbackSender> FeedbackSenderReceiverIdTeacherNavigation { get; set; }
         public virtual ICollection<FeedbackSender> FeedbackSenderSenderIdTeacherNavigation { get; set; }

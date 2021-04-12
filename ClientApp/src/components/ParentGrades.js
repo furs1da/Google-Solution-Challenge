@@ -54,7 +54,7 @@ class WatchParentGrades extends React.Component {
             >
                 {({ errors, touched, values, setFieldValue, setFieldTouched }) => (
                     <Form>
-                        <h1>Успішність</h1>
+                        <h1>Grades</h1>
                         <hr />
                         <div className="form-group col">
                             <label htmlFor="firstSelect">Select one of your children</label>
@@ -80,7 +80,7 @@ class WatchParentGrades extends React.Component {
                                 <ErrorMessage name="zeroSelect" component="div" className="invalid-feedback" />
                             </div>
                         }
-                        <h3>Поточні оцінки</h3>
+                        <h3>Current grades</h3>
                         <div>
                             {this.state.grades &&
                                 <Table responsive bordered hover>
@@ -107,7 +107,7 @@ class WatchParentGrades extends React.Component {
                             }
                         </div>
 
-                        <h3>Тематичні оцінки</h3>
+                        <h3>Thematical grades</h3>
                         <div>
                             {this.state.themGrades &&
                                 <Table responsive bordered hover>
@@ -119,7 +119,7 @@ class WatchParentGrades extends React.Component {
                                         {this.state.themGrades.map(gradeEntity =>
                                             <tr>
                                                 <td key={gradeEntity.idGrade}><p> {gradeEntity.grade}</p> </td>
-                                                <td><p>Від {new Date(gradeEntity.fromDate).toLocaleDateString()} до {new Date(gradeEntity.toDate).toLocaleDateString()}</p> </td>
+                                                <td><p>Starting with {new Date(gradeEntity.fromDate).toLocaleDateString()} until {new Date(gradeEntity.toDate).toLocaleDateString()}</p> </td>
                                             </tr>
                                         )}
 

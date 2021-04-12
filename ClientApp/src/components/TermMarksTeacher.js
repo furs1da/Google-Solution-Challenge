@@ -217,7 +217,7 @@ class ThematicalGrades extends React.Component {
                                 <label htmlFor="dateOfStart">The start of the theme</label>
                                 <br />
                             <DatePicker
-                                locale="uk"
+                 
                                     selected={values.dateOfStart}
                                     dateFormat="MMMM d, yyyy"
                                     className={'form-control' + (errors.dateOfStart && touched.dateOfStart ? ' is-invalid' : '')}
@@ -230,7 +230,7 @@ class ThematicalGrades extends React.Component {
                                 <label htmlFor="dateOfEnd">The end of the theme</label>
                                 <br />
                             <DatePicker
-                                locale="uk"
+                     
                                     selected={values.dateOfEnd}
                                     dateFormat="MMMM d, yyyy"
                                     className={'form-control' + (errors.dateOfEnd && touched.dateOfEnd ? ' is-invalid' : '')}
@@ -241,7 +241,7 @@ class ThematicalGrades extends React.Component {
                             </div>
                         }
                         {this.state.datepickerVisibility === true &&
-                            <Button variant="outline-secondary" onClick={selectValue => this.onSubmitDate(values)} style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}> Показати оцінки за цей період </Button>
+                            <Button variant="outline-secondary" onClick={selectValue => this.onSubmitDate(values)} style={{ marginTop: 1.5 + "em", marginBottom: 1 + "em", marginLeft: 1 + "em" }}> Show grades received in the selected period </Button>
                         }
                         <div>
                             {this.state.pupils &&
