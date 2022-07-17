@@ -54,6 +54,7 @@ List of functionality:
 
 <hr/>
 1. <a id="administration">School Administration</a>
+
 - <a id="">View, add, edit and delete teachers', students', administrators' accounts and class (group) entities;</a>
 - <a id="">View and delete parents of children;</a>
 - <a id="">View, publish, edit and delete announcements for certain groups with uploading files (for students, for teacher, for other administrators, for parents, etc);</a>
