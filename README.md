@@ -63,7 +63,35 @@ List of functionality:
 - <a id="">View attendance and calculate number of absences for each student;</a>
 - <a id="">Change personal information;</a>
 
+2. <a id="teacher">Teacher - Classroom Teacher</a>
 
+- <a id="">Submit attendance for each class (group)</a>
+- <a id="">View announcements</a>
+- <a id="">View and send messages</a>
+- <a id="">View, publish, edit and delete posts (with uploading files)</a>
+- <a id="">View, publish, edit, delete and give a mark for homework assignment</a>
+- <a id="">Give a final mark for a certain term and for whole year</a>
+- <a id="">Change personal information</a>
+- <a id="">View attendance and marks of students of your class (group) as a classroom teacher</a>
+
+3. <a id="student">Student</a>
+
+- <a id="">View homework assignments and submit them by uploading text and files</a>
+- <a id="">View marks (grades)</a>
+- <a id="">View announcements</a>
+- <a id="">View and send messages</a>
+- <a id="">View attendance</a>
+- <a id="">View teachers' posts</a>
+- <a id="">Change personal information</a>
+
+4. <a id="parent">Parent</a>
+
+- <a id="">View announcements</a>
+- <a id="">View attendance of their children</a>
+- <a id="">View marks (grades) of their children</a>
+- <a id="">View and add their children to their accounts</a>
+- <a id="">View and send messages</a>
+- <a id="">Change personal information</a>
 
 ## License and copyright
 
