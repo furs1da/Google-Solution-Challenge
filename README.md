@@ -56,43 +56,43 @@ List of functionality:
 
 1. <a id="administration">School Administration</a>
 
-- <a id="">View, add, edit and delete teachers', students', administrators' accounts and class (group) entities;</a>
-- <a id="">View and delete parents of children;</a>
-- <a id="">View, publish, edit and delete announcements for certain groups with uploading files (for students, for teacher, for other administrators, for parents, etc);</a>
-- <a id="">Create a timetable for each class;</a>
-- <a id="">Send and view messages across the system;</a>
-- <a id="">View attendance and calculate number of absences for each student;</a>
-- <a id="">Change personal information;</a>
+- <a id="admin_entities">View, add, edit and delete teachers', students', administrators' accounts and class (group) entities;</a>
+- <a id="admin_parents">View and delete parents of children;</a>
+- <a id="admin_announcements">View, publish, edit and delete announcements for certain groups with uploading files (for students, for teacher, for other administrators, for parents, etc);</a>
+- <a id="admin_timetable">Create a timetable for each class;</a>
+- <a id="admin_messages">Send and view messages across the system;</a>
+- <a id="admin_attendance">View attendance and calculate number of absences for each student;</a>
+- <a id="admin_info">Change personal information;</a>
 
 2. <a id="teacher">Teacher - Classroom Teacher</a>
 
-- <a id="">Submit attendance for each class (group)</a>
-- <a id="">View announcements</a>
-- <a id="">View and send messages</a>
-- <a id="">View, publish, edit and delete posts (with uploading files)</a>
-- <a id="">View, publish, edit, delete and give a mark for homework assignment</a>
-- <a id="">Give a final mark for a certain term and for whole year</a>
-- <a id="">Change personal information</a>
-- <a id="">View attendance and marks of students of your class (group) as a classroom teacher</a>
+- <a id="teacher_attendance">Submit attendance for each class (group)</a>
+- <a id="teacher_announcement">View announcements</a>
+- <a id="teacher_message">View and send messages</a>
+- <a id="teacher_posts">View, publish, edit and delete posts (with uploading files)</a>
+- <a id="teacher_marks">View, publish, edit, delete and give a mark for homework assignment</a>
+- <a id="teacher_final_grades">Give a final mark for a certain term and for whole year</a>
+- <a id="teacher_info">Change personal information</a>
+- <a id="teacher_classroom">View attendance and marks of students of your class (group) as a classroom teacher</a>
 
 3. <a id="student">Student</a>
 
-- <a id="">View homework assignments and submit them by uploading text and files</a>
-- <a id="">View marks (grades)</a>
-- <a id="">View announcements</a>
-- <a id="">View and send messages</a>
-- <a id="">View attendance</a>
-- <a id="">View teachers' posts</a>
-- <a id="">Change personal information</a>
+- <a id="student_assignments">View homework assignments and submit them by uploading text and files</a>
+- <a id="student_marks">View marks (grades)</a>
+- <a id="student_announcement">View announcements</a>
+- <a id="student_message">View and send messages</a>
+- <a id="student_attendance">View attendance</a>
+- <a id="student_posts">View teachers' posts</a>
+- <a id="student_info">Change personal information</a>
 
 4. <a id="parent">Parent</a>
 
-- <a id="">View announcements</a>
-- <a id="">View attendance of their children</a>
-- <a id="">View marks (grades) of their children</a>
-- <a id="">View and add their children to their accounts</a>
-- <a id="">View and send messages</a>
-- <a id="">Change personal information</a>
+- <a id="parent_announcement">View announcements</a>
+- <a id="parent_attendance">View attendance of their children</a>
+- <a id="parent_marks">View marks (grades) of their children</a>
+- <a id="parent_children">View and add their children to their accounts</a>
+- <a id="parent_messages">View and send messages</a>
+- <a id="parent_info">Change personal information</a>
 
 ## License and copyright
 
