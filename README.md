@@ -94,6 +94,12 @@ List of functionality:
 - <a id="parent_messages">View and send messages</a>
 - <a id="parent_info">Change personal information</a>
 
+<hr/>
+
+<a id="learned-things"><b>Things I have learned or enhanced while developing this project:</b></a>
+
+
+
 ## License and copyright
 
 © Dmytrii Furs, furs1268@gmail.com
