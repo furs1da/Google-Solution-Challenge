@@ -20,39 +20,40 @@ List of roles:
 
 List of functionality:
   * <a id="administration">School Administration</a>
-    * [View, add, edit and delete teachers', students', administrators' accounts and class (group) entities](#);
-    * [View and delete parents of children](#);
-    * [View, publish, edit and delete announcements for certain groups with uploading files (for students, for teacher, for other administrators, for parents, etc)](#);
-    * [Create a timetable for each class](#);
-    * [Send and view messages across the system](#);
-    * [View attendance and calculate number of absences for each student](#);
-    * [Change personal information](#);
+    * [View, add, edit and delete teachers', students', administrators' accounts and class (group) entities](#admin_entities);
+    * [View and delete parents of children](#admin_parents);
+    * [View, publish, edit and delete announcements for certain groups with uploading files (for students, for teacher, for other administrators, for parents, etc)](#admin_announcements);
+    * [Create a timetable for each class](#admin_timetable);
+    * [Send and view messages across the system](#admin_messages);
+    * [View attendance and calculate number of absences for each student](#admin_attendance);
+    * [Change personal information](#admin_info);
   * <a id="teacher">Teacher - Classroom Teacher</a>
-    * [Submit attendance for each class (group)](#);
-    * [View announcements](#);
-    * [View and send messages](#);    
-    * [View, publish, edit and delete posts (with uploading files)](#); 
-    * [View, publish, edit, delete and give a mark for homework assignment](#);
-    * [Give a final mark for a certain term and for whole year](#);
-    * [Change personal information](#);
-    * [View attendance and marks of students of your class (group) as a classroom teacher](#); 
+    * [Submit attendance for each class (group)](#teacher_attendance);
+    * [View announcements](#teacher_announcement);
+    * [View and send messages](#teacher_message);    
+    * [View, publish, edit and delete posts (with uploading files)](#teacher_posts); 
+    * [View, publish, edit, delete and give a mark for homework assignment](#teacher_marks);
+    * [Give a final mark for a certain term and for whole year](#teacher_final_grades);
+    * [Change personal information](#teacher_info);
+    * [View attendance and marks of students of your class (group) as a classroom teacher](#teacher_classroom); 
   * <a id="student">Student</a>
-    * [View homework assignments and submit them by uploading text and files](#);
-    * [View marks (grades)](#);
-    * [View announcements](#);
-    * [View and send messages](#);
-    * [View attendance](#);
-    * [View teachers' posts](#);
-    * [Change personal information](#);
+    * [View homework assignments and submit them by uploading text and files](#student_assignments);
+    * [View marks (grades)](#student_marks);
+    * [View announcements](#student_announcement);
+    * [View and send messages](#student_message);
+    * [View attendance](#student_attendance);
+    * [View teachers' posts](#student_posts);
+    * [Change personal information](#student_info);
   * <a id="parent">Parent</a>
-    * [View announcements](#);
-    * [View attendance of their children](#);
-    * [View marks (grades) of their children](#);
-    * [View and add their children to their accounts](#);
-    * [View and send messages](#);
-    * [Change personal information](#);
+    * [View announcements](#parent_announcement);
+    * [View attendance of their children](#parent_attendance);
+    * [View marks (grades) of their children](#parent_marks);
+    * [View and add their children to their accounts](#parent_children);
+    * [View and send messages](#parent_messages);
+    * [Change personal information](#parent_info);
 
 <hr/>
+
 1. <a id="administration">School Administration</a>
 
 - <a id="">View, add, edit and delete teachers', students', administrators' accounts and class (group) entities;</a>
