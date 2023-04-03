@@ -1,5 +1,5 @@
 # School Management System
-## Video Demonstration of this project - [![Link to YouTube Video](https://img.youtube.com/vi/ElsIaE6UavQ/0.jpg)](https://youtu.be/ElsIaE6UavQ)
+## Video Demonstration of this project - [Link to YouTube Video](https://youtu.be/ElsIaE6UavQ)
 ### This project is dedicated to help and make online part of education more scructered and comfortable.
 
 Most of the school in my home country (Ukraine) use 3 different services to make online education be possible: Google Site (for posting materials), 
